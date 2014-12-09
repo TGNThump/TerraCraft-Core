@@ -38,6 +38,13 @@ public class TerraCraft extends JavaPlugin{
 		CoreMechanics.Denitialize();
 	}
 	
+	public static void onDatabaseConnectionEstablished(){
+		TerraLogger.blank();
+		TerraLogger.info("Downloading Data from Terra Gaming CORE...");
+		CoreMechanics.DownloadData();
+		TerraLogger.info("Download Finished");
+	}
+	
 	public static TerraCraft Plugin(){
 		return (TerraCraft) plugin;
 	}

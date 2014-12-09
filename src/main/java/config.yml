@@ -1,1 +1,7 @@
 TerraCraft:
+    Database:
+        Hostname: 
+        Database: 
+        Port: 3306
+        Username:
+        Password:
