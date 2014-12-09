@@ -5,6 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import uk.co.terragaming.code.terracraft.utils.ConsoleColor;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
 public class TerraCraft extends JavaPlugin{
 	
 	private static Plugin plugin;
@@ -12,11 +15,17 @@ public class TerraCraft extends JavaPlugin{
 	
 	public void onEnable(){
 		
+		TerraLogger.blank();
+		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + this.getDescription().getVersion() + " ").length()));
+		TerraLogger.info(" " + ConsoleColor.CYAN + " Launching TerraCraft V" + this.getDescription().getVersion() + " ");
+		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + this.getDescription().getVersion() + " ").length()));
+		TerraLogger.blank();
+		
 		plugin = this;
 		server = this.getServer();
 		
 		getConfig().options().copyDefaults(true);
-	    saveConfig();
+		saveConfig();
 	    getConfig();
 		
 	}
