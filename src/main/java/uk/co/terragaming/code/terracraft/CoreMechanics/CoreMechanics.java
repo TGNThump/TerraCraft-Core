@@ -7,7 +7,8 @@ public class CoreMechanics {
 	
 	public static void Initialize(){
 		TerraLogger.info("CoreMechanics Initialized");
-
+		
+		ReloadHandler.Run();
 		DatabaseMechanics.Initialize();
 		
 		TerraLogger.info("");

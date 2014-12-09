@@ -56,4 +56,8 @@ public class TerraCraft extends JavaPlugin{
 	public static FileConfiguration Config(){
 		return plugin.getConfig();
 	}
+	
+	public static String getServerName(){
+		return Config().getString("TerraCraft.Server.Name");
+	}
 }

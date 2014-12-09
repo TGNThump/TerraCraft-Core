@@ -1,4 +1,8 @@
 TerraCraft:
+    Server:
+        Name: NULL
+        IP: NULL.Terra-Craft.net
+        Mode: DEVELOPMENT
     Database:
         Hostname: 
         Database: 
