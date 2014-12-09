@@ -1,6 +1,7 @@
 package uk.co.terragaming.code.terracraft;
 
 import org.bukkit.Server;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +15,10 @@ public class TerraCraft extends JavaPlugin{
 		plugin = this;
 		server = this.getServer();
 		
+		getConfig().options().copyDefaults(true);
+	    saveConfig();
+	    getConfig();
+		
 	}
 	
 	public void onDisable(){
@@ -26,5 +31,9 @@ public class TerraCraft extends JavaPlugin{
 	
 	public static Server Server(){
 		return server;
+	}
+	
+	public static FileConfiguration Config(){
+		return plugin.getConfig();
 	}
 }
