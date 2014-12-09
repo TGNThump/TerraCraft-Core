@@ -1,0 +1,11 @@
+# Eclipse
+/.classpath
+/.project
+/.settings
+
+# NetBeans
+/nbproject
+
+# Maven
+/target
+/bin/
