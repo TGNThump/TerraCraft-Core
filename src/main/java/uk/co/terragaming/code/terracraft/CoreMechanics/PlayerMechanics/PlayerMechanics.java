@@ -8,6 +8,7 @@ public class PlayerMechanics {
 		PlayerMessages.load();
 		TerraCraft.Server().getPluginManager().registerEvents(new LoginListener(), TerraCraft.Plugin());
 		TerraCraft.Server().getPluginManager().registerEvents(new LogoutListener(), TerraCraft.Plugin());
+		TerraCraft.Server().getPluginManager().registerEvents(new ChatListener(), TerraCraft.Plugin());
 
 		TerraLogger.info("  PlayerMechanics Initialized");
 	}
