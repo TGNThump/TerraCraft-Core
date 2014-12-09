@@ -4,7 +4,7 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Databas
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class CoreMechanics {
-	
+
 	public static void Initialize(){
 		TerraLogger.info("CoreMechanics Initialized");
 		
