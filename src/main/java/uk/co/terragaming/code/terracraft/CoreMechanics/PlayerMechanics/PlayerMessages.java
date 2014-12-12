@@ -13,6 +13,7 @@ public class PlayerMessages {
 
 		messages.put("account_banned_global", ChatColor.RED + "Your account has been GLOBALLY banned from all TGN Services.");
 		messages.put("account_banned_perm", ChatColor.RED + "Your account has been PERMANENTLY banned from TerraCraft.");
+		messages.put("account_access_revoked", ChatColor.RED + "Access to your Account has been revoked from this location.");
 		
 		messages.put("login_server_locked", ChatColor.RED + "This TerraCraft Server is currently LOCKED.");
 	}

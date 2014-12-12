@@ -82,7 +82,7 @@ public class Account {
 				if (results.getString("ipAddress").equals(getIpAddress().toString().substring(1))){
 					setSessionId(results.getInt("sessionId"));
 					if (!results.getBoolean("enabled")){
-						throw new AccountBannedException(ChatColor.RED + "Access to your Account has been revoked from this location.");
+						throw new AccountBannedException(PlayerMessages.get("account_access_revoked"));
 					}
 				}
 				
