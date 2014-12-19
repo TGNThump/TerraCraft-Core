@@ -5,15 +5,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import uk.co.terragaming.code.terracraft.CoreMechanics.CoreMechanics;
-import uk.co.terragaming.code.terracraft.CoreMechanics.ServerMode;
+import uk.co.terragaming.code.terracraft.CoreMechanics.ReloadHandler;
 import uk.co.terragaming.code.terracraft.utils.ConsoleColor;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class TerraCraft extends JavaPlugin{
-	
-	private static Plugin plugin;
-	private static Server server;
+
+	private MechanicLoader loader;
+	public static Plugin plugin;
+	public static Server server;
 	
 	public static ServerMode serverMode = ServerMode.LOADING;
 	
@@ -27,26 +27,30 @@ public class TerraCraft extends JavaPlugin{
 	
 		plugin = this;
 		server = this.getServer();
+		loader = new MechanicLoader();
 		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		getConfig();
 		
-		CoreMechanics.Initialize();
+		ReloadHandler.Run();
+		loader.constructMechanics();
+		TerraCraft.Server().getScheduler().scheduleSyncDelayedTask(TerraCraft.Plugin(), new Runnable() {
+			  public void run() {
+				  loader.preInitMechanics();
+				  loader.initMechanics();
+				  TerraLogger.info("All Enabled Mechanics have been Initialized");
+				  loader.postInitMechanics();
+				  serverMode = ServerMode.fromString(TerraCraft.Config().get("TerraCraft.Server.Mode").toString());
+			  }
+			}, 1L);
 		
 		TerraLogger.blank();
 	}
 	
 	public void onDisable(){
-		CoreMechanics.Denitialize();
-	}
-	
-	public static void onDatabaseConnectionEstablished(){
-		TerraLogger.blank();
-		TerraLogger.info("Downloading Data from Terra Gaming CORE...");
-		CoreMechanics.DownloadData();
-		TerraLogger.info("Download Finished");
-		serverMode = ServerMode.fromString(Config().getString("TerraCraft.Server.Mode"));
+		loader.deInitializeMechanics();
+		loader = null;
 	}
 	
 	public static TerraCraft Plugin(){

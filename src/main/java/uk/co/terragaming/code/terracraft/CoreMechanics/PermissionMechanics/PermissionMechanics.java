@@ -5,21 +5,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-public class PermissionMechanics {
+public class PermissionMechanics implements Mechanic{
+	
 	public static HashMap<Integer, PermissionGroup> groups = new HashMap<Integer, PermissionGroup>();
+	public static PermissionMechanics instance;
 	
-	public static void Initialize(){
+	public PermissionMechanics(){
 		TerraLogger.info("  PermissionMechanics Initialized");
+		instance = this;
 	}
 	
-	public static void Deinitialize(){
-		groups.clear();
+	public static PermissionMechanics getInstance(){
+		return instance;
 	}
 	
-	public static void DownloadData(){
+	public void PreInitialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void Initialize() {
 		try {
 			
 			Connection connection = Database.getInstance().getConnection();
@@ -48,5 +57,18 @@ public class PermissionMechanics {
 			TerraLogger.error("Cannot retrieve Permission Groups from Database");
 			e.printStackTrace();
 		}
+	}
+
+	public void PostInitialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void Deinitialize() {
+		groups.clear();
+	}
+	
+	public boolean isEnabled() {
+		return true;
 	}
 }

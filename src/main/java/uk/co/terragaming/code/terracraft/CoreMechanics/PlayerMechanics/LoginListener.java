@@ -2,13 +2,14 @@ package uk.co.terragaming.code.terracraft.CoreMechanics.PlayerMechanics;
 
 import java.sql.SQLException;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
+import uk.co.terragaming.code.terracraft.ServerMode;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.ServerMode;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountBannedException;
@@ -19,14 +20,14 @@ public class LoginListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event){
-		while(true){
-			if (!TerraCraft.getServerMode().equals(ServerMode.LOADING)){
-				break;
-			}
+		
+		if (TerraCraft.getServerMode().equals(ServerMode.LOADING)){
+			event.disallow(Result.KICK_OTHER, ChatColor.AQUA + "TerraCraft " + TerraCraft.getServerName() + " is still Loading");
+			return;
 		}
 		
 		Account account = new Account(event.getUniqueId(), event.getAddress());
-		AccountMechanics.addAccount(account);
+		AccountMechanics.getInstance().getRegistry().addAccount(account);
 		
 		try {
 			account.onLogin();

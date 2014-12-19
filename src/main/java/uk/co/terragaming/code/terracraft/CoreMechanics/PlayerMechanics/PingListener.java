@@ -1,5 +1,7 @@
 package uk.co.terragaming.code.terracraft.CoreMechanics.PlayerMechanics;
 
-public class PingListener {
+import org.bukkit.event.Listener;
+
+public class PingListener implements Listener {
 
 }

@@ -1,3 +1,10 @@
 name: TerraCraft
 main: uk.co.terragaming.code.terracraft.TerraCraft
 version: 0.0.1
+commands:
+    staff:
+        description: Staff Command Set
+        usage: /staff
+    s:
+        description: Staff Command Set
+        usage: /s

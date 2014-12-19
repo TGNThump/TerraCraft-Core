@@ -12,7 +12,7 @@ public class LogoutListener implements Listener{
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		try{
-			Account account = AccountMechanics.getAccountData(event.getPlayer().getUniqueId());
+			Account account = AccountMechanics.getInstance().getRegistry().getAccount(event.getPlayer().getUniqueId());
 			account.onLogout();
 		} catch (Exception e){
 			e.printStackTrace();

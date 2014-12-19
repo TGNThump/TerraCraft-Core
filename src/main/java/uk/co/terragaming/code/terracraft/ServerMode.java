@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics;
+package uk.co.terragaming.code.terracraft;
 
 public enum ServerMode {
 	LOADING,		// NOBODY
