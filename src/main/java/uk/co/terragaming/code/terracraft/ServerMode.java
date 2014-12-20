@@ -6,7 +6,8 @@ public enum ServerMode {
 	DEVELOPMENT,	// TGN Staff & Developers Only
 	CLOSED_BETA,	// TGN Beta Members Only
 	OPEN_BETA,		// All Project Bifrost Registered Players
-	OPEN			// All Project Bifrost Registered Players
+	OPEN,			// All Project Bifrost Registered Players
+	BIFROST			// BIFROST REGISTRATION SERVER
 ;
 
 	public static ServerMode fromString(String string) {
@@ -21,6 +22,8 @@ public enum ServerMode {
 			return ServerMode.OPEN_BETA;
 		case "OPEN":
 			return ServerMode.OPEN;
+		case "BIFROST":
+			return ServerMode.BIFROST;		
 		}
 		return ServerMode.LOCKED;
 	}

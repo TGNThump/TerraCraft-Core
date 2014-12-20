@@ -41,6 +41,9 @@ public class TerraCraft extends JavaPlugin{
 				  TerraLogger.info("All Enabled Mechanics have been Initialized");
 				  loader.postInitMechanics();
 				  serverMode = ServerMode.fromString(TerraCraft.Config().get("TerraCraft.Server.Mode").toString());
+				  if(TerraCraft.getServerMode().equals(ServerMode.BIFROST)){
+					  TerraLogger.info(ConsoleColor.CYAN + "Server launched in BIFROST Registration Mode!");
+				  }
 				  ReloadHandler.Run();
 			  }
 			}, 1L);
