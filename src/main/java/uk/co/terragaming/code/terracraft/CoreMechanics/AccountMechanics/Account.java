@@ -19,6 +19,7 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptio
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountNotLinkedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionGroup;
+import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionGroupKey;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionMechanics;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.permLevel;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.permType;
@@ -41,7 +42,7 @@ public class Account {
 	private InetAddress ipAddress;
 	
 	private HashMap<Integer, AccountBan> bans = new HashMap<Integer, AccountBan>();
-	private HashMap<Integer, PermissionGroup> groups = new HashMap<Integer, PermissionGroup>();
+	private HashMap<PermissionGroupKey, PermissionGroup> groups = new HashMap<PermissionGroupKey, PermissionGroup>();
 
 	public Account(UUID uniqueId, InetAddress ipAddress) {
 		this.playerUUID = uniqueId;
@@ -103,7 +104,8 @@ public class Account {
 				}
 				
 				if(results.getInt("groupId") > 0 && !groups.containsKey(results.getInt("groupId"))){
-					groups.put(results.getInt("groupId"), PermissionMechanics.groups.get(results.getInt("groupId")));
+					PermissionGroup group = PermissionMechanics.groups.get(results.getInt("groupId"));
+					groups.put(new PermissionGroupKey(group.getGroupId(), group.getGroupName()), group);
 				}
 				
 
@@ -120,7 +122,8 @@ public class Account {
 			setSignUpDate(results.getDate("signUpDate"));
 			
 			if (groups.size() == 0){
-				groups.put(6, PermissionMechanics.groups.get(6));
+				PermissionGroup group = PermissionMechanics.groups.get(6);
+				groups.put(new PermissionGroupKey(group.getGroupId(), group.getGroupName()), group);
 			}
 		}
 		
@@ -200,13 +203,18 @@ public class Account {
 	}
 	
 	public PermissionGroup[] getGroupsAsArray(){
-		PermissionGroup[] result = new PermissionGroup[groups.size()];
-		Integer i = 0;
-		for (Integer groupId : groups.keySet()){
-			result[i] = groups.get(groupId);
-			i++;
+		try{
+			PermissionGroup[] result = new PermissionGroup[groups.size()];
+			Integer i = 0;
+			for(PermissionGroupKey key : groups.keySet()){
+				result[groups.size() - 1 - i] = groups.get(key);
+				i++;
+			}
+			return result;
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		return result;
+		return null;
 	}
 
 	public boolean hasPermission(String permission, permType permType, permLevel permLevel){
@@ -330,7 +338,7 @@ public class Account {
 		this.sessionId = sessionId;
 	}
 
-	public HashMap<Integer, PermissionGroup> getGroups() {
+	public HashMap<PermissionGroupKey, PermissionGroup> getGroups() {
 		return groups;
 	}
 }

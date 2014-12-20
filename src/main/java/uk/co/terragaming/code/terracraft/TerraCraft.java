@@ -33,7 +33,6 @@ public class TerraCraft extends JavaPlugin{
 		saveConfig();
 		getConfig();
 		
-		ReloadHandler.Run();
 		loader.constructMechanics();
 		TerraCraft.Server().getScheduler().scheduleSyncDelayedTask(TerraCraft.Plugin(), new Runnable() {
 			  public void run() {
@@ -42,6 +41,7 @@ public class TerraCraft extends JavaPlugin{
 				  TerraLogger.info("All Enabled Mechanics have been Initialized");
 				  loader.postInitMechanics();
 				  serverMode = ServerMode.fromString(TerraCraft.Config().get("TerraCraft.Server.Mode").toString());
+				  ReloadHandler.Run();
 			  }
 			}, 1L);
 		

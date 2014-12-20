@@ -47,7 +47,7 @@ public class CommandMechanics implements Mechanic{
 		return commandManagers;
 	}
 
-	public static void createCommandManager(String commandLabel, String commandAlias){
+	public static CommandManager createCommandManager(String commandLabel, String commandAlias){
 		CommandManager commandManager = new CommandManager(TerraCraft.Plugin(), commandLabel, commandAlias);
 		commandManagers.put(commandLabel, commandManager);
 		try{
@@ -60,6 +60,7 @@ public class CommandMechanics implements Mechanic{
 		} catch (NullPointerException e){
 			TerraLogger.error("Could Not Register Command " + commandAlias + " because it was not set in plugin.yml");
 		}
+		return commandManager;
 	}
 		
 	public static CommandManager getCommandManager(String commandLabel){

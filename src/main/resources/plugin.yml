@@ -5,6 +5,6 @@ commands:
     staff:
         description: Staff Command Set
         usage: /staff
-    s:
+    a:
         description: Staff Command Set
-        usage: /s
+        usage: /a

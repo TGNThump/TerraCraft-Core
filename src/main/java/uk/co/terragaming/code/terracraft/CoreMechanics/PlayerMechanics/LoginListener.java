@@ -45,5 +45,4 @@ public class LoginListener implements Listener{
 		TerraLogger.blank();
 		TerraLogger.debug("Downloaded Data of " + account.getTerraTag());
 	}
-
 }

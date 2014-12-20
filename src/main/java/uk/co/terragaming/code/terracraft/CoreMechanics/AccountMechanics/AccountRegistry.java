@@ -3,6 +3,8 @@ package uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 public class AccountRegistry {
 	private static HashMap<UUID, Account> accounts = new HashMap<UUID, Account>();
 	
@@ -16,6 +18,10 @@ public class AccountRegistry {
 	
 	public Account getAccount(UUID uuid){
 		return accounts.get(uuid);
+	}
+	
+	public Account getAccount(Player player) {
+		return accounts.get(player.getUniqueId());
 	}
 	
 	public void addAccount(Account account){

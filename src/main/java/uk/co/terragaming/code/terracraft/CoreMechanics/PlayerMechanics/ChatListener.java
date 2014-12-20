@@ -7,6 +7,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class ChatListener implements Listener{
@@ -15,7 +16,8 @@ public class ChatListener implements Listener{
 	public void onChat (AsyncPlayerChatEvent event){
 		
 		//TODO: REWORK TO USE CHARACTER INSTEAD OF ACCOUNT (FOR Custom Names and Member Rank Info (Town Leaver Roles ect))
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(event.getPlayer().getUniqueId());
+		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+		Account account = registry.getAccount(event.getPlayer().getUniqueId());
 		String group = account.getGroupsAsArray()[0].getGroupName().toLowerCase();
 		if (group.equals("staff")){
 			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.GOLD + event.getMessage());
