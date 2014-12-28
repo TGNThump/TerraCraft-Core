@@ -15,6 +15,10 @@ public class TerraLogger {
 		debug("" + msg, (Object) "");
 	}
 	
+	public static void info(Object msg){
+		info("" + msg, (Object) "");
+	}
+	
 	public static void warn(String string) {
 		warn(string, "");
 	}

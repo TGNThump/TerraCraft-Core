@@ -9,10 +9,22 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class DatabaseMechanics implements Mechanic{
 
-	public DatabaseMechanics(){
-		TerraLogger.info("  DatabaseMechanics Initialized");
-	}
+	public boolean isEnabled() 	{ return true; }
+	public boolean isCore() 	{ return true; }
 	
+	public static DatabaseMechanics getInstance(){
+		return (DatabaseMechanics) TerraCraft.getMechanic("DatabaseMechanics");
+	}
+
+	// Mechanic Variables
+	
+	
+	// Mechanic Methods
+	
+	
+	// Mechanic Events
+	
+	@Override
 	public void PreInitialize() {
 		try {
 			new Database();
@@ -26,22 +38,31 @@ public class DatabaseMechanics implements Mechanic{
 		}
 	}
 
+	@Override
 	public void Initialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	public void PostInitialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	public void Deinitialize() {
-		Database.getInstance().getConnectionPool().shutdown();
-		TerraLogger.info("Database Connection Shutdown");
+	@Override
+	public void PreDenitialize() {
+		
 	}
-	
-	public boolean isEnabled() {
-		return true;
+
+	@Override
+	public void Denitialize() {
+		
+	}
+
+	@Override
+	public void PostDenitialize() {
+		Database.getInstance().getConnectionPool().shutdown();
+		TerraLogger.blank();
+		TerraLogger.info("Database Connection Shutdown");
+		TerraLogger.blank();
 	}
 }

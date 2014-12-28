@@ -1,48 +1,55 @@
 package uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.TerraCraft;
 
 public class AccountMechanics implements Mechanic{
-	
-	private static AccountMechanics instance;
-	private AccountRegistry accountRegistry;
-	
-	public AccountMechanics(){
-		instance = this;
-		TerraLogger.info("  AccountMechanics Initialized");
-	}
+
+	public boolean isEnabled() 	{ return true; }
+	public boolean isCore() 	{ return true; }
 	
 	public static AccountMechanics getInstance(){
-		return instance;
-	}
-	
-	
-	public void PreInitialize() {
-		accountRegistry = new AccountRegistry();
+		return (AccountMechanics) TerraCraft.getMechanic("AccountMechanics");
 	}
 
-	public void Initialize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void PostInitialize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void Deinitialize() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Mechanic Variables
+	private AccountRegistry accountRegistry;
 	
-	public boolean isEnabled() {
-		return true;
-	}
-	
+	// Mechanic Methods
 	
 	public AccountRegistry getRegistry(){
 		return accountRegistry;
+	}
+	
+	// Mechanic Events
+	
+	@Override
+	public void PreInitialize() {
+		this.accountRegistry = new AccountRegistry();
+	}
+
+	@Override
+	public void Initialize() {
+		
+	}
+
+	@Override
+	public void PostInitialize() {
+		
+	}
+
+	@Override
+	public void PreDenitialize() {
+		
+	}
+
+	@Override
+	public void Denitialize() {
+		
+	}
+
+	@Override
+	public void PostDenitialize() {
+		
 	}
 }

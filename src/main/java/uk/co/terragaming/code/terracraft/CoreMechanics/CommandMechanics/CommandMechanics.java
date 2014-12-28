@@ -7,47 +7,24 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class CommandMechanics implements Mechanic{
-	
-	private static CommandMechanics instance;
-	private static HashMap<String, CommandManager> commandManagers = new HashMap<String, CommandManager>();
-	
-	public CommandMechanics(){
-		TerraLogger.info("  CommandMechanics Initialized");
-		instance = this;
-	}
+
+	public boolean isEnabled() 	{ return true; }
+	public boolean isCore() 	{ return true; }
 	
 	public static CommandMechanics getInstance(){
-		return instance;
-	}
-	
-	public void PreInitialize() {
-		// TODO Auto-generated method stub
-		
+		return (CommandMechanics) TerraCraft.getMechanic("CommandMechanics");
 	}
 
-	public void Initialize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void PostInitialize() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Mechanic Variables
+	private HashMap<String, CommandManager> commandManagers = new HashMap<String, CommandManager>();
 	
-	public boolean isEnabled() {
-		return true;
-	}
-
-	public void Deinitialize() {
-		commandManagers = null;
-	}
+	// Mechanic Methods
 	
-	public static HashMap<String, CommandManager> getCommandManagers() {
+	public HashMap<String, CommandManager> getCommandManagers() {
 		return commandManagers;
 	}
 
-	public static CommandManager createCommandManager(String commandLabel, String commandAlias){
+	public CommandManager createCommandManager(String commandLabel, String commandAlias){
 		CommandManager commandManager = new CommandManager(TerraCraft.Plugin(), commandLabel, commandAlias);
 		commandManagers.put(commandLabel, commandManager);
 		try{
@@ -63,16 +40,47 @@ public class CommandMechanics implements Mechanic{
 		return commandManager;
 	}
 		
-	public static CommandManager getCommandManager(String commandLabel){
+	public CommandManager getCommandManager(String commandLabel){
 		return commandManagers.get(commandLabel);
 	}
 	
-	public static boolean hasCommandManager(String commandLabel){
+	public boolean hasCommandManager(String commandLabel){
 		return commandManagers.containsKey(commandLabel);
 	}
 	
-	public static void removeCommandManager(String commandLabel){
+	public void removeCommandManager(String commandLabel){
 		commandManagers.remove(commandLabel);
 	}
+	
+	// Mechanic Events
+	
+	@Override
+	public void PreInitialize() {
+		
+	}
 
+	@Override
+	public void Initialize() {
+		
+	}
+
+	@Override
+	public void PostInitialize() {
+		
+	}
+
+	@Override
+	public void PreDenitialize() {
+		
+	}
+
+	@Override
+	public void Denitialize() {
+		commandManagers = null;
+	}
+
+	@Override
+	public void PostDenitialize() {
+		
+	}
 }

@@ -11,7 +11,7 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class TerraCraft extends JavaPlugin{
 
-	private MechanicLoader loader;
+	private static MechanicLoader loader;
 	public static Plugin plugin;
 	public static Server server;
 	
@@ -38,7 +38,9 @@ public class TerraCraft extends JavaPlugin{
 			  public void run() {
 				  loader.preInitMechanics();
 				  loader.initMechanics();
-				  TerraLogger.info("All Enabled Mechanics have been Initialized");
+				  TerraLogger.blank();
+				  TerraLogger.info("All Enabled Mechanics have been Loaded");
+				  TerraLogger.blank();
 				  loader.postInitMechanics();
 				  serverMode = ServerMode.fromString(TerraCraft.Config().get("TerraCraft.Server.Mode").toString());
 				  if(TerraCraft.getServerMode().equals(ServerMode.BIFROST)){
@@ -52,7 +54,10 @@ public class TerraCraft extends JavaPlugin{
 	}
 	
 	public void onDisable(){
-		loader.deInitializeMechanics();
+		loader.preDenitializeMechanics();
+		loader.denitializeMechanics();
+		loader.postDenitializeMechanics();
+		
 		loader = null;
 	}
 	
@@ -74,5 +79,9 @@ public class TerraCraft extends JavaPlugin{
 	
 	public static ServerMode getServerMode(){
 		return serverMode;
+	}
+
+	public static Mechanic getMechanic(String mechanicName) {
+		return loader.getMechanic(mechanicName);
 	}
 }

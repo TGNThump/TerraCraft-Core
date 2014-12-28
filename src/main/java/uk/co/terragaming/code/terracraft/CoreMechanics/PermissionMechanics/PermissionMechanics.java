@@ -6,31 +6,37 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class PermissionMechanics implements Mechanic{
-	
-	public static HashMap<Integer, PermissionGroup> groups = new HashMap<Integer, PermissionGroup>();
-	public static PermissionMechanics instance;
-	
-	public PermissionMechanics(){
-		TerraLogger.info("  PermissionMechanics Initialized");
-		instance = this;
-	}
+
+	public boolean isEnabled() 	{ return true; }
+	public boolean isCore() 	{ return true; }
 	
 	public static PermissionMechanics getInstance(){
-		return instance;
+		return (PermissionMechanics) TerraCraft.getMechanic("PermissionMechanics");
+	}
+
+	// Mechanic Variables
+	private HashMap<Integer, PermissionGroup> groups = new HashMap<Integer, PermissionGroup>();
+
+	// Mechanic Methods
+	public HashMap<Integer, PermissionGroup> getGroupsHashMap(){
+		return groups;
 	}
 	
+	// Mechanic Events
+	
+	@Override
 	public void PreInitialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	public void Initialize() {
 		try {
-			
 			Connection connection = Database.getInstance().getConnection();
 			
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM groups", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
@@ -59,16 +65,23 @@ public class PermissionMechanics implements Mechanic{
 		}
 	}
 
+	@Override
 	public void PostInitialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	public void Deinitialize() {
-		groups.clear();
+	@Override
+	public void PreDenitialize() {
+		
 	}
-	
-	public boolean isEnabled() {
-		return true;
+
+	@Override
+	public void Denitialize() {
+		
+	}
+
+	@Override
+	public void PostDenitialize() {
+		groups.clear();
 	}
 }

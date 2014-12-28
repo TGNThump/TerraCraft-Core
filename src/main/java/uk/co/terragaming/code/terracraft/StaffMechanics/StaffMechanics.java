@@ -7,24 +7,33 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.ItemMechani
 import uk.co.terragaming.code.terracraft.StaffMechanics.commands.StaffSpawnCustomItem;
 import uk.co.terragaming.code.terracraft.StaffMechanics.commands.TestCommandListener;
 import uk.co.terragaming.code.terracraft.StaffMechanics.items.ItemDragonBreath;
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class StaffMechanics implements Mechanic{
 
-	public StaffMechanics(){
-		TerraLogger.info("  StaffMechanics Initialized");
-	}
+	public boolean isEnabled() 	{ return true; }
+	public boolean isCore() 	{ return false; }
+
+	// Mechanic Variables
 	
+	
+	// Mechanic Methods
+	
+	
+	// Mechanic Events
+	
+	@Override
 	public void PreInitialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	public void Initialize() {
+		CommandMechanics commandMechanics = CommandMechanics.getInstance();
+		ItemMechanics itemMechanics = ItemMechanics.getInstance();
 		
-		ItemMechanics.itemManager.registerItem("DragonBreath", new ItemDragonBreath());
+		itemMechanics.getItemManager().registerItem("DragonBreath", new ItemDragonBreath());
 		
-		CommandManager commandManger = CommandMechanics.createCommandManager("staff", "a");
+		CommandManager commandManger = commandMechanics.createCommandManager("staff", "a");
 		commandManger.registerCommand("spawncustomitem", new StaffSpawnCustomItem(), "Allows spawning of custom Items.", "/staff spawnCustomItem <ItemName>");
 		commandManger.registerCommand("citem", new StaffSpawnCustomItem());
 		
@@ -33,17 +42,23 @@ public class StaffMechanics implements Mechanic{
 		}
 	}
 
+	@Override
 	public void PostInitialize() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	public void Deinitialize() {
-		// TODO Auto-generated method stub
+	@Override
+	public void PreDenitialize() {
 		
 	}
 
-	public boolean isEnabled() {
-		return true;
+	@Override
+	public void Denitialize() {
+		
+	}
+
+	@Override
+	public void PostDenitialize() {
+		
 	}
 }

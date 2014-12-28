@@ -16,7 +16,7 @@ public class StaffSpawnCustomItem implements CommandExecutor{
 		Player player = (Player) sender;
 		if (args.length >= 1){
 			
-			ItemManager itemManager = ItemMechanics.itemManager;
+			ItemManager itemManager = ItemMechanics.getInstance().getItemManager();
 			
 			if (itemManager.hasItem(args[0])){
 				player.getInventory().addItem(itemManager.getItemStack(args[0]));

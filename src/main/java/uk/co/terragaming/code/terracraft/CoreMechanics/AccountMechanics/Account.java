@@ -104,7 +104,7 @@ public class Account {
 				}
 				
 				if(results.getInt("groupId") > 0 && !groups.containsKey(results.getInt("groupId"))){
-					PermissionGroup group = PermissionMechanics.groups.get(results.getInt("groupId"));
+					PermissionGroup group = PermissionMechanics.getInstance().getGroupsHashMap().get(results.getInt("groupId"));
 					groups.put(new PermissionGroupKey(group.getGroupId(), group.getGroupName()), group);
 				}
 				
@@ -122,7 +122,7 @@ public class Account {
 			setSignUpDate(results.getDate("signUpDate"));
 			
 			if (groups.size() == 0){
-				PermissionGroup group = PermissionMechanics.groups.get(6);
+				PermissionGroup group = PermissionMechanics.getInstance().getGroupsHashMap().get(6);
 				groups.put(new PermissionGroupKey(group.getGroupId(), group.getGroupName()), group);
 			}
 		}

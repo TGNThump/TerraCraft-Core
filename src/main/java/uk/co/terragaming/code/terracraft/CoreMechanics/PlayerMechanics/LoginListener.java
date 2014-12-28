@@ -15,6 +15,7 @@ import uk.co.terragaming.code.terracraft.ServerMode;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountBannedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountNotLinkedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
@@ -46,25 +47,29 @@ public class LoginListener implements Listener{
 				return;
 			}
 		} else {
-			
-			Account account = new Account(event.getUniqueId(), event.getAddress());
-			AccountMechanics.getInstance().getRegistry().addAccount(account);
-			
 			try {
+				
+				Account account = new Account(event.getUniqueId(), event.getAddress());
+				AccountMechanics accountMechanics = (AccountMechanics) TerraCraft.getMechanic("AccountMechanics");
+				AccountRegistry accountRegistry = accountMechanics.getRegistry();
+				
+				accountRegistry.addAccount(account);
+				
 				account.onLogin();
+				
+				TerraLogger.info("Downloaded Data of " + account.getTerraTag());
+				
 			} catch (AccountNotLinkedException e) {
 				event.disallow(Result.KICK_WHITELIST, PlayerMessages.get("account_not_linked"));
-				return;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				event.disallow(Result.KICK_OTHER, PlayerMessages.get("account_sql_exception"));
 				return;
 			} catch (AccountBannedException e) {
 				event.disallow(Result.KICK_BANNED, e.getMessage());
 				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				event.disallow(Result.KICK_OTHER, PlayerMessages.get("account_sql_exception"));
+				return;
 			}
-			TerraLogger.blank();
-			TerraLogger.debug("Downloaded Data of " + account.getTerraTag());
 		}
 	}
 	

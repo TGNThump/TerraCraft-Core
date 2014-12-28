@@ -1,6 +1,6 @@
 name: TerraCraft
 main: uk.co.terragaming.code.terracraft.TerraCraft
-version: 0.0.1
+version: 0.0.2
 commands:
     staff:
         description: Staff Command Set
