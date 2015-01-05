@@ -102,7 +102,5 @@ public class LoginListener implements Listener{
 				return;
 			}
 		}
-		
-		event.getHostname();
 	}
 }
