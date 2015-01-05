@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics;
+package uk.co.terragaming.code.terracraft.ItemMechanics;
 
 import java.util.ArrayList;
 
@@ -9,49 +9,48 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class CustomItem implements Listener {
-	public final ItemStack item;
-	private final ItemMeta itemMeta;
+	public ItemStack item;
+	private ItemMeta itemMeta;
 	public ArrayList<String> lore = new ArrayList<String>();
-	
-	public CustomItem(Material material){
+
+	public CustomItem(Material material) {
 		this.item = new ItemStack(material);
 		this.itemMeta = item.getItemMeta();
 	}
-	
-	public ItemStack getItemStack(){
+
+	public ItemStack getItemStack() {
 		item.setItemMeta(itemMeta);
 		return item;
 	}
-	
-	public ItemMeta getItemMeta(){
+
+	public ItemMeta getItemMeta() {
 		return itemMeta;
 	}
-	
-	
-	public void setName(String displayName){
+
+	public void setName(String displayName) {
 		itemMeta.setDisplayName(displayName);
 	}
-	
-	public void setLore(Integer loreId, String lore){
+
+	public void setLore(Integer loreId, String lore) {
 		this.lore.set(loreId, lore);
 		itemMeta.setLore(this.lore);
 	}
-	
-	public void addLore(String lore){
+
+	public void addLore(String lore) {
 		this.lore.add(lore);
 		itemMeta.setLore(this.lore);
 	}
-	
-	public void removeLore(Integer loreId){
+
+	public void removeLore(Integer loreId) {
 		this.lore.remove(loreId);
 		itemMeta.setLore(this.lore);
 	}
-	
-	public void setDurability(Short durability){
+
+	public void setDurability(Short durability) {
 		item.setDurability(durability);
 	}
-	
-	public void addEnchantment(Enchantment ent, Integer level){
+
+	public void addEnchantment(Enchantment ent, Integer level) {
 		itemMeta.addEnchant(ent, level, true);
 	}
 }

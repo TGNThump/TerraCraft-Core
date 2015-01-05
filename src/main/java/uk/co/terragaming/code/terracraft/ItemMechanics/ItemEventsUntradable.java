@@ -1,9 +1,8 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics;
+package uk.co.terragaming.code.terracraft.ItemMechanics;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -22,7 +21,7 @@ public class ItemEventsUntradable implements Listener {
 			if (is.hasItemMeta()){
 				if (is.getItemMeta().hasLore()){
 					for (String s : is.getItemMeta().getLore()){
-						if (s.equals(ChatColor.GRAY + "Untradable")){
+						if (s.contains("Soulbound") || s.contains("Heirloom")){
 							iter.remove();
 						}
 					}

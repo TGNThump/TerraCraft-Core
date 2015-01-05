@@ -6,8 +6,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.ItemManager;
-import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.ItemMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemMechanics;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemRegistry;
 
 public class StaffSpawnCustomItem implements CommandExecutor{
 	
@@ -16,16 +18,25 @@ public class StaffSpawnCustomItem implements CommandExecutor{
 		Player player = (Player) sender;
 		if (args.length >= 1){
 			
-			ItemManager itemManager = ItemMechanics.getInstance().getItemManager();
-			
-			if (itemManager.hasItem(args[0])){
-				player.getInventory().addItem(itemManager.getItemStack(args[0]));
+			ItemRegistry itemRegistry = ItemMechanics.getInstance().getItemRegistry();
+			Integer itemId;
+			try{
+				itemId = Integer.decode(args[0]);
+			} catch (Exception e){
+				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Invalid Command Usage.");
+				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Usage: /staff spawnCustomItem <ItemId>");
+				return true;
+			}
+			if (itemRegistry.hasItem(itemId)){
+				ItemInstance item = itemRegistry.getItem(itemId).createInstance();
+				item.setOwnerId(AccountMechanics.getInstance().getRegistry().getAccount(player).getId());
+				player.getInventory().addItem(item.getItemStack());
 			} else {
-				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Unregistered ItemName.");
+				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Unregistered ItemId: " + itemId + " from " + args[0]);
 			}
 		} else {
 			sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Invalid Command Usage.");
-			sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Usage: /staff spawnCustomItem <ItemName>");
+			sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Usage: /staff spawnCustomItem <ItemId>");
 		}
 		return true;
 	}

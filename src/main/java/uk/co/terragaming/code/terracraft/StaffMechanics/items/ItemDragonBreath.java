@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.CustomItem;
+import uk.co.terragaming.code.terracraft.ItemMechanics.CustomItem;
 
 
 public class ItemDragonBreath extends CustomItem {
