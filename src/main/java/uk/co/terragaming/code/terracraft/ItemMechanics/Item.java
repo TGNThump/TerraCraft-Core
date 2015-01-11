@@ -8,23 +8,27 @@ import java.util.HashMap;
 
 import org.bukkit.Material;
 
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
+import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
+import uk.co.terragaming.code.terracraft.enums.ItemBindType;
+import uk.co.terragaming.code.terracraft.enums.ItemClass;
+import uk.co.terragaming.code.terracraft.enums.ItemQuality;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class Item {
-	private final int id;
+	private final Integer id;
 	private String name;
 	private Material material;
-	private String quality;
-	private String bind;
-	private String itemClass;
+	private ItemQuality quality;
+	private ItemBindType bind;
+	private ItemClass itemClass;
 	private String type;
 	private int minBaseDamage;
 	private int maxBaseDamage;
 	private String data;
 	
-	private HashMap<String, Integer> requiredAttributes = new HashMap<String, Integer>(); 	// [AttributeName, Required Value] - Includes 'Rank' Requirement
-	private HashMap<String, Integer> moddedAttributes = new HashMap<String, Integer>();		// [AttributeName, Value Modifier]
+	private HashMap<CharacterAttribute, Integer> requiredAttributes = new HashMap<CharacterAttribute, Integer>(); 	// [AttributeName, Required Value] - Includes 'Rank' Requirement
+	private HashMap<CharacterAttribute, Integer> moddedAttributes = new HashMap<CharacterAttribute, Integer>();		// [AttributeName, Value Modifier]
 	
 	private int manaCost;
 	private int healthCost;
@@ -45,7 +49,7 @@ public class Item {
 		instance.setDurability(maxDurability);
 		
 		try{
-			Connection connection = Database.getInstance().getConnection();
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
 
 				String SQL = "INSERT INTO tcItemInstances (itemId) VALUES (?)";
 				
@@ -88,28 +92,28 @@ public class Item {
 		this.material = material;
 	}
 
-	public String getQuality() {
+	public ItemQuality getQuality() {
 		return quality;
 	}
 
-	public void setQuality(String quality) {
-		this.quality = quality;
+	public void setQuality(ItemQuality itemQuality) {
+		this.quality = itemQuality;
 	}
 
-	public String getBind() {
+	public ItemBindType getBind() {
 		return bind;
 	}
 
-	public void setBind(String string) {
-		this.bind = string;
+	public void setBind(ItemBindType itemBindType) {
+		this.bind = itemBindType;
 	}
 
-	public String getItemClass() {
+	public ItemClass getItemClass() {
 		return itemClass;
 	}
 
-	public void setItemClass(String itemClass) {
-		this.itemClass = itemClass;
+	public void setItemClass(ItemClass itemClass2) {
+		this.itemClass = itemClass2;
 	}
 
 	public String getType() {
@@ -144,27 +148,27 @@ public class Item {
 		this.data = data;
 	}
 
-	public HashMap<String, Integer> getRequiredAttributes() {
+	public HashMap<CharacterAttribute, Integer> getRequiredAttributes() {
 		return requiredAttributes;
 	}
 
-	public Integer getRequiredAttribute(String attribute){
+	public Integer getRequiredAttribute(CharacterAttribute attribute){
 		return requiredAttributes.get(attribute);
 	}
 	
-	public void setRequiredAttribute(String attribute, Integer value){
-		this.requiredAttributes.put(attribute, value);
+	public void setRequiredAttribute(CharacterAttribute strength, Integer value){
+		this.requiredAttributes.put(strength, value);
 	}
 
-	public HashMap<String, Integer> getModdedAttributes() {
+	public HashMap<CharacterAttribute, Integer> getModdedAttributes() {
 		return moddedAttributes;
 	}
 
-	public Integer getAttributeModifier(String attribute){
+	public Integer getAttributeModifier(CharacterAttribute attribute){
 		return moddedAttributes.get(attribute);
 	}
 	
-	public void setAttributeModifier(String attribute, Integer value){
+	public void setAttributeModifier(CharacterAttribute attribute, Integer value){
 		this.moddedAttributes.put(attribute, value);
 	}
 

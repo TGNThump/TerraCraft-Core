@@ -5,17 +5,17 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 
 public class AccountMechanics implements Mechanic{
 
-	public boolean isEnabled() 	{ return true; }
-	public boolean isCore() 	{ return true; }
+	public boolean isEnabled()	{ return true; }
+	public boolean isCore()		{ return true; }
 	
 	public static AccountMechanics getInstance(){
 		return (AccountMechanics) TerraCraft.getMechanic("AccountMechanics");
 	}
-
+	
 	// Mechanic Variables
 	private AccountRegistry accountRegistry;
 	
-	// Mechanic Methods
+	// Mechanic Method
 	
 	public AccountRegistry getRegistry(){
 		return accountRegistry;

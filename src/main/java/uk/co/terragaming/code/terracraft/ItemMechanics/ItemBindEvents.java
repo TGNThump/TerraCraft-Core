@@ -8,8 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemEventsUntradable implements Listener {
-	
+public class ItemBindEvents implements Listener {
 	
 	@EventHandler
 	public void manipulateDrops(EntityDeathEvent event) {

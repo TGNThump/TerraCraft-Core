@@ -13,6 +13,4 @@ public class CustomCommand {
 		this.desc = desc;
 		this.usage = usage;
 	}
-
-	
 }

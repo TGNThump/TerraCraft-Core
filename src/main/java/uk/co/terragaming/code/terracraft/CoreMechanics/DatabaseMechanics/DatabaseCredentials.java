@@ -3,10 +3,10 @@ package uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics;
 import java.util.Properties;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Exceptions.InvalidDatabaseCredentialsException;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.exceptions.InvalidCredentialsException;
 
 public class DatabaseCredentials {
-	static Properties getCredentials() throws InvalidDatabaseCredentialsException{
+	static Properties getCredentials() throws InvalidCredentialsException{
 		
 		try{
 		
@@ -22,7 +22,7 @@ public class DatabaseCredentials {
 		return properties;
 		
 		} catch(Exception e){
-			throw new InvalidDatabaseCredentialsException();
+			throw new InvalidCredentialsException();
 		}
 	}
 }

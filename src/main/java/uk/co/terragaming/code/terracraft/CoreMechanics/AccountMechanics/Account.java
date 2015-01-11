@@ -15,15 +15,16 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatterBuilder;
 
-import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountBannedException;
-import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions.AccountNotLinkedException;
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountBannedException;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountNotLinkedException;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionGroup;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionGroupKey;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.PermissionMechanics;
-import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.permLevel;
-import uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics.permType;
 import uk.co.terragaming.code.terracraft.CoreMechanics.PlayerMechanics.PlayerMessages;
+import uk.co.terragaming.code.terracraft.enums.PermissionLevel;
+import uk.co.terragaming.code.terracraft.enums.PermissionType;
+
 
 public class Account {
 	private Integer id;
@@ -57,7 +58,7 @@ public class Account {
 		String UUID = getPlayerUUID().toString();
 		String SQL = "SELECT a.accountId, a.terraTag, a.firstName, a.lastName, a.rep, a.country, a.dateOfBirth, a.signUpDate, a.lastLogDate, s.sessionId, s.ipAddress, s.userAgent, s.firstUsed, s.lastUsed, b.banId, b.type, b.reason, b.rep_lost, b.dateIssued, b.bannedUntil, b.issuedById, s.enabled, g.groupId FROM accounts a INNER JOIN accountSessions s ON a.accountId = s.accountId LEFT JOIN bans b ON a.accountId = b.accountId AND (b.serviceId = '3' OR b.type = 'GLOBAL') AND b.active = '1' LEFT JOIN groupMembers g ON a.accountId = g.accountId WHERE s.serviceId = '3' AND s.userAgent = ?";
 	
-		Connection connection = Database.getInstance().getConnection();
+		Connection connection = DatabaseMechanics.getInstance().getConnection();
 		
 		PreparedStatement query = connection.prepareStatement(SQL, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		query.setString(1, "Minecraft (" + UUID + ")");
@@ -141,7 +142,7 @@ public class Account {
 	
 	public void updateSession(Boolean active){
 		try{
-			Connection connection = Database.getInstance().getConnection();
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
 			if (getSessionId() > 0){
 				String SQL = "UPDATE accountSessions SET lastUsed = now(), active = ? WHERE sessionId = ?";
 				
@@ -219,7 +220,7 @@ public class Account {
 		return null;
 	}
 
-	public boolean hasPermission(String permission, permType permType, permLevel permLevel){
+	public boolean hasPermission(String permission, PermissionType permType, PermissionLevel permLevel){
 		for (PermissionGroup group : getGroupsAsArray()){
 			if (group.hasPermission(permission, permType, permLevel)){
 				return true;

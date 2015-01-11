@@ -5,13 +5,15 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.joda.time.DateTime;
 
+import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
+
 public class Character {
 	private int id;
 	private int accountId;
 	private int raceId;
 
 	private String name;
-	private HashMap<String, Integer> attributes = new HashMap<String, Integer>();
+	private HashMap<CharacterAttribute, Integer> attributes = new HashMap<CharacterAttribute, Integer>();
 
 	private int maxHitpoints;
 	private int curHitpoints;
@@ -69,7 +71,7 @@ public class Character {
 		this.name = name;
 	}
 
-	public void setAttributes(HashMap<String, Integer> attributes) {
+	public void setAttributes(HashMap<CharacterAttribute, Integer> attributes) {
 		this.attributes = attributes;
 	}
 
@@ -77,8 +79,8 @@ public class Character {
 		return this.attributes.get(attribute);
 	}
 
-	public void setAttribute(String attribute, Integer value) {
-		this.attributes.put(attribute, value);
+	public void setAttribute(CharacterAttribute strength, Integer value) {
+		this.attributes.put(strength, value);
 	}
 
 	public int getMaxHitpoints() {

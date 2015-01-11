@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.PlayerMechanics;
+package uk.co.terragaming.code.terracraft.LanguageMechanics;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,7 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountR
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class ChatListener implements Listener{
-
+	
 	@EventHandler
 	public void onChat (AsyncPlayerChatEvent event){
 		
@@ -26,7 +26,7 @@ public class ChatListener implements Listener{
 		} else if (group.equals("moderator")){
 			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.WHITE + event.getMessage());
 		} else if (group.equals("donator")){
-			event.setFormat(ChatColor.GOLD + "<Donator>"  + ChatColor.WHITE + "<" + account.getTerraTag() + "> " + event.getMessage());
+			event.setFormat(ChatColor.GOLD + "<Donator>" + ChatColor.WHITE + "<" + account.getTerraTag() + "> " + event.getMessage());
 		} else if (group.equals("member")){
 			event.setFormat(ChatColor.DARK_GRAY + "<Member>" + ChatColor.WHITE + "<" + account.getTerraTag() + "> " + event.getMessage());
 		} else if (group.equals("guest")){
@@ -35,6 +35,5 @@ public class ChatListener implements Listener{
 			TerraLogger.warn("Unknown Primary Rank: " + account.getGroupsAsArray()[0].getGroupName().toLowerCase());
 			event.setFormat(ChatColor.DARK_GRAY + "<" + account.getGroupsAsArray()[0].getGroupName() + ">" + ChatColor.WHITE + "<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
 		}
-		
 	}
 }

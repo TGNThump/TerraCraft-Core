@@ -1,6 +1,6 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics;
+package uk.co.terragaming.code.terracraft.enums;
 
-public enum permType {
+public enum PermissionType {
 	VIEW(1),
 	MODIFY(2),
 	CREATE(3),
@@ -8,7 +8,7 @@ public enum permType {
 	
 	private final int level;
 	
-	permType(int level){
+	PermissionType(int level){
 		this.level = level;
 	}
 

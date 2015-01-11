@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Exceptions;
+package uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions;
 
 public class AccountBannedException extends Exception{
 

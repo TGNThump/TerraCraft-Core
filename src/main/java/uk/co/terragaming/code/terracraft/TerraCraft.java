@@ -6,14 +6,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.ReloadHandler;
+import uk.co.terragaming.code.terracraft.enums.ServerMode;
 import uk.co.terragaming.code.terracraft.utils.ConsoleColor;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class TerraCraft extends JavaPlugin{
-
+	
 	private static MechanicLoader loader;
-	public static Plugin plugin;
-	public static Server server;
+	private static Plugin plugin;
+	private static Server server;
 	
 	public static ServerMode serverMode = ServerMode.LOADING;
 	

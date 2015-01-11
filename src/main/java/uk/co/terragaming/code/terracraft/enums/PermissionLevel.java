@@ -1,13 +1,13 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics;
+package uk.co.terragaming.code.terracraft.enums;
 
-public enum permLevel {
+public enum PermissionLevel {
 	OWNER(1),
 	RESTRICTED(2),
 	EVERYONE(3);
 	
 	private final int level;
 	
-	permLevel(int level){
+	PermissionLevel(int level){
 		this.level = level;
 	}
 

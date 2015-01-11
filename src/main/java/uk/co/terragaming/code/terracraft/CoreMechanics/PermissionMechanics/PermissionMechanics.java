@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class PermissionMechanics implements Mechanic{
@@ -37,7 +37,7 @@ public class PermissionMechanics implements Mechanic{
 	@Override
 	public void Initialize() {
 		try {
-			Connection connection = Database.getInstance().getConnection();
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
 			
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM groups", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			query.executeQuery();

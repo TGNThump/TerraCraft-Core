@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
-import uk.co.terragaming.code.terracraft.ItemMechanics.CustomItem;
+import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.CustomItem;
 import uk.co.terragaming.code.terracraft.utils.IconMenu;
 import uk.co.terragaming.code.terracraft.utils.IconMenu.Row;
 import uk.co.terragaming.code.terracraft.utils.IconMenu.onClick;

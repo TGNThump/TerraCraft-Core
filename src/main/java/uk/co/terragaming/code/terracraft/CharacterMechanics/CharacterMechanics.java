@@ -14,7 +14,9 @@ import org.joda.time.DateTime;
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Database;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.WhitelistMechanics.LoginListener;
+import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
 
 public class CharacterMechanics implements Mechanic{
 
@@ -38,7 +40,7 @@ public class CharacterMechanics implements Mechanic{
 	public void downloadCharacters(Account account) throws SQLException {
 		String SQL = "SELECT * FROM tcCharacters WHERE accountId = ?";
 		
-		Connection connection = Database.getInstance().getConnection();
+		Connection connection = DatabaseMechanics.getInstance().getConnection();
 		
 		PreparedStatement query = connection.prepareStatement(SQL, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		query.setInt(1, account.getId());

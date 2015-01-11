@@ -6,6 +6,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.CustomItem;
+import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
+import uk.co.terragaming.code.terracraft.enums.ItemBinding;
+import uk.co.terragaming.code.terracraft.enums.ItemClass;
+import uk.co.terragaming.code.terracraft.enums.ItemQuality;
+
 public class ItemInstance {
 	private int id;
 	private int itemId;
@@ -13,13 +19,13 @@ public class ItemInstance {
 	private int slotid;
 	private String name;
 	private Material material;
-	private String quality;
-	private String binding;
+	private ItemQuality quality;
+	private ItemBinding binding;
 	private int minDamageMod;
 	private int maxDamageMod;
 	private String data;
 	
-	private HashMap<String, Integer> moddedAttributes = new HashMap<String, Integer>();		// [AttributeName, Value Modifier]
+	private HashMap<CharacterAttribute, Integer> moddedAttributes = new HashMap<CharacterAttribute, Integer>();		// [AttributeName, Value Modifier]
 	
 	private Integer value;
 	private int durability;
@@ -79,22 +85,22 @@ public class ItemInstance {
 	public void setMaterial(Material material) {
 		this.material = material;
 	}
-	public String getQuality() {
+	public ItemQuality getQuality() {
 		if (quality == null){
 			return this.getItem().getQuality();
 		}
 		return quality;
 	}
-	public void setQuality(String quality) {
+	public void setQuality(ItemQuality quality) {
 		this.quality = quality;
 	}
-	public String getBinding() {
+	public ItemBinding getBinding() {
 		if(binding == null){
 			return ItemBinding.NONE;
 		}
 		return binding;
 	}
-	public void setBinding(String binding) {
+	public void setBinding(ItemBinding binding) {
 		this.binding = binding;
 	}
 	public int getMinDamageMod() {
@@ -127,15 +133,15 @@ public class ItemInstance {
 	public void setData(String data) {
 		this.data = data;
 	}
-	public HashMap<String, Integer> getRawModdedAttributes() {
+	public HashMap<CharacterAttribute, Integer> getRawModdedAttributes() {
 		return moddedAttributes;
 	}
 	
-	public Integer getRawModdedAttribute(String attribute){
+	public Integer getRawModdedAttribute(CharacterAttribute attribute){
 		return this.moddedAttributes.get(attribute);
 	}
 	
-	public Integer setRawModdedAttribute(String attribute, Integer value){
+	public Integer setRawModdedAttribute(CharacterAttribute attribute, Integer value){
 		return this.moddedAttributes.put(attribute, value);
 	}
 	
@@ -155,7 +161,7 @@ public class ItemInstance {
 		this.durability = durability;
 	}
 	
-	public Integer getModdedAttribute(String attribute){
+	public Integer getModdedAttribute(CharacterAttribute attribute){
 		return (this.getItem().getAttributeModifier(attribute) + this.getRawModdedAttribute(attribute));
 	}
 	
@@ -164,7 +170,7 @@ public class ItemInstance {
 		
 		item.setName(ItemQuality.getChatColor(getQuality()) + "" + ChatColor.BOLD + getName());
 
-		item.addLore(ChatColor.GRAY + (getItem().getItemClass() == ItemClass.MELEE || getItem().getItemClass() == ItemClass.RANGE ? getItem().getItemClass() + " Weapon" :  getItem().getItemClass()) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
+		item.addLore(ChatColor.GRAY + (getItem().getItemClass().equals(ItemClass.MELEE) || getItem().getItemClass().equals(ItemClass.RANGE) ? getItem().getItemClass().toString() + " Weapon" :  getItem().getItemClass().toString()) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
 		item.addLore(ChatColor.DARK_GRAY + "" + getMinDamage() + " - " + getMaxDamage() + " Damage");
 		
 		if (getBinding().equals(ItemBinding.ACCOUNT)){

@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 
 public class HelpCommand implements CommandExecutor {
 	public String mechanicName;
-//	private HashSet<CustomCommand> commandSet = new HashSet<CustomCommand>();
 	private List<CustomCommand> commandsList = new ArrayList<CustomCommand>();
 	
 	public HelpCommand(String mechanicName){
@@ -21,7 +20,6 @@ public class HelpCommand implements CommandExecutor {
 		if (command == null) {
             throw new IllegalArgumentException("Invalid command paramters specified.");
         }
-//        commandSet.add(command);
 		commandsList.add(command);
 	}
 	
@@ -29,12 +27,10 @@ public class HelpCommand implements CommandExecutor {
 		if (command.isEmpty() || desc.isEmpty() || usage.isEmpty()) {
             throw new IllegalArgumentException("Invalid command paramters specified.");
         }
-//        commandSet.add(new CustomCommand(command, desc, usage));
 		commandsList.add(new CustomCommand(command, desc, usage));
 	}
 	
 	public void unregisterCommand(CustomCommand command) {
-//		commandSet.remove(command);
 		commandsList.remove(command);
     }
 	
@@ -73,5 +69,4 @@ public class HelpCommand implements CommandExecutor {
 
 		return true;
 	}
-	
 }

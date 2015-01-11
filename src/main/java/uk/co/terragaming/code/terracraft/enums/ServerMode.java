@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft;
+package uk.co.terragaming.code.terracraft.enums;
 
 public enum ServerMode {
 	LOADING,		// NOBODY
@@ -7,6 +7,7 @@ public enum ServerMode {
 	CLOSED_BETA,	// TGN Beta Members Only
 	OPEN_BETA,		// All Project Bifrost Registered Players
 	OPEN,			// All Project Bifrost Registered Players
+	PUBLIC,			// All Players
 	BIFROST			// BIFROST REGISTRATION SERVER
 ;
 
@@ -22,6 +23,8 @@ public enum ServerMode {
 			return ServerMode.OPEN_BETA;
 		case "OPEN":
 			return ServerMode.OPEN;
+		case "PUBLIC":
+			return ServerMode.PUBLIC;
 		case "BIFROST":
 			return ServerMode.BIFROST;		
 		}

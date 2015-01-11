@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.PlayerMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.WhitelistMechanics;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

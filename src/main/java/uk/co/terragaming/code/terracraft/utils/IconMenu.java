@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+
 public class IconMenu implements Listener {
 
 	private String name;
@@ -138,5 +139,4 @@ public class IconMenu implements Listener {
 		item.setItemMeta(im);
 		return item;
 	}
-
 }

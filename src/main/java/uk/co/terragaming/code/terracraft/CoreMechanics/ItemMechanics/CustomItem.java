@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.ItemMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics;
 
 import java.util.ArrayList;
 

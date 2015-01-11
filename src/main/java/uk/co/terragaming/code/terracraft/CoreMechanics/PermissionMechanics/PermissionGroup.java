@@ -3,6 +3,9 @@ package uk.co.terragaming.code.terracraft.CoreMechanics.PermissionMechanics;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import uk.co.terragaming.code.terracraft.enums.PermissionLevel;
+import uk.co.terragaming.code.terracraft.enums.PermissionType;
+
 public class PermissionGroup {
 	private Integer groupId;
 	private String groupName;
@@ -39,7 +42,7 @@ public class PermissionGroup {
 		permissions.put(permission, permissionLevel);
 	}
 	
-	public boolean hasPermission(String permission, permType permType, permLevel permLevel){
+	public boolean hasPermission(String permission, PermissionType permType, PermissionLevel permLevel){
 		if (!permissions.containsKey(permission)) return false;
 		String permString = getPermissionString(permission);
 		permString = permString.substring(permLevel.getLevel() - 1, permLevel.getLevel());
