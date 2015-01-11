@@ -2,12 +2,12 @@ package uk.co.terragaming.code.terracraft.CharacterMechanics;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.CustomItem;
@@ -15,6 +15,8 @@ import uk.co.terragaming.code.terracraft.utils.IconMenu;
 import uk.co.terragaming.code.terracraft.utils.IconMenu.Row;
 import uk.co.terragaming.code.terracraft.utils.IconMenu.onClick;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
+import com.comphenix.attribute.AttributeStorage;
 
 public class CharacterInterface {
 
@@ -24,19 +26,30 @@ public class CharacterInterface {
 	
 	public void showCharacterSelectorInterface(final UUID playerUUID){
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(playerUUID);
-		Player player = Bukkit.getPlayer(playerUUID);
-		IconMenu menu = new IconMenu("Your Character Profiles", 1, new onClick(){
+		Player player = TerraCraft.Server().getPlayer(playerUUID);
+		player.setHealth(20d);
+		player.setFoodLevel(20);
+		player.getInventory().clear();
+		
+		IconMenu menu = new IconMenu(ChatColor.WHITE + "Your Character Profiles", 1, new onClick(){
 			
 			@Override
 			public boolean click(Player clicker, IconMenu menu, Row row, int slot, ItemStack item) {
-				Player player = Bukkit.getPlayer(playerUUID);
 				if (row.getRow() == 0){
-					TerraLogger.debug("Player " + clicker.getDisplayName() + " clicked " + ChatColor.stripColor(row.getRowItem(slot).getItemMeta().getDisplayName()).toLowerCase());
-					
-					switch(ChatColor.stripColor(row.getRowItem(slot).getItemMeta().getDisplayName()).toLowerCase()){
-					case "new character":
-						menu.close(player);
-						showNewCharacterInterface(player);
+					if (item != null) {
+						AttributeStorage storage = AttributeStorage.newTarget(item, TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft"));
+						
+						if (storage.getData(null) != null){
+							Integer charId = Integer.parseInt(storage.getData(null).substring(5));
+							Account account = AccountMechanics.getInstance().getRegistry().getAccount(clicker);
+							Character activeChar = CharacterMechanics.getInstance().getCharacter(charId);
+							account.setCurCharacterId(charId);
+							activeChar.downloadData();
+							clicker.teleport(activeChar.getLocation());
+						} else {
+							menu.close(clicker);
+							showNewCharacterInterface(clicker);
+						}
 					}
 				}				
 				return true;
@@ -53,8 +66,10 @@ public class CharacterInterface {
 			
 			item.setName(ChatColor.GOLD + character1.getName());
 			item.addLore(ChatColor.DARK_AQUA + "Click here to become " + character1.getName() + ".");
-
-			menu.addButton(menu.getRow(0), i, item.getItemStack());
+			AttributeStorage storage = AttributeStorage.newTarget(item.getItemStack(), TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft"));
+			storage.setData("CID: " + character1.getId());
+			
+			menu.addButton(menu.getRow(0), i, storage.getTarget());
 			i++;
 		}
 		

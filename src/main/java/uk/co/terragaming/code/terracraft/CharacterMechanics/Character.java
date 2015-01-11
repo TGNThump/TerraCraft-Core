@@ -1,11 +1,26 @@
 package uk.co.terragaming.code.terracraft.CharacterMechanics;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.joda.time.DateTime;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
+import uk.co.terragaming.code.terracraft.enums.ItemBinding;
+import uk.co.terragaming.code.terracraft.enums.ItemQuality;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class Character {
 	private int id;
@@ -38,7 +53,74 @@ public class Character {
 	private String description;
 	private String description_ooc;
 	private String notes;
+	
+	public Account getAccount(){
+		return AccountMechanics.getInstance().getRegistry().getAccount(accountId);
+	}
 
+	public void downloadData(){
+		try {
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
+			
+			PreparedStatement query = connection.prepareStatement("SELECT * FROM tcItemInstances WHERE charId = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+			query.setInt(1, this.getId());
+			query.executeQuery();
+			ResultSet results = query.getResultSet();
+			results.beforeFirst();
+			
+			Account account = getAccount();
+			UUID uuid = account.getPlayerUUID();
+			Player player = TerraCraft.Server().getPlayer(uuid);
+			player.getInventory().clear();
+			
+			while(results.next()){
+				ItemInstance item = new ItemInstance(results.getInt("itemInstanceId"));
+				item.setId(results.getInt("itemInstanceId"));
+				item.setItemId(results.getInt("itemId"));
+				item.setOwnerId(results.getInt("charId"));
+				item.setSlotid(results.getInt("slotId"));
+				item.setName(results.getString("name"));
+				item.setMaterial(Material.getMaterial(results.getString("material")));
+				
+				item.setQuality(ItemQuality.getQuality(results.getString("quality")));
+				
+				item.setBinding(ItemBinding.getBinding(results.getString("bound")));
+				
+				item.setMinDamageMod(results.getInt("minModDamage"));
+				item.setMaxDamageMod(results.getInt("maxModDamage"));
+				
+				item.setData(results.getString("data"));
+				
+				item.setRawModdedAttribute(CharacterAttribute.STRENGTH, results.getInt("modStrength"));
+				item.setRawModdedAttribute(CharacterAttribute.AGILITY, results.getInt("modAgility"));
+				item.setRawModdedAttribute(CharacterAttribute.STAMINA, results.getInt("modStamina"));
+				item.setRawModdedAttribute(CharacterAttribute.SPIRIT, results.getInt("modSpirit"));
+				item.setRawModdedAttribute(CharacterAttribute.RESISTANCE, results.getInt("modResistance"));
+				item.setRawModdedAttribute(CharacterAttribute.INTELLECT, results.getInt("modIntellect"));
+				item.setRawModdedAttribute(CharacterAttribute.VITALITY, results.getInt("modVitality"));
+								
+				item.setValue(results.getInt("cost"));
+				item.setDurability(results.getInt("curDurability"));
+
+				
+				ItemMechanics.getInstance().getItemInstanceRegistry().addItemInstance(item.getId(), this.getId(), item);
+				player.getInventory().setItem(item.getSlotid(), item.getItemStack());
+			}
+			
+			connection.close();
+
+		} catch (Exception e){
+			TerraLogger.error("Cannot retrieve Items from Database");
+			e.printStackTrace();
+		}
+	}
+	
+	public void uploadData(){
+//		Account account = getAccount();
+//		Player player = TerraCraft.Server().getPlayer(account.getPlayerUUID());
+//		
+	}
+	
 	public int getId() {
 		return id;
 	}

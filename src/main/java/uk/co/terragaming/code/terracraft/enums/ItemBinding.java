@@ -11,7 +11,19 @@ public enum ItemBinding {
 		this.binding = binding;
 	}
 
-	public String getAttribute() {
+	public String getBinding() {
 		return binding;
+	}
+	
+	public static ItemBinding getBinding(String string) {
+		if (string == null){
+			return ItemBinding.NONE;
+		} else if (string.equals("Account")){
+			return ItemBinding.ACCOUNT;
+		} else if (string.equals("Character")){
+			return ItemBinding.CHARACTER;
+		} else {
+			return ItemBinding.NONE;
+		}
 	}
 }

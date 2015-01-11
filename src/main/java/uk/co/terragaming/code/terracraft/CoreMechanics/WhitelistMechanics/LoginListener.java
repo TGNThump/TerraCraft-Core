@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
-import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountBannedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountNotLinkedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
@@ -53,12 +52,9 @@ public class LoginListener implements Listener{
 			try {
 				
 				Account account = new Account(event.getUniqueId(), event.getAddress());
-				AccountMechanics accountMechanics = (AccountMechanics) TerraCraft.getMechanic("AccountMechanics");
-				AccountRegistry accountRegistry = accountMechanics.getRegistry();
-				
-				accountRegistry.addAccount(account);
-				
+
 				account.onLogin();
+				AccountMechanics.getInstance().getRegistry().addAccount(account);
 				
 				TerraLogger.info("Downloaded Data of " + account.getTerraTag());
 				

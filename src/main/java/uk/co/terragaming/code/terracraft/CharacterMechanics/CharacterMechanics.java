@@ -15,7 +15,6 @@ import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
-import uk.co.terragaming.code.terracraft.CoreMechanics.WhitelistMechanics.LoginListener;
 import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
 
 public class CharacterMechanics implements Mechanic{

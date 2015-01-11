@@ -92,7 +92,7 @@ public class ItemMechanics implements Mechanic{
 				item.setAttributeModifier(CharacterAttribute.INTELLECT, results.getInt("modIntellect"));
 				item.setAttributeModifier(CharacterAttribute.VITALITY, results.getInt("modVitality"));
 				
-				item.setCost(results.getInt("value"));
+				item.setCost(results.getInt("cost"));
 				item.setMaxDurability(results.getInt("maxDurability"));
 				
 				itemRegistry.addItem(item.getId(), item);

@@ -41,6 +41,10 @@ public enum ItemQuality {
 	}
 
 	public static ItemQuality getQuality(String string) {
+		if(string == null){
+			return null;
+		}
+		
 		string = string.toUpperCase();
 		if (string.equals("POOR")){
 			return ItemQuality.POOR;

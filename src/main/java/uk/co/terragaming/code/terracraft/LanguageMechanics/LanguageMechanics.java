@@ -7,7 +7,7 @@ import uk.co.terragaming.code.terracraft.LanguageMechanics.ChatListener;
 public class LanguageMechanics implements Mechanic{
 
 	public boolean isEnabled() 	{ return true; }
-	public boolean isCore() 	{ return true; }
+	public boolean isCore() 	{ return false; }
 	
 	public static LanguageMechanics getInstance(){
 		return (LanguageMechanics) TerraCraft.getMechanic("LanguageMechanics");

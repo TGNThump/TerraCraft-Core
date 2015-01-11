@@ -1,5 +1,10 @@
 package uk.co.terragaming.code.terracraft;
 
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -9,6 +14,8 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.ReloadHandler;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
 import uk.co.terragaming.code.terracraft.utils.ConsoleColor;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
+import com.google.common.base.Charsets;
 
 public class TerraCraft extends JavaPlugin{
 	
@@ -53,6 +60,20 @@ public class TerraCraft extends JavaPlugin{
 		
 		TerraLogger.blank();
 	}
+	
+    public static UUID computeUUID(String id) {
+	    try {
+		    // TODO: REPLACE PREFIX WITH A RANDOM STRING. See random.org
+		    final byte[] input = ("5jNT9hjG64C431gOmv0l5hqQaEdueX3lnnUW1Rm2" + id).getBytes(Charsets.UTF_8);
+		    final ByteBuffer output = ByteBuffer.wrap(MessageDigest.getInstance("MD5").digest(input));
+		     
+		    return new UUID(output.getLong(), output.getLong());
+		     
+	    } catch (NoSuchAlgorithmException e) {
+	    // Definitely in violation of the specs
+	    throw new IllegalStateException("Current JVM doesn't support MD5.", e);
+	    }
+    }
 	
 	public void onDisable(){
 		loader.preDenitializeMechanics();

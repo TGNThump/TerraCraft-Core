@@ -6,11 +6,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.comphenix.attribute.AttributeStorage;
+
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.ItemMechanics.CustomItem;
 import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
 import uk.co.terragaming.code.terracraft.enums.ItemBinding;
 import uk.co.terragaming.code.terracraft.enums.ItemClass;
 import uk.co.terragaming.code.terracraft.enums.ItemQuality;
+import uk.co.terragaming.code.terracraft.utils.StringTools;
 
 public class ItemInstance {
 	private int id;
@@ -170,7 +174,7 @@ public class ItemInstance {
 		
 		item.setName(ItemQuality.getChatColor(getQuality()) + "" + ChatColor.BOLD + getName());
 
-		item.addLore(ChatColor.GRAY + (getItem().getItemClass().equals(ItemClass.MELEE) || getItem().getItemClass().equals(ItemClass.RANGE) ? getItem().getItemClass().toString() + " Weapon" :  getItem().getItemClass().toString()) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
+		item.addLore(ChatColor.GRAY + (getItem().getItemClass().equals(ItemClass.MELEE) || getItem().getItemClass().equals(ItemClass.RANGE) ? StringTools.toNormalCase(getItem().getItemClass().toString()) + " Weapon" :  StringTools.toNormalCase(getItem().getItemClass().toString())) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
 		item.addLore(ChatColor.DARK_GRAY + "" + getMinDamage() + " - " + getMaxDamage() + " Damage");
 		
 		if (getBinding().equals(ItemBinding.ACCOUNT)){
@@ -179,6 +183,10 @@ public class ItemInstance {
 			item.addLore(ChatColor.GRAY + "Soulbound");
 		}
 		
-		return item.getItemStack();
+		AttributeStorage storage = AttributeStorage.newTarget(item.getItemStack(), TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft"));
+		
+		storage.setData("TCID: " + this.getId());
+		
+		return storage.getTarget();
 	}
 }
