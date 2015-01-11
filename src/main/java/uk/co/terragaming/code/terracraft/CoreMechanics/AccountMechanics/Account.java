@@ -43,6 +43,8 @@ public class Account {
 	
 	private HashMap<Integer, AccountBan> bans = new HashMap<Integer, AccountBan>();
 	private HashMap<PermissionGroupKey, PermissionGroup> groups = new HashMap<PermissionGroupKey, PermissionGroup>();
+	
+	private Integer curCharacterId;
 
 	public Account(UUID uniqueId, InetAddress ipAddress) {
 		this.playerUUID = uniqueId;
@@ -340,5 +342,17 @@ public class Account {
 
 	public HashMap<PermissionGroupKey, PermissionGroup> getGroups() {
 		return groups;
+	}
+
+
+
+	public Integer getCurCharacterId() {
+		return curCharacterId;
+	}
+
+
+
+	public void setCurCharacterId(Integer curCharacterId) {
+		this.curCharacterId = curCharacterId;
 	}
 }

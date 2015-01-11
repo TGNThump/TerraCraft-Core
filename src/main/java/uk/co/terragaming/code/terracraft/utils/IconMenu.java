@@ -83,6 +83,11 @@ public class IconMenu implements Listener {
 			viewing.remove(event.getPlayer().getName());
 	}
 
+	public IconMenu addButton(Row row, int position, ItemStack item) {
+		items[row.getRow() * 9 + position] = item;
+		return this;
+	}
+	
 	public IconMenu addButton(Row row, int position, ItemStack item, String name, String... lore) {
 		items[row.getRow() * 9 + position] = getItem(item, name, lore);
 		return this;
@@ -125,7 +130,7 @@ public class IconMenu implements Listener {
 			return row;
 		}
 	}
-
+	
 	private ItemStack getItem(ItemStack item, String name, String... lore) {
 		ItemMeta im = item.getItemMeta();
 		im.setDisplayName(name);
