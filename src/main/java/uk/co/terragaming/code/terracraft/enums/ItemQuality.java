@@ -23,19 +23,19 @@ public enum ItemQuality {
 	
 	public static ChatColor getChatColor(ItemQuality quality) {
 		if (quality.equals(ItemQuality.POOR)){
-			return ChatColor.GRAY;
+			return ChatColor.DARK_GRAY;
 		} else if (quality.equals(ItemQuality.COMMON)){
-			return ChatColor.WHITE;
+			return ChatColor.GRAY;
 		} else if (quality.equals(ItemQuality.UNCOMMON)){
-			return ChatColor.GREEN;
+			return ChatColor.WHITE;
 		} else if (quality.equals(ItemQuality.RARE)){
-			return ChatColor.DARK_AQUA;
+			return ChatColor.GREEN;
 		} else if (quality.equals(ItemQuality.EPIC)){
 			return ChatColor.LIGHT_PURPLE;
 		} else if (quality.equals(ItemQuality.LEGENDARY)){
-			return ChatColor.RED;
+			return ChatColor.DARK_AQUA;
 		} else if (quality.equals(ItemQuality.ARTIFACT)){
-			return ChatColor.GOLD;
+			return ChatColor.YELLOW;
 		}
 		return ChatColor.WHITE;
 	}

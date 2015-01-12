@@ -58,7 +58,23 @@ public class Character {
 		return AccountMechanics.getInstance().getRegistry().getAccount(accountId);
 	}
 
-	public void downloadData(){
+	public void setActiveCharacter(){
+		Account account = getAccount();
+		UUID uuid = account.getPlayerUUID();
+		Player player = TerraCraft.Server().getPlayer(uuid);
+				
+		downloadInventoryData();
+		
+		player.getInventory().clear();
+		player.teleport(getLocation());
+		player.setCustomName(getName());
+		
+		for (ItemInstance item : ItemMechanics.getInstance().getItemInstanceRegistry().getItemInstances(getId())){
+			player.getInventory().setItem(item.getSlotid(), item.getItemStack());
+		}
+	}
+	
+	public void downloadInventoryData(){
 		try {
 			Connection connection = DatabaseMechanics.getInstance().getConnection();
 			
@@ -67,11 +83,6 @@ public class Character {
 			query.executeQuery();
 			ResultSet results = query.getResultSet();
 			results.beforeFirst();
-			
-			Account account = getAccount();
-			UUID uuid = account.getPlayerUUID();
-			Player player = TerraCraft.Server().getPlayer(uuid);
-			player.getInventory().clear();
 			
 			while(results.next()){
 				ItemInstance item = new ItemInstance(results.getInt("itemInstanceId"));
@@ -103,8 +114,7 @@ public class Character {
 				item.setDurability(results.getInt("curDurability"));
 
 				
-				ItemMechanics.getInstance().getItemInstanceRegistry().addItemInstance(item.getId(), this.getId(), item);
-				player.getInventory().setItem(item.getSlotid(), item.getItemStack());
+				ItemMechanics.getInstance().getItemInstanceRegistry().addItemInstance(item, getId());
 			}
 			
 			connection.close();

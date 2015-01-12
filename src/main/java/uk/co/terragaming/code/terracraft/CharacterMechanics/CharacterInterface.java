@@ -28,7 +28,7 @@ public class CharacterInterface {
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(playerUUID);
 		Player player = TerraCraft.Server().getPlayer(playerUUID);
 		player.setHealth(20d);
-		player.setFoodLevel(20);
+		player.setFoodLevel(200);
 		player.getInventory().clear();
 		
 		IconMenu menu = new IconMenu(ChatColor.WHITE + "Your Character Profiles", 1, new onClick(){
@@ -44,8 +44,7 @@ public class CharacterInterface {
 							Account account = AccountMechanics.getInstance().getRegistry().getAccount(clicker);
 							Character activeChar = CharacterMechanics.getInstance().getCharacter(charId);
 							account.setCurCharacterId(charId);
-							activeChar.downloadData();
-							clicker.teleport(activeChar.getLocation());
+							activeChar.setActiveCharacter();
 						} else {
 							menu.close(clicker);
 							showNewCharacterInterface(clicker);

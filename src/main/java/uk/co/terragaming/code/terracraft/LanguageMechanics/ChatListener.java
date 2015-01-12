@@ -20,7 +20,7 @@ public class ChatListener implements Listener{
 		Account account = registry.getAccount(event.getPlayer().getUniqueId());
 		String group = account.getGroupsAsArray()[0].getGroupName().toLowerCase();
 		if (group.equals("staff")){
-			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.GOLD + event.getMessage());
+			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', event.getMessage()));
 		} else if (group.equals("developer")){
 			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.WHITE + event.getMessage());
 		} else if (group.equals("moderator")){
