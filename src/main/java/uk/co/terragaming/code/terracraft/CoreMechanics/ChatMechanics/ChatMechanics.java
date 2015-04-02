@@ -1,16 +1,16 @@
-package uk.co.terragaming.code.terracraft.LanguageMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.ChatMechanics;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.LanguageMechanics.ChatListener;
+import uk.co.terragaming.code.terracraft.CoreMechanics.ChatMechanics.ChatListener;
 
-public class LanguageMechanics implements Mechanic{
+public class ChatMechanics implements Mechanic{
 
 	public boolean isEnabled() 	{ return true; }
-	public boolean isCore() 	{ return false; }
+	public boolean isCore() 	{ return true; }
 	
-	public static LanguageMechanics getInstance(){
-		return (LanguageMechanics) TerraCraft.getMechanic("LanguageMechanics");
+	public static ChatMechanics getInstance(){
+		return (ChatMechanics) TerraCraft.getMechanic("ChatMechanics");
 	}
 
 	// Mechanic Variables

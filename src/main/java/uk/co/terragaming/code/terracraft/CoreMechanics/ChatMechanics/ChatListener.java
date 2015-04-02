@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.LanguageMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.ChatMechanics;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -14,8 +14,6 @@ public class ChatListener implements Listener{
 	
 	@EventHandler
 	public void onChat (AsyncPlayerChatEvent event){
-		
-		//TODO: REWORK TO USE CHARACTER INSTEAD OF ACCOUNT (FOR Custom Names and Member Rank Info (Town Leaver Roles ect))
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		Account account = registry.getAccount(event.getPlayer().getUniqueId());
 		String group = account.getGroupsAsArray()[0].getGroupName().toLowerCase();
