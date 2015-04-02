@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ItemInstanceRegistry {
-	private HashMap<Integer, ItemInstance> instances1 = new HashMap<Integer, ItemInstance>();
-	private HashMap<Integer, HashSet<Integer>> instances2 = new HashMap<Integer, HashSet<Integer>>(); // [CharId, InstanceId[]]
+	private HashMap<Integer, ItemInstance> instances1 = new HashMap<Integer, ItemInstance>();			// [InstanceId, ItemInstance]
+	private HashMap<Integer, HashSet<Integer>> instances2 = new HashMap<Integer, HashSet<Integer>>();	// [CharId, InstanceId[]]
 	
 	public boolean hasItemInstance(Integer id){
 		return instances1.containsKey(id);

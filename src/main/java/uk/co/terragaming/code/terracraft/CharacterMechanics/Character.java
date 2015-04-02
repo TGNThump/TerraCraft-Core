@@ -120,7 +120,7 @@ public class Character {
 			connection.close();
 
 		} catch (Exception e){
-			TerraLogger.error("Cannot retrieve Items from Database");
+			TerraLogger.error("Cannot retrieve Inventory Data from Database");
 			e.printStackTrace();
 		}
 	}

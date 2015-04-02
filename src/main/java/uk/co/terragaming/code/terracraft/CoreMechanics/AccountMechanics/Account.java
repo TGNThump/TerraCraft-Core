@@ -47,12 +47,35 @@ public class Account {
 	
 	private Integer curCharacterId;
 
+	// ----------------------------------- //
+	//  Construction
+	// ----------------------------------- //
+	
 	public Account(UUID uniqueId, InetAddress ipAddress) {
 		this.playerUUID = uniqueId;
 		this.ipAddress = ipAddress;
 	}
 	
+	// ----------------------------------- //
+	//  External Methods
+	// ----------------------------------- //
 	
+	public void onPreLogin() throws AccountNotLinkedException, AccountBannedException, SQLException {
+		downloadData();
+		checkBans();	
+		updateSession(true);
+		addToRegistry();
+	}
+	
+	public void onLogout() throws SQLException {
+		uploadData();
+		updateSession(false);
+		removeFromRegistry();
+	}
+	
+	// ----------------------------------- //
+	//  Database Link
+	// ----------------------------------- //
 	
 	public void downloadData() throws AccountNotLinkedException, SQLException, AccountBannedException{
 		String UUID = getPlayerUUID().toString();
@@ -136,6 +159,10 @@ public class Account {
 
 	}
 	
+	// ----------------------------------- //
+	//  Update Session
+	// ----------------------------------- //
+	
 	public void updateSession(){
 		updateSession(true);
 	}
@@ -174,9 +201,24 @@ public class Account {
 		}
 	}
 	
-	public void onLogin() throws AccountNotLinkedException, AccountBannedException, SQLException {
-		downloadData();
-		
+	// ----------------------------------- //
+	//  Update Registry
+	// ----------------------------------- //
+	
+	public void addToRegistry(){
+		AccountMechanics.getInstance().getRegistry().addAccount(this);
+	}
+	
+	public void removeFromRegistry(){
+		AccountMechanics.getInstance().getRegistry().removeAccount(this);
+	}
+	
+	// ----------------------------------- //
+	//  Util Methods
+	// ----------------------------------- //
+	
+	//Check status of Bans
+	public void checkBans() throws AccountBannedException{
 		for (Integer banId : bans.keySet()){
 			AccountBan ban = bans.get(banId);
 			switch(ban.getType()){
@@ -196,15 +238,9 @@ public class Account {
 					throw new AccountBannedException(PlayerMessages.get("account_banned_global"));
 			}
 		}
-		
-		updateSession(true);
 	}
 	
-	public void onLogout() throws SQLException {
-		uploadData();
-		updateSession(false);
-	}
-	
+	// Get Array of PermissionsGroups
 	public PermissionGroup[] getGroupsAsArray(){
 		try{
 			PermissionGroup[] result = new PermissionGroup[groups.size()];
@@ -220,6 +256,7 @@ public class Account {
 		return null;
 	}
 
+	// Check if an account has a permission
 	public boolean hasPermission(String permission, PermissionType permType, PermissionLevel permLevel){
 		for (PermissionGroup group : getGroupsAsArray()){
 			if (group.hasPermission(permission, permType, permLevel)){
@@ -345,13 +382,9 @@ public class Account {
 		return groups;
 	}
 
-
-
 	public Integer getCurCharacterId() {
 		return curCharacterId;
 	}
-
-
 
 	public void setCurCharacterId(Integer curCharacterId) {
 		this.curCharacterId = curCharacterId;

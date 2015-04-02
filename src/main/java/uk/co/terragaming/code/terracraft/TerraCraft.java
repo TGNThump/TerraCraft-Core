@@ -42,9 +42,9 @@ public class TerraCraft extends JavaPlugin{
 		getConfig();
 		
 		loader.constructMechanics();
+		loader.preInitMechanics();
 		TerraCraft.Server().getScheduler().scheduleSyncDelayedTask(TerraCraft.Plugin(), new Runnable() {
 			  public void run() {
-				  loader.preInitMechanics();
 				  loader.initMechanics();
 				  TerraLogger.blank();
 				  TerraLogger.info("All Enabled Mechanics have been Loaded");

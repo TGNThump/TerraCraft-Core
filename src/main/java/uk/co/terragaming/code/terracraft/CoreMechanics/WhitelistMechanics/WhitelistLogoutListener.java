@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
 
-public class LogoutListener implements Listener{
+public class WhitelistLogoutListener implements Listener{
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
