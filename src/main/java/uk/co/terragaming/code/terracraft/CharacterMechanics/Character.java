@@ -3,12 +3,15 @@ package uk.co.terragaming.code.terracraft.CharacterMechanics;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.joda.time.DateTime;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
@@ -20,7 +23,10 @@ import uk.co.terragaming.code.terracraft.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
 import uk.co.terragaming.code.terracraft.enums.ItemBinding;
 import uk.co.terragaming.code.terracraft.enums.ItemQuality;
+import uk.co.terragaming.code.terracraft.utils.StringTools;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
+import com.comphenix.attribute.AttributeStorage;
 
 public class Character {
 	private int id;
@@ -66,6 +72,11 @@ public class Character {
 		downloadInventoryData();
 		
 		player.getInventory().clear();
+		player.setHealth(this.getCurHitpoints());
+		player.setMaxHealth(this.getMaxHitpoints());
+		player.setExp(this.getCurExp());
+		player.setLevel(this.getCurLevel());
+		player.setFoodLevel(this.getCurHunger());
 		player.teleport(getLocation());
 		player.setCustomName(getName());
 		
@@ -125,10 +136,213 @@ public class Character {
 		}
 	}
 	
-	public void uploadData(){
-//		Account account = getAccount();
-//		Player player = TerraCraft.Server().getPlayer(account.getPlayerUUID());
-//		
+
+	public void uploadData() {
+		TerraLogger.debug("uploadData();");
+		try {
+			uploadInventoryData();
+			
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
+			String SQL = "UPDATE tcCharacters SET " +
+						"raceId = ?, " +
+						"name = ?, " +
+						"attrStrength = ?, " +
+						"attrAgility = ?, " +
+						"attrStamina = ?, " +
+						"attrSpirit = ?, " +
+						"attrResistance = ?, " +
+						"attrIntellect = ?, " +
+						"attrVitality = ?, " +
+						"maxHitpoints = ?, " +
+						"curHitpoints = ?, " +
+						"maxHunger = ?, " +
+						"curHunger = ?, " +
+						"maxMana = ?, " +
+						"curMana = ?, " +
+						"curLevel = ?, " +
+						"curExp = ?, " +
+						"money = ?, " +
+						"bankMoney = ?, " +
+						"locWorld = ?, " +
+						"locX = ?, " +
+						"locY = ?, " +
+						"locZ = ?, " +
+						"locPitch = ?, " +
+						"locYaw = ?, " +
+						"lastLoginDate = ?, " +
+						"createDate = ?, " +
+						"description = ?, " +
+						"description_ooc = ?, " +
+						"notes = ? " +
+						"WHERE characterId = ?";
+		
+			PreparedStatement query = connection.prepareStatement(SQL);
+			
+			// raceId
+			query.setInt(1, this.getRaceId());
+			// name
+			query.setString(2, this.getName());
+			// attrStrength
+			query.setInt(3, this.getAttribute(CharacterAttribute.STRENGTH));
+			// attrAgility
+			query.setInt(4, this.getAttribute(CharacterAttribute.AGILITY));
+			// attrStamina
+			query.setInt(5, this.getAttribute(CharacterAttribute.STAMINA));
+			// attrSpirit
+			query.setInt(6, this.getAttribute(CharacterAttribute.SPIRIT));
+			// attrResistance
+			query.setInt(7, this.getAttribute(CharacterAttribute.RESISTANCE));
+			// attrIntellect
+			query.setInt(8, this.getAttribute(CharacterAttribute.INTELLECT));
+			// attrVitality
+			query.setInt(9, this.getAttribute(CharacterAttribute.VITALITY));
+			// maxHitpoints
+			query.setInt(10, this.getMaxHitpoints());
+			// curHitpoints
+			query.setInt(11, this.getCurHitpoints());
+			// maxHunger
+			query.setInt(12, this.getMaxHunger());
+			// curHunger
+			query.setInt(13, this.getCurHunger());
+			// maxMana
+			query.setInt(14, this.getMaxMana());
+			// curMana
+			query.setInt(15, this.getCurMana());
+			// curLevel
+			query.setInt(16, this.getCurLevel());
+			// curExp
+			query.setInt(17, this.getCurExp());
+			// money
+			query.setInt(18, this.getMoney());
+			// bankMoney
+			query.setInt(19, this.getBankMoney());
+			// locWorld
+			query.setString(20, this.getLocation().getWorld().getName());
+			// locX			
+			query.setInt(21, (int) this.getLocation().getX());
+			// locY
+			query.setInt(22, (int) this.getLocation().getY());
+			// locZ
+			query.setInt(23, (int) this.getLocation().getZ());
+			// locPitch
+			query.setInt(24, Math.round(this.getLocation().getPitch()));
+			// locYaw
+			query.setInt(25, Math.round(this.getLocation().getYaw()));
+			// lastLoginDate
+			query.setDate(26, new java.sql.Date(((java.util.Date) this.getLastLogDate().toDate()).getTime()));
+			// createDate
+			query.setDate(27, new java.sql.Date(((java.util.Date) this.getCreateDate().toDate()).getTime()));
+			// description
+			query.setString(28, this.getDescription());
+			// description_ooc
+			query.setString(29, this.getDescription_ooc());
+			// notes
+			query.setString(30, this.getNotes());
+			// characterId
+			query.setInt(31, this.getId());
+			
+			query.execute();
+			connection.close();
+			
+			TerraLogger.info("Uploaded Date of " + getAccount().getTerraTag());
+			
+		} catch (SQLException e) {
+			TerraLogger.error("Failed to upload " + getAccount().getTerraTag() + "'s Character Data to CORE....");
+			TerraLogger.error("Their character will be rolled back to before they logged in.");
+			e.printStackTrace();
+		}
+	}
+	
+	public void uploadInventoryData() throws SQLException{
+			TerraLogger.debug("uploadInventoryData();");
+			Account account = getAccount();
+			Player player = TerraCraft.Server().getPlayer(account.getPlayerUUID());
+			
+			PlayerInventory inv = player.getInventory();
+			UUID uuid = TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft");
+			
+			Connection connection = DatabaseMechanics.getInstance().getConnection();
+			String SQL = "UPDATE tcItemInstances SET " +
+						"charId = ?, " +
+						"slotId = ?, " +
+						"name = ?, " +
+						"material = ?, " +
+						"quality = ?, " +
+						"bound = ?, " +
+						"minModDamage = ?, " +
+						"maxModDamage = ?, " +
+						"data = ?, " +
+						"modStrength = ?, " +
+						"modAgility = ?, " +
+						"modStamina = ?, " +
+						"modSpirit = ?, " +
+						"modResistance = ?, " +
+						"modIntellect = ?, " +
+						"modVitality = ?, " +
+						"cost = ?, " +
+						"curDurability = ? " +
+						"WHERE itemInstanceId = ?";
+			
+			PreparedStatement query = connection.prepareStatement(SQL);
+
+			int i = 0;
+			for(ItemStack is : inv.getContents()){
+				if (is == null){ i++; continue; }
+				
+				AttributeStorage storage = AttributeStorage.newTarget(is, uuid);
+				String attrData = storage.getData(null);
+				 
+				if (!attrData.startsWith("TCID: ")) continue;
+				Integer itemInstanceID = Integer.parseInt(attrData.substring(6));
+
+				// TerraLogger.debug("ItemInstanceId: " + itemInstanceID + " at SlotId: " + i);
+				
+				ItemInstance itemInstance = ItemMechanics.getInstance().getItemInstanceRegistry().getItemInstance(itemInstanceID);
+				
+				// charId
+				query.setInt(1, itemInstance.getOwnerId());
+				// slotId
+				query.setInt(2, i);
+				// name
+				query.setString(3, itemInstance.getName());
+				// material
+				query.setString(4, itemInstance.getMaterial().toString());
+				// quality
+				query.setString(5, StringTools.toNormalCase(itemInstance.getQuality().toString()));
+				// bound
+				query.setString(6, StringTools.toNormalCase(itemInstance.getBinding().toString()));
+				// minModDamage
+				query.setInt(7, itemInstance.getMinDamageMod());
+				// maxModDamage
+				query.setInt(8, itemInstance.getMaxDamageMod());
+				// data
+				query.setString(9, itemInstance.getData());
+				// modStrength
+				query.setInt(10, itemInstance.getRawModdedAttribute(CharacterAttribute.STRENGTH));
+				// modAgility
+				query.setInt(11, itemInstance.getRawModdedAttribute(CharacterAttribute.AGILITY));
+				// modStamina
+				query.setInt(12, itemInstance.getRawModdedAttribute(CharacterAttribute.STAMINA));
+				// modSpirit
+				query.setInt(13, itemInstance.getRawModdedAttribute(CharacterAttribute.SPIRIT));
+				// modResistance
+				query.setInt(14, itemInstance.getRawModdedAttribute(CharacterAttribute.RESISTANCE));
+				// modIntellect
+				query.setInt(15, itemInstance.getRawModdedAttribute(CharacterAttribute.INTELLECT));
+				// modVitality
+				query.setInt(16, itemInstance.getRawModdedAttribute(CharacterAttribute.VITALITY));
+				// cost
+				query.setInt(17, itemInstance.getValue());
+				// curDurability
+				query.setInt(18, itemInstance.getDurability());
+				
+				query.setInt(19, itemInstance.getId());
+				query.addBatch();
+
+				i++;
+			}
+			query.executeBatch();
+			connection.close();
 	}
 	
 	public int getId() {
@@ -166,13 +380,13 @@ public class Character {
 	public void setAttributes(HashMap<CharacterAttribute, Integer> attributes) {
 		this.attributes = attributes;
 	}
-
-	public int getAttribute(String attribute) {
+	
+	public int getAttribute(CharacterAttribute attribute){
 		return this.attributes.get(attribute);
 	}
 
-	public void setAttribute(CharacterAttribute strength, Integer value) {
-		this.attributes.put(strength, value);
+	public void setAttribute(CharacterAttribute attribute, Integer value) {
+		this.attributes.put(attribute, value);
 	}
 
 	public int getMaxHitpoints() {

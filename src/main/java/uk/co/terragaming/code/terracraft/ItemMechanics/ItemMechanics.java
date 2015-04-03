@@ -45,7 +45,7 @@ public class ItemMechanics implements Mechanic{
 		itemRegistry = new ItemRegistry();
 		itemInstanceRegistry = new ItemInstanceRegistry();
 		
-		TerraCraft.Server().getPluginManager().registerEvents(new ItemBindEvents(), TerraCraft.Plugin());		
+		TerraCraft.Server().getPluginManager().registerEvents(new ItemEvents(), TerraCraft.Plugin());		
 	}
 
 	@Override

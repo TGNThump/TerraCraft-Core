@@ -34,6 +34,7 @@ public class CharacterMechanics implements Mechanic{
 	// Mechanic Methods
 	private void Construct(){
 		TerraCraft.Server().getPluginManager().registerEvents(new LoginListener(), TerraCraft.Plugin());
+		TerraCraft.Server().getPluginManager().registerEvents(new LogoutListener(), TerraCraft.Plugin());
 	}
 	
 	public void downloadCharacters(Account account) throws SQLException {
@@ -129,6 +130,10 @@ public class CharacterMechanics implements Mechanic{
 		}
 		
 		return chars;
+	}
+	
+	public Character getAccountActiveCharater(Account account){
+		return getCharacter(account.getCurCharacterId());
 	}
 	
 	public Character getCharacter(Integer id){
