@@ -152,12 +152,15 @@ public class InventoryMechanics {
 		if (!attrData.startsWith("TCID: ")) continue;
 		Integer itemInstanceID = Integer.parseInt(attrData.substring(6));
 		
-		TerraLogger.debug("ItemInstanceId: " + itemInstanceID + " at SlotId: " + i);
-		
 		ItemInstance itemInstance = itemInstanceRegistry.getItemInstance(itemInstanceID);
 		
+		if (itemInstance == null){
+			TerraLogger.debug("Failed to getItemInstance for Item Id: " + itemInstanceID);
+			continue;
+		}
+		
 		// charId
-		query.setInt(1, account.getId());
+		query.setInt(1, character.getId());
 		// slotId
 		query.setInt(2, i);
 		// name

@@ -31,7 +31,7 @@ public class CharacterInterface {
 		player.setHealth(20d);
 		player.setFoodLevel(200);
 		player.getInventory().clear();
-		player.setGameMode(GameMode.SPECTATOR);
+		player.setGameMode(GameMode.CREATIVE);
 		
 		IconMenu menu = new IconMenu(ChatColor.WHITE + "Your Character Profiles", 1, new onClick(){
 			
