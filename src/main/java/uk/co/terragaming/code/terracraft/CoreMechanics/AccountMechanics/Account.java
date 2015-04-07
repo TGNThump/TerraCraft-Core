@@ -11,10 +11,12 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountBannedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.exceptions.AccountNotLinkedException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
@@ -277,6 +279,10 @@ public class Account {
 
 	public UUID getPlayerUUID() {
 		return playerUUID;
+	}
+	
+	public Player getPlayer(){
+		return TerraCraft.Server().getPlayer(getPlayerUUID());
 	}
 
 	public void setPlayerUUID(UUID playerUUID) {

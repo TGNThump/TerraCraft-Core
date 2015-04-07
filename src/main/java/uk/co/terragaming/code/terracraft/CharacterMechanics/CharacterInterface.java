@@ -3,6 +3,7 @@ package uk.co.terragaming.code.terracraft.CharacterMechanics;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,7 @@ public class CharacterInterface {
 		player.setHealth(20d);
 		player.setFoodLevel(200);
 		player.getInventory().clear();
+		player.setGameMode(GameMode.SPECTATOR);
 		
 		IconMenu menu = new IconMenu(ChatColor.WHITE + "Your Character Profiles", 1, new onClick(){
 			
@@ -56,7 +58,8 @@ public class CharacterInterface {
 			
 		});
 		int i = 0;
-		for (Character character1 : CharacterMechanics.getInstance().getCharactersByAccount(account)){
+		Character[] chars = CharacterMechanics.getInstance().getCharactersByAccount(account);
+		for (Character character1 : chars){
 			if(i == 8){
 				TerraLogger.debug(account.getTerraTag() + "has more than 8 characters");
 				break;

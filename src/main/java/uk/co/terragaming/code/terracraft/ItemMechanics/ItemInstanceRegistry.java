@@ -16,6 +16,7 @@ public class ItemInstanceRegistry {
 	}
 	
 	public ItemInstance[] getItemInstances(Integer charId){
+		if (!instances2.containsKey(charId)) {return null;}
 		HashSet<Integer> instanceIds = instances2.get(charId);
 		ItemInstance[] instances = new ItemInstance[instanceIds.size()];
 		int i = 0;
@@ -50,6 +51,17 @@ public class ItemInstanceRegistry {
 			instances2.get(instance.getOwnerId()).add(instance.getId());
 		}
 		
+	}
+	
+	public void removeCharItemInstances(Integer charId){
+		if (!instances2.containsKey(charId)) {return;}
+		HashSet<Integer> instanceIds = instances2.get(charId);
+		
+		for(Integer instanceId : instanceIds){
+			instances1.remove(instanceId);
+		}
+		
+		instances2.remove(charId);
 	}
 	
 }

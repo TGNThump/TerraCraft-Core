@@ -30,7 +30,7 @@ public class WhitelistLoginListener implements Listener{
 				Account account = new Account(event.getUniqueId(), event.getAddress());
 				account.onPreLogin();
 				
-				TerraLogger.info("Downloaded Data of " + account.getTerraTag());
+				TerraLogger.info("Downloaded Account Data of " + account.getTerraTag());
 				
 			} catch (AccountNotLinkedException e) {
 				if (TerraCraft.getServerMode().equals(ServerMode.PUBLIC)){

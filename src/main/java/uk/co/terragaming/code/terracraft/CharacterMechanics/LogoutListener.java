@@ -7,13 +7,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class LogoutListener implements Listener{
 
 	@EventHandler
 	public void onLogout(PlayerQuitEvent event){
-		TerraLogger.debug("onLogout();");
 		Player player = event.getPlayer();
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
 		if(account.getCurCharacterId() == null) return;

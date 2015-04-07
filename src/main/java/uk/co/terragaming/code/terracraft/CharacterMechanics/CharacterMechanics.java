@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.CharacterMechanics.InventoryMechanics.InventoryMechanics;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.enums.CharacterAttribute;
@@ -25,18 +26,12 @@ public class CharacterMechanics implements Mechanic{
 	public static CharacterMechanics getInstance(){
 		return (CharacterMechanics) TerraCraft.getMechanic("CharacterMechanics");
 	}
-	public CharacterMechanics(){ Construct();}
 
 	// Mechanic Variables
 	private HashMap<Integer, Character> chars1 = new HashMap<Integer, Character>();
 	private HashMap<Integer, HashSet<Integer>> chars2 = new HashMap<Integer, HashSet<Integer>>();
 	
 	// Mechanic Methods
-	private void Construct(){
-		TerraCraft.Server().getPluginManager().registerEvents(new LoginListener(), TerraCraft.Plugin());
-		TerraCraft.Server().getPluginManager().registerEvents(new LogoutListener(), TerraCraft.Plugin());
-	}
-	
 	public void downloadCharacters(Account account) throws SQLException {
 		String SQL = "SELECT * FROM tcCharacters WHERE accountId = ?";
 		
@@ -111,11 +106,14 @@ public class CharacterMechanics implements Mechanic{
 				
 				chars1.put(character.getId(), character);
 				if(chars2.containsKey(account.getId())){
-					chars2.get(account.getId()).add(character.getId());
+					HashSet<Integer> set = chars2.get(account.getId());
+					set.add(character.getId());
+					chars2.put(account.getId(), set);
+				} else {
+					HashSet<Integer> set = new HashSet<Integer>();
+					set.add(character.getId());
+					chars2.put(account.getId(), set);
 				}
-				HashSet<Integer> set = new HashSet<Integer>();
-				set.add(character.getId());
-				chars2.put(account.getId(), set);
 			}
 		}
 	}
@@ -144,7 +142,9 @@ public class CharacterMechanics implements Mechanic{
 	
 	@Override
 	public void PreInitialize() {
-
+		InventoryMechanics.initialize();
+		TerraCraft.Server().getPluginManager().registerEvents(new LoginListener(), TerraCraft.Plugin());
+		TerraCraft.Server().getPluginManager().registerEvents(new LogoutListener(), TerraCraft.Plugin());
 	}
 
 	@Override
