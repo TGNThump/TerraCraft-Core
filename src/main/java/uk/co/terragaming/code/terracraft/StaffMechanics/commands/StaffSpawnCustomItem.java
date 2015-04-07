@@ -6,6 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import uk.co.terragaming.code.terracraft.CharacterMechanics.CharacterMechanics;
+import uk.co.terragaming.code.terracraft.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.ItemMechanics.ItemInstance;
 import uk.co.terragaming.code.terracraft.ItemMechanics.ItemMechanics;
@@ -29,7 +32,12 @@ public class StaffSpawnCustomItem implements CommandExecutor{
 			}
 			if (itemRegistry.hasItem(itemId)){
 				ItemInstance item = itemRegistry.getItem(itemId).createInstance();
-				item.setOwnerId(AccountMechanics.getInstance().getRegistry().getAccount(player).getId());
+				Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+				Character character = CharacterMechanics.getInstance().getAccountActiveCharater(account);
+				
+				item.setOwnerId(account.getId());
+				ItemMechanics.getInstance().getItemInstanceRegistry().addItemInstance(item, character.getId());
+				
 				player.getInventory().addItem(item.getItemStack());
 			} else {
 				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Unregistered ItemId: " + itemId + " from " + args[0]);

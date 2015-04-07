@@ -65,8 +65,8 @@ public class Character {
 		
 		player.setHealth(this.getCurHitpoints());
 		player.setMaxHealth(this.getMaxHitpoints());
-		player.setExp(this.getCurExp());
 		player.setLevel(this.getCurLevel());
+		player.setExp(((float)this.getCurExp()) / 100f);
 		player.setFoodLevel(this.getCurHunger());
 		player.teleport(getLocation());
 		player.setGameMode(GameMode.SURVIVAL);

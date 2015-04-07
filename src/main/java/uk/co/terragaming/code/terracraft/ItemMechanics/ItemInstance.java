@@ -142,6 +142,7 @@ public class ItemInstance {
 	}
 	
 	public Integer getRawModdedAttribute(CharacterAttribute attribute){
+		if (!this.moddedAttributes.containsKey(attribute)){ return 0;}
 		return this.moddedAttributes.get(attribute);
 	}
 	
