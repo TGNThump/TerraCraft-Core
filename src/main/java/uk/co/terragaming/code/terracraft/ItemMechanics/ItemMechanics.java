@@ -3,8 +3,10 @@ package uk.co.terragaming.code.terracraft.ItemMechanics;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
@@ -14,6 +16,8 @@ import uk.co.terragaming.code.terracraft.enums.ItemBindType;
 import uk.co.terragaming.code.terracraft.enums.ItemClass;
 import uk.co.terragaming.code.terracraft.enums.ItemQuality;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
+import com.comphenix.attribute.AttributeStorage;
 
 public class ItemMechanics implements Mechanic{
 
@@ -27,6 +31,7 @@ public class ItemMechanics implements Mechanic{
 	// Mechanic Variables
 	private ItemRegistry itemRegistry;
 	private ItemInstanceRegistry itemInstanceRegistry;
+	private UUID uuid;
 	
 	// Mechanic Methods
 	
@@ -38,13 +43,27 @@ public class ItemMechanics implements Mechanic{
 		return itemInstanceRegistry;
 	}
 	
+	public ItemInstance getItemInstance(ItemStack is){
+		AttributeStorage storage = AttributeStorage.newTarget(is, uuid);
+		String attrData = storage.getData(null);
+		if (attrData == null) return null;
+		if (!attrData.startsWith("TCID: ")) return null;
+		Integer itemInstanceID = Integer.parseInt(attrData.substring(6));
+		
+		ItemInstance itemInstance = itemInstanceRegistry.getItemInstance(itemInstanceID);
+		
+		if(itemInstance == null) {TerraLogger.debug("Failed to getItemInstance for Item Id: " + itemInstanceID);}
+		
+		return itemInstance;
+	}
+	
 	// Mechanic Events
 	
 	@Override
 	public void PreInitialize() {
 		itemRegistry = new ItemRegistry();
 		itemInstanceRegistry = new ItemInstanceRegistry();
-		
+		uuid = TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft");
 		TerraCraft.Server().getPluginManager().registerEvents(new ItemEvents(), TerraCraft.Plugin());		
 	}
 

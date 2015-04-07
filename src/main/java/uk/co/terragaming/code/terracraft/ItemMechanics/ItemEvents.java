@@ -15,16 +15,19 @@ public class ItemEvents implements Listener {
 		List<ItemStack> dropList = event.getDrops();
 		Iterator<ItemStack> iter = dropList.iterator();
 		ItemStack is;
+		ItemMechanics itemMechanics = ItemMechanics.getInstance();
 		while (iter.hasNext()) {
 			is = iter.next();
-			if (is.hasItemMeta()) {
-				if (is.getItemMeta().hasLore()) {
-					for (String s : is.getItemMeta().getLore()) {
-						if (s.contains("Soulbound") || s.contains("Heirloom")) {
-							iter.remove();
-						}
-					}
-				}
+			
+			ItemInstance itemInstance = itemMechanics.getItemInstance(is);
+			if (itemInstance == null) {continue;}
+			
+			switch (itemInstance.getBinding()){
+			case NONE:
+				break;
+			default:
+				iter.remove();
+				break;
 			}
 		}
 	}

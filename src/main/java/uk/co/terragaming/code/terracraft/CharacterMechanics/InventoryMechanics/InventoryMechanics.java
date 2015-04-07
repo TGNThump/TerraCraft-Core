@@ -24,8 +24,6 @@ import uk.co.terragaming.code.terracraft.enums.ItemQuality;
 import uk.co.terragaming.code.terracraft.utils.StringTools;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-import com.comphenix.attribute.AttributeStorage;
-
 public class InventoryMechanics {
 
 	private static DatabaseMechanics databaseMechanics;
@@ -146,18 +144,8 @@ public class InventoryMechanics {
 	for(ItemStack is : inventory.getContents()){
 		if (is == null){ i++; continue; }
 		
-		AttributeStorage storage = AttributeStorage.newTarget(is, uuid);
-		String attrData = storage.getData(null);
-		if (attrData == null) continue;
-		if (!attrData.startsWith("TCID: ")) continue;
-		Integer itemInstanceID = Integer.parseInt(attrData.substring(6));
-		
-		ItemInstance itemInstance = itemInstanceRegistry.getItemInstance(itemInstanceID);
-		
-		if (itemInstance == null){
-			TerraLogger.debug("Failed to getItemInstance for Item Id: " + itemInstanceID);
-			continue;
-		}
+		ItemInstance itemInstance = itemMechanics.getItemInstance(is);
+		if (itemInstance == null){ continue; }
 		
 		// charId
 		query.setInt(1, character.getId());
