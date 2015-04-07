@@ -20,7 +20,7 @@ public class ItemInstance {
 	private int id;
 	private int itemId;
 	private int ownerId;
-	private int slotid;
+	private Integer slotid;
 	private String name;
 	private Material material;
 	private ItemQuality quality;
@@ -65,10 +65,10 @@ public class ItemInstance {
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}
-	public int getSlotid() {
+	public Integer getSlotid() {
 		return slotid;
 	}
-	public void setSlotid(int slotid) {
+	public void setSlotid(Integer slotid) {
 		this.slotid = slotid;
 	}
 	public String getName() {

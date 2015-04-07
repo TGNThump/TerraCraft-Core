@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
+import java.util.HashSet;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
@@ -28,12 +27,10 @@ public class InventoryMechanics {
 
 	private static DatabaseMechanics databaseMechanics;
 	private static ItemMechanics itemMechanics;
-	private static UUID uuid;
 	
 	public static void initialize(){
 		databaseMechanics = DatabaseMechanics.getInstance();
 		itemMechanics = ItemMechanics.getInstance();
-		uuid = TerraCraft.computeUUID("TerraGamingNetwork-TerraCraft");
 	}
 	
 	public static void downloadCharInventory(Account account, Character character){
@@ -58,6 +55,7 @@ public class InventoryMechanics {
 				item.setItemId(results.getInt("itemId"));
 				item.setOwnerId(results.getInt("charId"));
 				item.setSlotid(results.getInt("slotId"));
+				if (results.wasNull()){item.setSlotid(null);}
 				item.setName(results.getString("name"));
 				item.setMaterial(Material.getMaterial(results.getString("material")));
 				
@@ -99,8 +97,14 @@ public class InventoryMechanics {
 		
 		ItemInstance[] items = itemMechanics.getItemInstanceRegistry().getItemInstances(character.getId());
 		if (items == null){ return; }
+		HashSet<ItemStack> addLater = new HashSet<ItemStack>();
 		for (ItemInstance item : items){
+			if (item.getSlotid() == null) { addLater.add(item.getItemStack()); continue; }
 			inventory.setItem(item.getSlotid(), item.getItemStack());
+		}
+		for (ItemStack is : addLater){
+			TerraLogger.debug("Adding Item with no slotId to Inventory: " + is.getItemMeta().getDisplayName());
+			inventory.addItem(is);
 		}
 	}
 	
@@ -151,12 +155,12 @@ public class InventoryMechanics {
 		query.setInt(1, character.getId());
 		// slotId
 		query.setInt(2, i);
-		// name
-		query.setString(3, itemInstance.getName());
+		// name		
+		query.setString(3, itemInstance.getName().equals(itemInstance.getItem().getName()) ? null : itemInstance.getName());
 		// material
-		query.setString(4, itemInstance.getMaterial().toString());
+		query.setString(4, itemInstance.getMaterial().equals(itemInstance.getItem().getMaterial()) ? null : itemInstance.getMaterial().toString());
 		// quality
-		query.setString(5, StringTools.toNormalCase(itemInstance.getQuality().toString()));
+		query.setString(5, itemInstance.getQuality().equals(itemInstance.getItem().getQuality()) ? null : StringTools.toNormalCase(itemInstance.getQuality().toString()));
 		// bound
 		query.setString(6, StringTools.toNormalCase(itemInstance.getBinding().toString()));
 		// minModDamage
@@ -180,6 +184,7 @@ public class InventoryMechanics {
 		// modVitality
 		query.setInt(16, itemInstance.getRawModdedAttribute(CharacterAttribute.VITALITY));
 		// cost
+		
 		query.setInt(17, itemInstance.getValue());
 		// curDurability
 		query.setInt(18, itemInstance.getDurability());
