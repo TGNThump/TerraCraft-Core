@@ -103,7 +103,6 @@ public class InventoryMechanics {
 			inventory.setItem(item.getSlotid(), item.getItemStack());
 		}
 		for (ItemStack is : addLater){
-			TerraLogger.debug("Adding Item with no slotId to Inventory: " + is.getItemMeta().getDisplayName());
 			inventory.addItem(is);
 		}
 	}

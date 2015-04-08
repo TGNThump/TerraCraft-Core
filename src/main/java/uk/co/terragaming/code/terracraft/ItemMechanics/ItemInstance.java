@@ -170,10 +170,14 @@ public class ItemInstance {
 		return (this.getItem().getAttributeModifier(attribute) + this.getRawModdedAttribute(attribute));
 	}
 	
+	public String getColouredName(){
+		return ItemQuality.getChatColor(getQuality()) + "" + ChatColor.BOLD + getName() + ChatColor.RESET;
+	}
+	
 	public ItemStack getItemStack(){
 		CustomItem item = new CustomItem(getMaterial());
 		
-		item.setName(ItemQuality.getChatColor(getQuality()) + "" + ChatColor.BOLD + getName());
+		item.setName(getColouredName());
 
 		item.addLore(ChatColor.GRAY + (getItem().getItemClass().equals(ItemClass.MELEE) || getItem().getItemClass().equals(ItemClass.RANGE) ? StringTools.toNormalCase(getItem().getItemClass().toString()) + " Weapon" :  StringTools.toNormalCase(getItem().getItemClass().toString())) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
 		item.addLore(ChatColor.DARK_GRAY + "" + getMinDamage() + " - " + getMaxDamage() + " Damage");

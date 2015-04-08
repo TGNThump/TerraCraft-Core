@@ -33,10 +33,10 @@ public class ItemInstanceRegistry {
 		instances1.put(id, instance);
 	}
 	
-	public void addItemInstance(Integer id, Integer charId, ItemInstance instance){
-		instances1.put(id, instance);
-		instances2.get(charId).add(id);
-	}
+//	public void addItemInstance(Integer id, Integer charId, ItemInstance instance){
+//		instances1.put(id, instance);
+//		instances2.get(charId).add(id);
+//	}
 	
 	public void addItemInstance(ItemInstance instance){
 		instances1.put(instance.getId(), instance);

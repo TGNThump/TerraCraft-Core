@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,11 +38,22 @@ public class ItemEvents implements Listener {
 		ItemInstance item = itemMechanics.getItemInstance(is);
 		if (item == null){ return; }
 		
+		// ... Get the name of the Damaged Entity ...
+		Entity damaged = event.getEntity();
+		String damagedName;
+		if (damaged.getCustomName() == null){
+			damagedName = "the " + ChatColor.BOLD + damaged.getType().toString().toLowerCase();
+		} else if (damaged.getCustomName().isEmpty()){
+			damagedName = "the " + ChatColor.BOLD + damaged.getType().toString().toLowerCase();
+		} else {
+			damagedName = ChatColor.BOLD + damaged.getCustomName();
+		}
+		
 		// ... Set the correct damage value ...
 		event.setDamage(randInt(item.getMinDamage(), item.getMaxDamage()));
 		
 		// ... and send a Debug Message.
-		damager.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" + ChatColor.WHITE + "][" + ChatColor.DARK_AQUA + "DEBUG" + ChatColor.WHITE + "] Dealt " + event.getDamage() + " (" + item.getMinDamage() + "," + item.getMaxDamage() + ") damage using your " + item.getName() + "." + ChatColor.RESET);
+		damager.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" + ChatColor.WHITE + "][" + ChatColor.DARK_AQUA + "DEBUG" + ChatColor.WHITE + "] Dealt " + ChatColor.DARK_GRAY + (int)event.getDamage() + ChatColor.RESET + " damage to " + damagedName + ChatColor.RESET + " using your " + item.getColouredName() + "." + ChatColor.RESET);
 		
 	}
 	
