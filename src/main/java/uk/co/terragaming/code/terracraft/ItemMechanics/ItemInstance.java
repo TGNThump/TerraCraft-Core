@@ -167,7 +167,11 @@ public class ItemInstance {
 	}
 	
 	public Integer getModdedAttribute(CharacterAttribute attribute){
-		return (this.getItem().getAttributeModifier(attribute) + this.getRawModdedAttribute(attribute));
+		Integer fromThis = this.getRawModdedAttribute(attribute);
+		Integer inherit = this.getItem().getAttributeModifier(attribute);
+		if (fromThis == null){ fromThis = 0; }
+		if (inherit == null){ inherit = 0; }
+		return (fromThis + inherit);
 	}
 	
 	public String getColouredName(){
@@ -180,8 +184,17 @@ public class ItemInstance {
 		item.setName(getColouredName());
 
 		item.addLore(ChatColor.GRAY + (getItem().getItemClass().equals(ItemClass.MELEE) || getItem().getItemClass().equals(ItemClass.RANGE) ? StringTools.toNormalCase(getItem().getItemClass().toString()) + " Weapon" :  StringTools.toNormalCase(getItem().getItemClass().toString())) + "                              " + ChatColor.GOLD + this.getItem().getType().toString());
-		item.addLore(ChatColor.DARK_GRAY + "" + getMinDamage() + " - " + getMaxDamage() + " Damage");
 		
+		if (getMaxDamage() > 0){
+			item.addLore(ChatColor.DARK_GRAY + "" + getMinDamage() + " - " + getMaxDamage() + " Damage");
+		}
+		
+		for(CharacterAttribute attr : CharacterAttribute.values()){
+			Integer value = getModdedAttribute(attr);
+			if (value == 0){ continue; }
+			item.addLore(ChatColor.GOLD + "" + (value > 0 ? "+" : "") + value + " " + attr.getAttribute());
+		}
+
 		if (getBinding().equals(ItemBinding.ACCOUNT)){
 			item.addLore(ChatColor.GRAY + "Heirloom");
 		} else if (getBinding().equals(ItemBinding.CHARACTER)){
