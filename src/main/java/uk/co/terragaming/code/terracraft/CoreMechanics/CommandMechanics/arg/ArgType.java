@@ -1,4 +1,7 @@
 package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg;
 
-public abstract class CommandArgument {
+public enum ArgType {
+	String,
+	Integer,
+	Boolean
 }

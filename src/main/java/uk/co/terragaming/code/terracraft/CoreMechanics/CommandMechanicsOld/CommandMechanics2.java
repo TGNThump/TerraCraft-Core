@@ -4,17 +4,15 @@ import java.util.HashMap;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.CommandHandler;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.TestCommand;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-public class CommandMechanics implements Mechanic{
+public class CommandMechanics2 implements Mechanic{
 
 	public boolean isEnabled() 	{ return true; }
 	public boolean isCore() 	{ return true; }
 	
-	public static CommandMechanics getInstance(){
-		return (CommandMechanics) TerraCraft.getMechanic("CommandMechanics");
+	public static CommandMechanics2 getInstance(){
+		return (CommandMechanics2) TerraCraft.getMechanic("CommandMechanics2");
 	}
 
 	// Mechanic Variables
@@ -63,7 +61,7 @@ public class CommandMechanics implements Mechanic{
 
 	@Override
 	public void Initialize() {
-		CommandHandler.registerCommands(TerraCraft.Plugin(), new TestCommand());
+		
 	}
 
 	@Override

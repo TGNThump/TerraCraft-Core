@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.StaffMechanics;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld.CommandManager;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld.CommandMechanics;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld.CommandMechanics2;
 import uk.co.terragaming.code.terracraft.StaffMechanics.commands.StaffDownloadCharacter;
 import uk.co.terragaming.code.terracraft.StaffMechanics.commands.StaffSpawnCustomItem;
 import uk.co.terragaming.code.terracraft.StaffMechanics.commands.StaffSwitchCharacter;
@@ -26,7 +26,7 @@ public class StaffMechanics implements Mechanic{
 
 	@Override
 	public void Initialize() {
-		CommandMechanics commandMechanics = CommandMechanics.getInstance();
+		CommandMechanics2 commandMechanics = CommandMechanics2.getInstance();
 
 		CommandManager commandManger = commandMechanics.createCommandManager("staff", "a");
 		commandManger.registerCommand("spawncustomitem", new StaffSpawnCustomItem(), "Allows spawning of custom Items.", "/staff spawnCustomItem <ItemId>");

@@ -36,9 +36,13 @@ public class CommandHandler implements CommandExecutor{
 		List<Method> methods = Lists.newArrayList(handler.getClass().getMethods());
 		Collections.sort(methods, new Comparator<Method>() {
 			  @Override public int compare(final Method m1, final Method m2) {
-				  if (!(m1.isAnnotationPresent(CommandParent.class) && m2.isAnnotationPresent(CommandParent.class))){ return 0;}
+				  if (!m1.isAnnotationPresent(Command.class)){ return 0; }
+				  if (!m2.isAnnotationPresent(Command.class)){ return 0; }
+				  
+				  if ((!m1.isAnnotationPresent(CommandParent.class)) && (!m2.isAnnotationPresent(CommandParent.class))){}
 				  if (!m1.isAnnotationPresent(CommandParent.class)){return -1;}
-				  if (!m2.isAnnotationPresent(CommandParent.class)){return 1;}
+				  if (!m2.isAnnotationPresent(CommandParent.class)){ return 1;}
+				  
 				  Integer m1l = m1.getAnnotation(CommandParent.class).value().split(" ").length;
 				  Integer m2l = m1.getAnnotation(CommandParent.class).value().split(" ").length;
 				  if (m1l > m2l){
@@ -50,6 +54,16 @@ public class CommandHandler implements CommandExecutor{
 				  }
 			  }
 			});
+		
+//		TerraLogger.blank();
+//		
+//		for (Iterator<Method> iterator = methods.iterator(); iterator.hasNext();) {
+//			Method method = (Method) iterator.next();
+//			if (!method.isAnnotationPresent(Command.class)){ continue; }
+//			TerraLogger.debug(method.getName());
+//		}
+		
+		TerraLogger.blank();
 		
 		// For each method in handler class...
 		for (Iterator<Method> iterator = methods.iterator(); iterator.hasNext();) {
@@ -75,7 +89,7 @@ public class CommandHandler implements CommandExecutor{
 				// Grab the parent command ...
 				CommandParent commandParent = method.getAnnotation(CommandParent.class);
 				String parentName = commandParent.value();
-				if (!commands.containsKey(parentName)){ TerraLogger.debug("A command cannot be registered before its parent: " + handler.getClass().getName() + " [" + method.getName() + "]"); continue; }
+				if (!commands.containsKey(parentName)){ TerraLogger.error("Command Registered Before Parent: " + handler.getClass().getName() + " [" + method.getName() + "]"); continue; }
 				CommandAbstract parent = commands.get(parentName);
 				
 				// ... and create the child command ...
@@ -89,7 +103,7 @@ public class CommandHandler implements CommandExecutor{
 				}
 				
 				// ... and if the method has a @CommandDescription annotation ...
-				if (!method.isAnnotationPresent(CommandDescription.class)){
+				if (method.isAnnotationPresent(CommandDescription.class)){
 					CommandDescription commandDescription = method.getAnnotation(CommandDescription.class);
 					
 					// ... set the commandDescription ...
@@ -97,7 +111,7 @@ public class CommandHandler implements CommandExecutor{
 				}
 				
 				// ... and if the method has a @CommandUsage annotation ...
-				if (!method.isAnnotationPresent(CommandUsage.class)){
+				if (method.isAnnotationPresent(CommandUsage.class)){
 					CommandUsage commandUsage = method.getAnnotation(CommandUsage.class);
 					
 					// ... set the commandUsage ...
@@ -107,12 +121,12 @@ public class CommandHandler implements CommandExecutor{
 				// ... and add the child command as a child in the parent command.
 				parent.addChild(child);
 				commands.put(child.getPath(), child);
-				TerraLogger.debug("Registered Command: /" + child.getPath());
+				TerraLogger.info("Registered Command: /" + child.getPath());
 			}
 			// .. or if it is a root command ...
 			else {
 				// Get the bukkit command ...
-				if (plugin.getCommand(commandName) == null){ TerraLogger.debug("Failed to register command: " + commandAnnotation.toString()); continue; }
+				if (plugin.getCommand(commandName) == null){ TerraLogger.error("Could not register command " + commandName + " because it was not set in plugin.yml"); continue; }
 				PluginCommand pc = plugin.getCommand(commandName);
 				
 				// ... set the command aliases ...
@@ -129,7 +143,7 @@ public class CommandHandler implements CommandExecutor{
 				command.setMethod(method);
 				
 				// ... and if the method has a @CommandDescription annotation ...
-				if (!method.isAnnotationPresent(CommandDescription.class)){
+				if (method.isAnnotationPresent(CommandDescription.class)){
 					CommandDescription commandDescription = method.getAnnotation(CommandDescription.class);
 					
 					// ... set the commandDescription ...
@@ -137,7 +151,7 @@ public class CommandHandler implements CommandExecutor{
 				}
 				
 				// ... and if the method has a @CommandUsage annotation ...
-				if (!method.isAnnotationPresent(CommandUsage.class)){
+				if (method.isAnnotationPresent(CommandUsage.class)){
 					CommandUsage commandUsage = method.getAnnotation(CommandUsage.class);
 					
 					// ... set the commandUsage ...
@@ -152,9 +166,10 @@ public class CommandHandler implements CommandExecutor{
 					}
 				}
 				
-				TerraLogger.debug("Registered Command: /" + command.getPath());
+				TerraLogger.info("Registered Command: /" + command.getPath());
 			}
 		}
+		TerraLogger.blank();
 	}
 	
 	
