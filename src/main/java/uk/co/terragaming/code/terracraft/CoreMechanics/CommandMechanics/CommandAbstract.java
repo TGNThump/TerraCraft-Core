@@ -1,7 +1,7 @@
 package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommandAbstract {
@@ -10,7 +10,7 @@ public abstract class CommandAbstract {
 	
 	private Object handler;
 	private Method method;
-	private HashMap<String, CommandAbstract> children = new HashMap<String, CommandAbstract>(); // Includes Aliases
+	private List<CommandAbstract> subCommands = new ArrayList<CommandAbstract>(); // Includes Aliases
 	
 	public Object getHandler(){
 		return handler;
@@ -28,20 +28,12 @@ public abstract class CommandAbstract {
 		this.method = method;
 	}
 	
-	public HashMap<String, CommandAbstract> getChildren(){
-		return children;
+	public List<CommandAbstract> getSubCommands(){
+		return subCommands;
 	}
 	
-	public void addChild(CommandAbstract command){
-		addChild(command.getName(), command);
-	}
-	
-	public void addChild(String name, CommandAbstract command){
-		children.put(name, command);
-		if (command.getAliases().isEmpty()){ return; }
-		for(String alias : command.getAliases()){
-			children.put(alias, command);
-		}
+	public void addSubCommand(CommandAbstract command){
+		subCommands.add(command);
 	}
 	
 	public abstract String getName();
@@ -55,6 +47,5 @@ public abstract class CommandAbstract {
 	public abstract void setDescription(String description);
 	public abstract void setUsage(String usage);
 	public abstract void setParent(CommandAbstract parent);
-	
 	
 }

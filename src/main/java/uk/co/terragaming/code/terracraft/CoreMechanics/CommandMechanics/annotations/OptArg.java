@@ -1,13 +1,14 @@
 package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.RetentionPolicy;
-
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg.ArgType;
+import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(CommandArgs.class)
-public @interface CommandArg {
-	ArgType value();
+@Target(ElementType.PARAMETER)
+public @interface OptArg {
+
+	String value();
+
 }
