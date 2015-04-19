@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;

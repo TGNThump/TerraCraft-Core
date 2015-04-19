@@ -1,9 +1,11 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld;
 
 import java.util.HashMap;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.CommandHandler;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.TestCommand;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class CommandMechanics implements Mechanic{
@@ -61,7 +63,7 @@ public class CommandMechanics implements Mechanic{
 
 	@Override
 	public void Initialize() {
-		
+		CommandHandler.registerCommands(TerraCraft.Plugin(), new TestCommand());
 	}
 
 	@Override

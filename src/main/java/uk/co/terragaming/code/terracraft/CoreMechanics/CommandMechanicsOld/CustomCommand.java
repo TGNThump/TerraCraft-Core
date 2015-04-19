@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics;
+package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanicsOld;
 
 public class CustomCommand {
 	final public String name;

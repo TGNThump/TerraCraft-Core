@@ -8,3 +8,9 @@ commands:
     a:
         description: Staff Command Set
         usage: /a
+    test:
+        description: test
+        usage: /test
+    t:
+        description: test
+        usage: /test
