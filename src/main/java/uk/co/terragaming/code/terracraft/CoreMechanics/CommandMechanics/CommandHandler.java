@@ -26,6 +26,7 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotati
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandUsage;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.HelpCommand;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.OptArg;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.TagArg;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg.AR;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -223,111 +224,136 @@ public class CommandHandler implements CommandExecutor{
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] parsedArgs) {
-		CommandAbstract command = rootCommands.get(bukkitCommand.getName());;
-		List<String> args;
+	public boolean onCommand(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] fullArgs){
+		CommandAbstract command = rootCommands.get(bukkit.command.getName());
+		List<String> commandArgs;
 		
-		// If the command has at least 1 arg [possible subcommand] ...
-		if (parsedArgs.length > 0){
-			Entry<CommandAbstract, List<String>> result = getSubCommandMap(command, Lists.newArrayList(parsedArgs));
+		// If the command has at least one argument ...
+		if (fullArgs.length > 0){
+			// ... Grab the subcommand by argument recursively, parsing the remaining arguments ...
+			Entry<CommandAbstract, List<String>> result = getSubCommandFromArgs(command, fullArgs);
 			
 			command = result.getKey();
-			args = result.getValue();
-		} else {
-			args = Lists.newArrayList(parsedArgs);
+			commandArgs = result.getValue();
 		}
 		
-		List<String> formatedArgs = Lists.newArrayList();
-		
-		for (int i=0; i<args.size(); i++){
-			formatedArgs.add(i, "<p>" + args.get(i));
-		}
-		sender.sendMessage("Command Path: " + command.getPath());
-		sender.sendMessage("Command Args: " + Txt.parse(Txt.implodeCommaAnd(formatedArgs, "<r>")));
-		
+		// ... then Get the command handler and method ...
 		Object handler = command.getHandler();
 		Method method = command.getMethod();
 		
-		if (handler == null | method == null){ sender.sendMessage("Unknown command. Type \"help\" for help."); return true; }
-		
-		if(method.getParameterTypes()[0].equals(Player.class) && !(sender instanceof Player)){
-			sender.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" + ChatColor.WHITE + "] This command can only be run as a player.");
+		if (handler == null | method == null){
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Unknown command. Type \"<c>/" + command.getPath() + " help<r>\" for help."));
 			return true;
 		}
 		
-		if(method.getParameterTypes()[0].equals(ConsoleCommandSender.class) && !(sender instanceof ConsoleCommandSender)){
-			sender.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" + ChatColor.WHITE + "] This command can only be run from the console.");
-			return true;
-		}
+		// ... and the arguments from argumentReaders ...
+		Object[] arguments = getArguments(commandArgs, method.getParameters(), sender, command);
 		
-		Parameter[] parameters = method.getParameters();
-		Object[] arguments = new Object[parameters.length];
-		int argCount = 0;
-		int paramCount = 0;
-		for (Parameter parameter : parameters){
-			String name = parameter.getName();
-			Class<?> type = parameter.getType();
-			
-			String defaultValue = null;
-			
-			if (parameter.isAnnotationPresent(OptArg.class)){
-				OptArg optArg = parameter.getAnnotation(OptArg.class);
-				defaultValue = optArg.value();
-			}
-			
-			//TerraLogger.debug("Parameter: " + name + " [" + type.getSimpleName() + "] " + (!parameter.isAnnotationPresent(OptArg.class) ? "" : "@OptArg(" + defaultValue + ")"));
-		
-			if (name.equals("sender")){arguments[argCount] = sender; argCount++; continue;}
-			if (name.equals("command")){arguments[argCount] = command; argCount++; continue;}
-			
-			try {
-			
-				Class<?> cl = Class.forName("uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg.AR" + Txt.upperCaseFirst(type.getSimpleName()));
-				
-				Object c = cl.newInstance();
-				AR<?> ar = (AR<?>) c;
-				
-				Object arg = null;
-				
-				
-				try {
-					arg = ar.read(args.get(paramCount), sender);
-				} catch ( IndexOutOfBoundsException e ){
-					if (defaultValue == null){
-						TerraException ex = new TerraException();
-						ex.addMessage(Txt.parse("<b>%s", "Incorrect number of arguments"));
-						ex.addMessage(Txt.parse("Command Usage: " + command.getUsage()));
-						throw ex;
-					} else {
-						arg = ar.read(defaultValue, sender);
-					}
-				}
-				
-				arguments[argCount] = arg;
-				
-			} catch (ClassNotFoundException | SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-				e.printStackTrace();
-			} catch (TerraException e) {
-				for(String string : Txt.wrap(e.getMessages())){
-					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string));
-				}
-				return true;
-			}
-			
-			argCount++;
-			paramCount++;
-		}
-		
+		// ... and invoke the method with the arguments.
 		try { method.invoke(handler, arguments); }
 		catch (Exception e){
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] An error occurred while trying to process the command"));
-			TerraLogger.debug("Full Stack Trace printed to Console");
 			e.printStackTrace();
 		}
 		return true;
 	}
 	
-	public Entry<CommandAbstract, List<String>> getSubCommandMap(CommandAbstract parent, List<String> args){
+	public static Object[] getArguments(List<String> commandArgs, Paramater[] params, CommandSender sender, CommandAbstract command){
+		Object[] args = new Object[params.length];
+		
+		int paramIndex = 0;
+		int argIndex = 0;
+		
+		// ... and for each parameter ...
+		for (Parameter param : params){
+			// Grab the parameter name and type ...
+			String paramName = param.getName();
+			Class<?> type = param.getType();
+			
+			// ... and any @annotations and their values ...
+			boolean isOptional = param.isAnnotationPresent(OptArg.class);
+			boolean isTag = param.isAnnotationPresent(TagArg.class);
+		
+			String defaultValue = null;
+			
+			if (isOptional){ defaultValue = param.getAnnotation(OptArg.class).value(); }
+			
+			// ... and handle a tag argument ...
+			
+			if (isTag){
+				if (argIndex > commandArgs.size()){
+					if (commandArgs.get(argIndex).equals("-" + paramName)){
+						args[paramIndex] = true;
+						paramIndex++;
+						argIndex++;
+						continue;
+					}
+				}
+			}
+			
+			// ... and if the parameter is special, assign its value ...
+			if (argIndex < 2 && type.isAssignableFrom(CommandSender.class)){
+				args[paramIndex] = sender;
+				paramIndex++;
+				continue;
+			}
+			if (argIndex < 2 && type.isAssignableFrom(CommandAbstract.class)){
+				args[paramIndex] = command;
+				paramIndex++;
+				continue;
+			}
+			
+			// ... Otherwise try ...
+			try{
+				// ... to get the argReader for the parameter type ...
+				Class<?> arClass = Class.forName("uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg.AR" + Txt.upperCaseFirst(type.getSimpleName()));
+				AR<?> argReader = (AR<?>) arClass.newInstance();
+				
+				Object arg = null;
+				
+				// ... and if argIndex > the number of arguments ...
+				if (argIndex > commandArgs.size()){
+					
+					// ... attempt to read the argument.
+					arg = argReader.read(commandArgs.get(paramIndex), sender);
+					argIndex++;
+				
+				// ... or if the parameter is optional ...
+				} else if (isOptional) {
+					
+					// ... attempt to read the defaultValue.
+					arg = argReader.read(defaultValue, sender);
+				
+				// ... otherwise ...
+				} else {
+					
+					// ... throw a new TerraException - Incorrect Command Usage...
+					TerraException ex = new TerraException();
+					ex.addMessage(Txt.parse("<b>%s", "Incorrect Command Usage"));
+					ex.addMessage(Txt.parse(command.getUsage()));
+					throw ex;
+				}
+				
+				args[paramIndex] = arg;
+				
+			} catch (TerraException e){
+				for(String string : Txt.wrap(e.getMessages())){ 
+ 					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string)); 
+ 				} 
+ 				return null; 
+			}
+			
+			paramIndex++;
+		}
+		
+		return args;
+	}
+	
+	public Entry<CommandAbstract, List<String>> getSubCommandFromArgs(CommandAbstract parent, String[] args){
+		return getSubCommandFromArgs(parent, Lists.newArrayList(args));
+	}
+	
+	public Entry<CommandAbstract, List<String>> getSubCommandFromArgs(CommandAbstract parent, List<String> args){
 		if (parent.getSubCommands().isEmpty() | args.isEmpty()){
 			Entry<CommandAbstract, List<String>> result = new AbstractMap.SimpleEntry<CommandAbstract, List<String>>(parent, args); 
 			return result;
@@ -340,6 +366,6 @@ public class CommandHandler implements CommandExecutor{
 		
 		CommandAbstract child = getSubCommand(args.get(0), parent);
 		args.remove(0);
-		return getSubCommandMap(child, args);
+		return getSubCommandFromArgs(child, args);
 	}
 }
