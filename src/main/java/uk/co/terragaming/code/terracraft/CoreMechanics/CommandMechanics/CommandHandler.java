@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.TerraException;
@@ -226,8 +223,8 @@ public class CommandHandler implements CommandExecutor{
 	
 	@Override
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] fullArgs){
-		CommandAbstract command = rootCommands.get(bukkit.command.getName());
-		List<String> commandArgs;
+		CommandAbstract command = rootCommands.get(bukkitCommand.getName());
+		List<String> commandArgs = Lists.newArrayList(fullArgs);
 		
 		// If the command has at least one argument ...
 		if (fullArgs.length > 0){
@@ -260,7 +257,6 @@ public class CommandHandler implements CommandExecutor{
 	}
 	
 	public static String generateUsage(CommandAbstract command){
-		Object handler = command.getHandler();
 		Method method = command.getMethod();
 		
 		String usage = "<c>/" + command.getPath() + "<p>";
@@ -291,9 +287,10 @@ public class CommandHandler implements CommandExecutor{
 				usage += " <" + paramName + ">";
 			}
 		}
+		return usage;
 	}
 	
-	public static Object[] getArguments(List<String> commandArgs, Paramater[] params, CommandSender sender, CommandAbstract command){
+	public static Object[] getArguments(List<String> commandArgs, Parameter[] params, CommandSender sender, CommandAbstract command){
 		Object[] args = new Object[params.length];
 		
 		int paramIndex = 0;
@@ -376,6 +373,12 @@ public class CommandHandler implements CommandExecutor{
  					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string)); 
  				} 
  				return null; 
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
 			}
 			
 			paramIndex++;

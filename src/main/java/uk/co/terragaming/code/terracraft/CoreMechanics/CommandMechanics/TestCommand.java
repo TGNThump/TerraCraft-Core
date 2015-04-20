@@ -8,7 +8,6 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.TerraException;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandParent;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandUsage;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.HelpCommand;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.OptArg;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
