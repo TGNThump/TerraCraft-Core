@@ -346,20 +346,20 @@ public class Txt {
 	
 	// Paging and chrome-tools like titleize
 	
-	private final static String titleizeLine = repeat("_", 52);
+	private final static String titleizeLine = repeat("-", 48);
 	private final static int titleizeBalance = -1;
 	
 	public static String titleize(String str){
-		String center = ".[ " + parse("<l>") + str + parse("<a>") + " ].";
+		String center = "- [ " + parse("<l>") + str + parse("<r>") + " ] -";
 		int centerlen = ChatColor.stripColor(center).length();
 		int pivot = titleizeLine.length() / 2;
 		int eatLeft = (centerlen / 2) - titleizeBalance;
 		int eatRight = (centerlen - eatLeft) + titleizeBalance;
 
 		if (eatLeft < pivot)
-			return parse("<a>")+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+			return parse("<r>")+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
 		else
-			return parse("<a>")+center;
+			return parse("<r>")+center;
 	}
 	
 	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title){
@@ -375,13 +375,13 @@ public class Txt {
 		int pageZeroBased = pageHumanBased - 1;
 		int pagecount = (int) Math.ceil(((double) lines.size()) / pageheight);
 		
-		ret.add(titleize(title + parse("<a>") + " " + pageHumanBased + "/" + pagecount));
+		ret.add(parse("[<l>TerraCraft<r>] ") + titleize(title + parse("<a>") + " [" + pageHumanBased + "/" + pagecount + "]"));
 		
 		if (pagecount == 0){
-			ret.add(parse("Sorry. No Pages available."));
+			ret.add(parse("[<l>TerraCraft<r>]") +  " Sorry. No Pages available.");
 			return ret;
 		} else if (pageZeroBased < 0 || pageHumanBased > pagecount){
-			ret.add(parse("<i>Invalid page. Must be between 1 and " + pagecount));
+			ret.add(parse("[<l>TerraCraft<r>] <i>Invalid page. Must be between 1 and " + pagecount));
 			return ret;
 		}
 		
@@ -391,7 +391,13 @@ public class Txt {
 			to = lines.size();
 		}
 		
-		ret.addAll(lines.subList(from, to));
+		List<String> subList = lines.subList(from, to);
+		
+		for(int i = 0; i<subList.size();i++){
+			subList.set(i, parse("[<l>TerraCraft<r>] ") + subList.get(i));
+		}
+		
+		ret.addAll(subList);
 		
 		return ret;
 	}

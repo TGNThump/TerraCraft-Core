@@ -54,19 +54,22 @@ public class CommandHandler implements CommandExecutor{
 		Collections.sort(methods, new Comparator<Method>() {
 			@Override
 			public int compare(final Method m1, final Method m2) {
-				if (!m1.isAnnotationPresent(Command.class)){ return 0; }
-				if (!m2.isAnnotationPresent(Command.class)){ return 0; }
+				// If both methods are commands ...
+				if ((!isCommand(m1)) | (!isCommand(m2))){ return 0; }
 				
-				if (!m1.isAnnotationPresent(CommandParent.class)){ return -1; }
-				if (!m2.isAnnotationPresent(CommandParent.class)){ return 1; }
+				if (!hasParent(m1) && !hasParent(m2)){ return 0; }
+				if (hasParent(m1) && !hasParent(m2)){ return 1; }
+				if (hasParent(m2) && !hasParent(m1)){ return -1; }
 
-				Integer m1l = m1.getAnnotation(CommandParent.class).value().split(" ").length;
-				Integer m2l = m1.getAnnotation(CommandParent.class).value().split(" ").length;
+				Integer m1l = getParent(m1).split(" ").length;
+				Integer m2l = getParent(m1).split(" ").length;
 				
-				if (m1l > m2l){
-					return 1;
-				} else if (m2l < m1l){
+				TerraLogger.debug(m1.getName() + " [" + m1l + "], " + m2.getName() + " [" + m2l + "]");
+				
+				if (m1l < m2l){
 					return -1;
+				} else if (m2l > m1l){
+					return 1;
 				} else {
 					return 0;
 				}
@@ -74,6 +77,18 @@ public class CommandHandler implements CommandExecutor{
 		});
 		
 		return methods;
+	}
+	
+	private static boolean isCommand(Method method){
+		return method.isAnnotationPresent(Command.class);
+	}
+	
+	private static boolean hasParent(Method method){
+		return method.isAnnotationPresent(CommandParent.class);
+	}
+	
+	private static String getParent(Method method){
+		return method.getAnnotation(CommandParent.class).value();
 	}
 	
 	private static Optional<CommandAbstract> registerMethod(JavaPlugin plugin, Object handler, Method method){
@@ -170,7 +185,7 @@ public class CommandHandler implements CommandExecutor{
 
 	private static void createHelpCommand(JavaPlugin plugin, CommandAbstract parent){
 		try {
-			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList(), "Help for " + parent.getName(), "/" + parent.getPath() + " help", Optional.of(parent));
+			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList(), "Shows this help message", "<c>/" + parent.getPath() + " help [pageNumber]", Optional.of(parent));
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -247,7 +262,8 @@ public class CommandHandler implements CommandExecutor{
 		
 		Parameter[] parameters = method.getParameters();
 		Object[] arguments = new Object[parameters.length];
-		int i = 0;
+		int argCount = 0;
+		int paramCount = 0;
 		for (Parameter parameter : parameters){
 			String name = parameter.getName();
 			Class<?> type = parameter.getType();
@@ -259,10 +275,10 @@ public class CommandHandler implements CommandExecutor{
 				defaultValue = optArg.value();
 			}
 			
-			TerraLogger.debug("Parameter: " + name + " [" + type.getSimpleName() + "] " + (!parameter.isAnnotationPresent(OptArg.class) ? "" : "@OptArg(" + defaultValue + ")"));
+			//TerraLogger.debug("Parameter: " + name + " [" + type.getSimpleName() + "] " + (!parameter.isAnnotationPresent(OptArg.class) ? "" : "@OptArg(" + defaultValue + ")"));
 		
-			if (name.equals("sender")){arguments[i] = sender; continue;}
-			if (name.equals("command")){arguments[i] = command; continue;}
+			if (name.equals("sender")){arguments[argCount] = sender; argCount++; continue;}
+			if (name.equals("command")){arguments[argCount] = command; argCount++; continue;}
 			
 			try {
 			
@@ -273,32 +289,38 @@ public class CommandHandler implements CommandExecutor{
 				
 				Object arg = null;
 				
-				if (i < args.size()){
-					
-					arg = ar.read(args.get(i), sender);
+				
+				try {
+					arg = ar.read(args.get(paramCount), sender);
+				} catch ( IndexOutOfBoundsException e ){
+					if (defaultValue == null){
+						TerraException ex = new TerraException();
+						ex.addMessage(Txt.parse("<b>%s", "Incorrect number of arguments"));
+						ex.addMessage(Txt.parse("Command Usage: " + command.getUsage()));
+						throw ex;
+					} else {
+						arg = ar.read(defaultValue, sender);
+					}
 				}
-				if (arg == null && defaultValue != null){
-					arg = ar.read(defaultValue, sender);
-				}
-				TerraLogger.debug(arg.toString());
-				arguments[i] = arg;
+				
+				arguments[argCount] = arg;
 				
 			} catch (ClassNotFoundException | SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
 				e.printStackTrace();
 			} catch (TerraException e) {
-				for(String string : Txt.parseWrap(e.getMessages())){
-					sender.sendMessage(string);
+				for(String string : Txt.wrap(e.getMessages())){
+					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string));
 				}
+				return true;
 			}
 			
-			i++;
+			argCount++;
+			paramCount++;
 		}
 		
 		try { method.invoke(handler, arguments); }
 		catch (Exception e){
-			sender.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" + ChatColor.WHITE + "] An error occurred while trying to process the command");
-			String commandText = command.getName();
-			for(String arg : args){ commandText += " " + arg; }
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] An error occurred while trying to process the command"));
 			TerraLogger.debug("Full Stack Trace printed to Console");
 			e.printStackTrace();
 		}
