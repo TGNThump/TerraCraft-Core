@@ -99,7 +99,7 @@ public class CommandHandler implements CommandExecutor{
 		String name = "";
 		List<String> aliases = Lists.newArrayList();
 		String description = "";
-		String usage = "";
+		String usage = null;
 		Optional<CommandAbstract> parent = Optional.empty();
 		
 		name = commandAnnotation.value()[0];
@@ -148,7 +148,8 @@ public class CommandHandler implements CommandExecutor{
 		command.setHandler(handler);
 		command.setMethod(method);
 		command.setDescription(commandDescription);
-		command.setUsage(commandUsage);
+		if (commandUsage == null) command.setUsage(generateUsage(command));
+		else command.setUsage(commandUsage);
 		
 		commands.put(command.getPath(), command);
 		if (!parent.isPresent()){
@@ -256,6 +257,40 @@ public class CommandHandler implements CommandExecutor{
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public static String generateUsage(CommandAbstract command){
+		Object handler = command.getHandler();
+		Method method = command.getMethod();
+		
+		String usage = "<c>/" + command.getPath() + "<p>";
+		
+		int i = -1;
+		
+		for (Parameter param : method.getParameters()){
+			i++;
+			String paramName = param.getName();
+			Class<?> type = param.getType();
+			
+			boolean isOptional = param.isAnnotationPresent(OptArg.class);
+			boolean isTag = param.isAnnotationPresent(TagArg.class);
+			
+			if (i < 2 && (type.isAssignableFrom(CommandSender.class) || type.isAssignableFrom(CommandAbstract.class))){
+				continue;
+			}
+			
+			if (isTag){
+				usage += " [-" + paramName + "]";
+				continue;
+			}
+			
+			if (isOptional){
+				usage += " [" + paramName + "]";
+				continue;
+			} else {
+				usage += " <" + paramName + ">";
+			}
+		}
 	}
 	
 	public static Object[] getArguments(List<String> commandArgs, Paramater[] params, CommandSender sender, CommandAbstract command){

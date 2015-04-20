@@ -18,7 +18,6 @@ public class TestCommand {
 	
 	@Command({"test", "t"})
 	@CommandDescription("Test Commands")
-	@CommandUsage("<c>/test help")
 	@HelpCommand
 	public void onTestCommand(CommandSender sender) throws TerraException{
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Use <c>/test help<r> for a list of commands."));
@@ -27,7 +26,6 @@ public class TestCommand {
 	@Command("args")
 	@CommandDescription("Test Arguments")
 	@CommandParent("test")
-	@CommandUsage("<c>/test args")
 	@HelpCommand
 	public void onTestArgsCommand(CommandSender sender) throws TerraException{
 		TerraLogger.debug("Test Child 1");
@@ -36,7 +34,6 @@ public class TestCommand {
 	@Command({"required", "req"})
 	@CommandDescription("Test Required Arguments")
 	@CommandParent("test args")
-	@CommandUsage("<c>/test args required <p><testString> <testInt>")
 	public void onTestArgRequiredCommand(CommandSender sender, String testString, Integer testInt) throws TerraException{
 		List<String> lines = Txt.parseWrap(Txt.repeat(testString + "\n", testInt));
 		for (String line : lines){
@@ -47,7 +44,6 @@ public class TestCommand {
 	@Command({"optional", "opt"})
 	@CommandDescription("Test Optional Arguments")
 	@CommandParent("test args")
-	@CommandUsage("<c>/test args optional <p>[testString] [testInt]")
 	public void onTestArgOptionalCommand(CommandSender sender, @OptArg("defaultValue") String testString, @OptArg("1") Integer testInt) throws TerraException{
 		List<String> lines = Txt.parseWrap(Txt.repeat(testString + "\n", testInt));
 		for (String line : lines){
