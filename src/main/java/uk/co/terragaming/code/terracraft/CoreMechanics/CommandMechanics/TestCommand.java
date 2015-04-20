@@ -10,6 +10,7 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotati
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandParent;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.HelpCommand;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.OptArg;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.TagArg;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -48,6 +49,13 @@ public class TestCommand {
 		for (String line : lines){
 			sender.sendMessage(line);
 		}
+	}
+	
+	@Command({"tag"})
+	@CommandDescription("Test Tag Arguments")
+	@CommandParent("test args")
+	public void onTestArgTagCommand(CommandSender sender, @TagArg boolean f) throws TerraException{
+		sender.sendMessage("" + f);
 	}
 	
 }

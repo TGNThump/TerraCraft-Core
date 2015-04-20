@@ -62,11 +62,9 @@ public class CommandHandler implements CommandExecutor{
 				Integer m1l = getParent(m1).split(" ").length;
 				Integer m2l = getParent(m1).split(" ").length;
 				
-				TerraLogger.debug(m1.getName() + " [" + m1l + "], " + m2.getName() + " [" + m2l + "]");
-				
 				if (m1l < m2l){
 					return -1;
-				} else if (m2l > m1l){
+				} else if (m1l > m2l){
 					return 1;
 				} else {
 					return 0;
@@ -184,7 +182,7 @@ public class CommandHandler implements CommandExecutor{
 
 	private static void createHelpCommand(JavaPlugin plugin, CommandAbstract parent){
 		try {
-			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList(), "Shows this help message", "<c>/" + parent.getPath() + " help [pageNumber]", Optional.of(parent));
+			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList(), "Shows this help message", "<c>/" + parent.getPath() + " help <p>[pageNumber]", Optional.of(parent));
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -246,6 +244,7 @@ public class CommandHandler implements CommandExecutor{
 		
 		// ... and the arguments from argumentReaders ...
 		Object[] arguments = getArguments(commandArgs, method.getParameters(), sender, command);
+		if (arguments == null) return true;
 		
 		// ... and invoke the method with the arguments.
 		try { method.invoke(handler, arguments); }
@@ -313,7 +312,7 @@ public class CommandHandler implements CommandExecutor{
 			// ... and handle a tag argument ...
 			
 			if (isTag){
-				if (argIndex > commandArgs.size()){
+				if (argIndex < commandArgs.size()){
 					if (commandArgs.get(argIndex).equals("-" + paramName)){
 						args[paramIndex] = true;
 						paramIndex++;
@@ -321,6 +320,9 @@ public class CommandHandler implements CommandExecutor{
 						continue;
 					}
 				}
+				args[paramIndex] = false;
+				paramIndex++;
+				continue;
 			}
 			
 			// ... and if the parameter is special, assign its value ...
@@ -343,11 +345,11 @@ public class CommandHandler implements CommandExecutor{
 				
 				Object arg = null;
 				
-				// ... and if argIndex > the number of arguments ...
-				if (argIndex > commandArgs.size()){
+				// ... and if argIndex > the number of arguments ...				
+				if (argIndex < commandArgs.size()){
 					
 					// ... attempt to read the argument.
-					arg = argReader.read(commandArgs.get(paramIndex), sender);
+					arg = argReader.read(commandArgs.get(argIndex), sender);
 					argIndex++;
 				
 				// ... or if the parameter is optional ...
