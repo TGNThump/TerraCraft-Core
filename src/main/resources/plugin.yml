@@ -1,24 +1,24 @@
 name: TerraCraft
 main: uk.co.terragaming.code.terracraft.TerraCraft
 version: 0.0.2
-commands:
-    plugins:
-        description: Plugins
-        usage: /plugins
-    version:
-        description: version
-        usage: /version
-        aliases: [ver]
-    help:
-        description: Help
-        usage: /help
-        aliases: [?]
+# commands:
+#     plugins:
+#         description: Plugins
+#         usage: /plugins
+#     version:
+#         description: version
+#         usage: /version
+#         aliases: [ver]
+#     help:
+#         description: Help
+#         usage: /help
+#         aliases: [?]
 
-    staff:
-        description: TerraCraft Staff Mechanics
-        usage: /staff help
-        aliases: [a]
-    test:
-        description: TerraCraft Test Mechanics
-        usage: /test help
-        aliases: [t]
+#     staff:
+#         description: TerraCraft Staff Mechanics
+#         usage: /staff help
+#         aliases: [a]
+#     test:
+#         description: TerraCraft Test Mechanics
+#         usage: /test help
+#         aliases: [t]

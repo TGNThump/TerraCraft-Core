@@ -12,9 +12,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +37,8 @@ public class CommandHandler implements CommandExecutor{
 	private final static HashMap<String, CommandAbstract> commands = new HashMap<String, CommandAbstract>(); // Including parents recursivly, Used for checking parents in registration
 	private final static HashMap<String, CommandAbstract> rootCommands = new HashMap<String, CommandAbstract>(); // Includes aliases
 	
+	private final static CommandMap commandMap = CommandMechanics.getInstance().getCommandMap();
+	
 	public static void registerCommands(JavaPlugin plugin, Object handler){
 		// Get the methods in the class ...
 		List<Method> methods = getMethodsInClass(handler);
@@ -53,24 +55,23 @@ public class CommandHandler implements CommandExecutor{
 		List<Method> methods = Lists.newArrayList(handler.getClass().getMethods());
 		Collections.sort(methods, new Comparator<Method>() {
 			@Override
+			// m1 < m2 => -1
+			// m1 = m2 => 0
+			// m1 > m2 => +1
 			public int compare(final Method m1, final Method m2) {
-				// If both methods are commands ...
-				if ((!isCommand(m1)) | (!isCommand(m2))){ return 0; }
+				if ((!isCommand(m1)) || (!isCommand(m2))) return 0;
 				
-				if (!hasParent(m1) && !hasParent(m2)){ return 0; }
-				if (hasParent(m1) && !hasParent(m2)){ return 1; }
-				if (hasParent(m2) && !hasParent(m1)){ return -1; }
-
-				Integer m1l = getParent(m1).split(" ").length;
-				Integer m2l = getParent(m1).split(" ").length;
+				Integer m1Length = (hasParent(m1) ? getParent(m1).split(" ").length : 0);
+				Integer m2Length = (hasParent(m2) ? getParent(m2).split(" ").length : 0);
 				
-				if (m1l < m2l){
-					return 1;
-				} else if (m1l > m2l){
+				if (m1Length < m2Length){
 					return -1;
+				} else if (m1Length > m2Length){
+					return 1;
 				} else {
 					return 0;
 				}
+				
 			}
 		});
 		
@@ -159,15 +160,18 @@ public class CommandHandler implements CommandExecutor{
 	}
 
 	private static Optional<CommandAbstract> createRootCommand(JavaPlugin plugin, String commandName, List<String> commandAliases) {
-		if (plugin.getCommand(commandName) == null){ TerraLogger.error("Could not register command " + commandName + " because it was not set in plugin.yml"); return Optional.empty(); }
-		PluginCommand pc = plugin.getCommand(commandName);
+		CCommand cCommand = new CCommand(commandName);
 		
 		// ... set the command aliases and executor ...
-		if (commandAliases.size() > 0){ pc.setAliases(commandAliases); }
-		pc.setExecutor(new CommandHandler());
+		if (commandAliases.size() > 0){ cCommand.setAliases(commandAliases); }
+		cCommand.setExecutor(new CommandHandler());
+		
+		// ... register the command to the commandMap ...
+		
+		commandMap.register(commandName, "TerraCraft", cCommand);
 		
 		// ... and create a root command.
-		CommandRoot root = new CommandRoot(pc);
+		CommandRoot root = new CommandRoot(cCommand);
 		return Optional.of(root);
 	}
 	
@@ -184,7 +188,7 @@ public class CommandHandler implements CommandExecutor{
 
 	private static void createHelpCommand(JavaPlugin plugin, CommandAbstract parent){
 		try {
-			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList(), "Shows this help message", "<c>/" + parent.getPath() + " help <p>[pageNumber]", Optional.of(parent));
+			createCommand(plugin, new CommandHelp(), CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, CommandAbstract.class, Integer.class), "help", Lists.newArrayList("?"), "Shows this help message", "<c>/" + parent.getPath() + " help <p>[pageNumber]", Optional.of(parent));
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -297,50 +301,70 @@ public class CommandHandler implements CommandExecutor{
 		int paramIndex = 0;
 		int argIndex = 0;
 		
-		// ... and for each parameter ...
-		for (Parameter param : params){
-			// Grab the parameter name and type ...
-			String paramName = param.getName();
-			Class<?> type = param.getType();
+		int argLength = commandArgs.size();
+		int paramLength = params.length;
+				
+		try{
 			
-			// ... and any @annotations and their values ...
-			boolean isOptional = param.isAnnotationPresent(OptArg.class);
-			boolean isTag = param.isAnnotationPresent(TagArg.class);
-		
-			String defaultValue = null;
+			// ... and for each parameter ...
+			for (Parameter param : params){
+				// Grab the parameter name and type ...
+				String paramName = param.getName();
+				Class<?> type = param.getType();
+				
+				// ... and any @annotations and their values ...
+				boolean isOptional = param.isAnnotationPresent(OptArg.class);
+				boolean isTag = param.isAnnotationPresent(TagArg.class);
 			
-			if (isOptional){ defaultValue = param.getAnnotation(OptArg.class).value(); }
+				String defaultValue = null;
 			
-			// ... and handle a tag argument ...
-			
-			if (isTag){
-				if (argIndex < commandArgs.size()){
-					if (commandArgs.get(argIndex).equals("-" + paramName)){
-						args[paramIndex] = true;
-						paramIndex++;
-						argIndex++;
-						continue;
+				if (isOptional){ defaultValue = param.getAnnotation(OptArg.class).value(); }
+				
+				// ... and handle a tag argument ...
+				
+				if (isTag){
+					if (argIndex < commandArgs.size()){
+						if (commandArgs.get(argIndex).equals("-" + paramName)){
+							args[paramIndex] = true;
+							paramIndex++;
+							argIndex++;
+							argLength--;
+							paramLength--;
+							continue;
+						}
 					}
+					args[paramIndex] = false;
+					paramIndex++;
+					paramLength--;
+					continue;
 				}
-				args[paramIndex] = false;
-				paramIndex++;
-				continue;
-			}
+				
+				// ... and if the parameter is special, assign its value ...
+				if (argIndex < 2 && (type.equals(CommandSender.class) || type.equals(Player.class) || type.equals(ConsoleCommandSender.class))){
+					if (type.equals(Player.class) && !(sender instanceof Player)){
+						TerraException ex = new TerraException();
+						ex.addMessage(Txt.parse("<b>%s", "This command must be run as a Player."));
+						throw ex;
+					}
+					
+					if (type.equals(ConsoleCommandSender.class) && !(sender instanceof ConsoleCommandSender)){
+						TerraException ex = new TerraException();
+						ex.addMessage(Txt.parse("<b>%s", "This command must be run from the Console."));
+						throw ex;
+					}
+					
+					args[paramIndex] = sender;
+					paramIndex++;
+					paramLength--;
+					continue;
+				}
+				if (argIndex < 2 && type.equals(CommandAbstract.class)){
+					args[paramIndex] = command;
+					paramIndex++;
+					paramLength--;
+					continue;
+				}
 			
-			// ... and if the parameter is special, assign its value ...
-			if (argIndex < 2 && (type.equals(CommandSender.class) || type.equals(Player.class) || type.equals(ConsoleCommandSender.class))){
-				args[paramIndex] = sender;
-				paramIndex++;
-				continue;
-			}
-			if (argIndex < 2 && type.equals(CommandAbstract.class)){
-				args[paramIndex] = command;
-				paramIndex++;
-				continue;
-			}
-			
-			// ... Otherwise try ...
-			try{
 				// ... to get the argReader for the parameter type ...
 				Class<?> arClass = Class.forName("uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.arg.AR" + Txt.upperCaseFirst(type.getSimpleName()));
 				AR<?> argReader = (AR<?>) arClass.newInstance();
@@ -371,21 +395,27 @@ public class CommandHandler implements CommandExecutor{
 				}
 				
 				args[paramIndex] = arg;
-				
-			} catch (TerraException e){
-				for(String string : Txt.wrap(e.getMessages())){ 
- 					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string)); 
- 				} 
- 				return null; 
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				paramIndex++;
 			}
-			
-			paramIndex++;
+
+			if (argLength > paramLength){
+				TerraException ex = new TerraException();
+				ex.addMessage(Txt.parse("<b>%s", "Incorrect Command Usage"));
+				ex.addMessage(Txt.parse(command.getUsage()));
+				throw ex;
+			}
+		
+		} catch (TerraException e){
+			for(String string : Txt.wrap(e.getMessages())){ 
+					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + string)); 
+				} 
+				return null; 
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 		
 		return args;

@@ -2,15 +2,13 @@ package uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics;
 
 import java.util.List;
 
-import org.bukkit.command.Command;
-
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class CommandRoot extends CommandAbstract{
 	
-	public final Command command;
+	public final CCommand command;
 	
-	public CommandRoot(Command command){
+	public CommandRoot(CCommand command){
 		this.command = command;
 	}
 

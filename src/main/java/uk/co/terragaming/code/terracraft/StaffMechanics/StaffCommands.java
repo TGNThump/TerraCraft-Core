@@ -1,5 +1,6 @@
 package uk.co.terragaming.code.terracraft.StaffMechanics;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,6 +13,9 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotati
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandParent;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.HelpCommand;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemMechanics;
+import uk.co.terragaming.code.terracraft.ItemMechanics.ItemRegistry;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class StaffCommands {
@@ -78,7 +82,21 @@ public class StaffCommands {
 		@Command({"create","c"})
 		@CommandDescription("Spawn Item")
 		@CommandParent("staff item")
-		public void onItemSpawnCommand(Player sender){
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Not Yet Implemented"));
+		public void onItemSpawnCommand(Player sender, Integer itemId){
+				
+			ItemRegistry itemRegistry = ItemMechanics.getInstance().getItemRegistry();
+			
+			if (itemRegistry.hasItem(itemId)){
+				ItemInstance item = itemRegistry.getItem(itemId).createInstance();
+				Account account = AccountMechanics.getInstance().getRegistry().getAccount(sender);
+				Character character = CharacterMechanics.getInstance().getAccountActiveCharater(account);
+				
+				item.setOwnerId(account.getId());
+				ItemMechanics.getInstance().getItemInstanceRegistry().addItemInstance(item, character.getId());
+				
+				sender.getInventory().addItem(item.getItemStack());
+			} else {
+				sender.sendMessage("[" + ChatColor.AQUA + "TerraCraft" + ChatColor.WHITE + "] Unregistered ItemId: " + itemId);
+			}
 		}
 }

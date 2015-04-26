@@ -54,7 +54,7 @@ public class TestCommand {
 	@Command({"tag"})
 	@CommandDescription("Test Tag Arguments")
 	@CommandParent("test args")
-	public void onTestArgTagCommand(CommandSender sender, @TagArg boolean f) throws TerraException{
+	public void onTestArgTagCommand(CommandSender sender, @TagArg boolean f, String test) throws TerraException{
 		sender.sendMessage("" + f);
 	}
 	
