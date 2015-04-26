@@ -11,7 +11,6 @@ import uk.co.terragaming.code.terracraft.CoreMechanics.AccountMechanics.AccountM
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandParent;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.CommandUsage;
 import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.annotations.HelpCommand;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -19,7 +18,6 @@ public class StaffCommands {
 
 	@Command({"staff","admin","a"})
 	@CommandDescription("Staff Command Set")
-	@CommandUsage("/staff help")
 	@HelpCommand
 	public void onStaffCommand(CommandSender sender){
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Use <c>/staff help<r> for a list of commands."));
@@ -28,7 +26,6 @@ public class StaffCommands {
 	@Command({"char", "character","c"})
 	@CommandDescription("Staff Command Set")
 	@CommandParent("staff")
-	@CommandUsage("/staff help")
 	@HelpCommand
 	public void onCharCommand(CommandSender sender){
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Use <c>/staff char help<r> for a list of commands."));
@@ -37,7 +34,6 @@ public class StaffCommands {
 		@Command({"download","down","d"})
 		@CommandDescription("Force Download Character")
 		@CommandParent("staff char")
-		@CommandUsage("/staff char download")
 		public void onCharDownloadCommand(Player sender){
 			CharacterMechanics characterMechanics = CharacterMechanics.getInstance();
 			AccountMechanics accountMechanics = AccountMechanics.getInstance();
@@ -52,7 +48,6 @@ public class StaffCommands {
 		@Command({"switch","s"})
 		@CommandDescription("Switch Character")
 		@CommandParent("staff char")
-		@CommandUsage("/staff char switch")
 		public void onCharSwitchCommand(Player sender){
 			CharacterMechanics characterMechanics = CharacterMechanics.getInstance();
 			AccountMechanics accountMechanics = AccountMechanics.getInstance();
@@ -75,7 +70,6 @@ public class StaffCommands {
 	@Command({"item","i"})
 	@CommandDescription("Staff Command Set")
 	@CommandParent("staff")
-	@CommandUsage("/staff help")
 	@HelpCommand
 	public void onItemCommand(CommandSender sender){
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Use <c>/staff item help<r> for a list of commands."));
@@ -84,7 +78,6 @@ public class StaffCommands {
 		@Command({"create","c"})
 		@CommandDescription("Spawn Item")
 		@CommandParent("staff item")
-		@CommandUsage("/staff item create")
 		public void onItemSpawnCommand(Player sender){
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Not Yet Implemented"));
 		}

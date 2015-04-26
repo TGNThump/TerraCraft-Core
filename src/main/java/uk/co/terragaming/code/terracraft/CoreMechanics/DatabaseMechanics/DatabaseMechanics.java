@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.exceptions.InvalidCredentialsException;
+import uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Exceptions.InvalidCredentialsException;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class DatabaseMechanics implements Mechanic{

@@ -13,7 +13,9 @@ import java.util.Optional;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.co.terragaming.code.terracraft.CoreMechanics.TerraException;
@@ -63,9 +65,9 @@ public class CommandHandler implements CommandExecutor{
 				Integer m2l = getParent(m1).split(" ").length;
 				
 				if (m1l < m2l){
-					return -1;
-				} else if (m1l > m2l){
 					return 1;
+				} else if (m1l > m2l){
+					return -1;
 				} else {
 					return 0;
 				}
@@ -270,7 +272,7 @@ public class CommandHandler implements CommandExecutor{
 			boolean isOptional = param.isAnnotationPresent(OptArg.class);
 			boolean isTag = param.isAnnotationPresent(TagArg.class);
 			
-			if (i < 2 && (type.isAssignableFrom(CommandSender.class) || type.isAssignableFrom(CommandAbstract.class))){
+			if (i < 2 && (type.equals(CommandSender.class) || type.equals(Player.class) || type.equals(ConsoleCommandSender.class) || type.equals(CommandAbstract.class))){
 				continue;
 			}
 			
@@ -326,12 +328,12 @@ public class CommandHandler implements CommandExecutor{
 			}
 			
 			// ... and if the parameter is special, assign its value ...
-			if (argIndex < 2 && type.isAssignableFrom(CommandSender.class)){
+			if (argIndex < 2 && (type.equals(CommandSender.class) || type.equals(Player.class) || type.equals(ConsoleCommandSender.class))){
 				args[paramIndex] = sender;
 				paramIndex++;
 				continue;
 			}
-			if (argIndex < 2 && type.isAssignableFrom(CommandAbstract.class)){
+			if (argIndex < 2 && type.equals(CommandAbstract.class)){
 				args[paramIndex] = command;
 				paramIndex++;
 				continue;

@@ -36,7 +36,7 @@ public class StaffMechanics implements Mechanic{
 //		commandManger.registerCommand("downloadcharacter", new StaffDownloadCharacter(), "Allows force downloading character.", "/staff downloadCharacter");
 //		commandManger.registerCommand("dchar", new StaffDownloadCharacter());
 		
-		//CommandHandler.registerCommands(TerraCraft.Plugin(), new StaffCommands());
+		CommandHandler.registerCommands(TerraCraft.Plugin(), new StaffCommands());
 	}
 
 	@Override

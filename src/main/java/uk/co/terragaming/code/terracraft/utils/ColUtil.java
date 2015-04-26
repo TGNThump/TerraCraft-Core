@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ColUtil {
+	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> map(K key1, V value1, Object... objects)
 	{
 		Map<K, V> ret = new LinkedHashMap<K, V>();

@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.exceptions;
+package uk.co.terragaming.code.terracraft.CoreMechanics.DatabaseMechanics.Exceptions;
 
 public class InvalidCredentialsException extends Exception{
 	
