@@ -133,7 +133,7 @@ public class CommandExecutor implements TabExecutor{
 			
 			// If the parameter is special ...
 			if (param.isSpecial()){
-				if (param.getType().isAssignableFrom(CommandSender.class)){
+				if (param.getType().equals(CommandSender.class) || param.getType().equals(Player.class) || param.getType().equals(ConsoleCommandSender.class)){
 					if (param.getType().equals(Player.class) && !(sender instanceof Player)){
 						TerraException ex = new TerraException();
 						ex.addMessage(Txt.parse("<b>%s", "This command must be run as a Player."));
