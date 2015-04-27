@@ -47,6 +47,8 @@ public class MechanicLoader {
 				e.printStackTrace();
 			}
 		}
+		
+		TerraLogger.blank();
 	}
 	
 	public boolean hasMechanic(String mechanicName){

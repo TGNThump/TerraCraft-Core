@@ -58,4 +58,11 @@ public class TestCommand {
 		sender.sendMessage("" + f);
 	}
 	
+	@Command("tab")
+	@CommandDescription("Test Tab Completion")
+	@CommandParent("test args")
+	public void onTestArgTabCommand(CommandSender sender, boolean test){
+		sender.sendMessage("" + test);
+	}
+	
 }

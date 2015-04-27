@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.StaffMechanics;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.CommandHandler;
+import uk.co.terragaming.code.terracraft.CoreMechanics.CommandMechanics.CommandRegistry;
 
 public class StaffMechanics implements Mechanic{
 
@@ -23,7 +23,7 @@ public class StaffMechanics implements Mechanic{
 
 	@Override
 	public void Initialize() {
-		CommandHandler.registerCommands(TerraCraft.Plugin(), new StaffCommands());
+		CommandRegistry.registerCommands(TerraCraft.Plugin(), new StaffCommands());
 	}
 
 	@Override

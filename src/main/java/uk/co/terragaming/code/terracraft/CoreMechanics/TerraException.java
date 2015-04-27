@@ -12,6 +12,10 @@ public class TerraException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	protected List<String> messages = new ArrayList<String>();
+	
+	public TerraException() {}
+	public TerraException(String message) { addMsg(message); }
+	
 	public boolean hasMessages(){ return !this.messages.isEmpty(); }
 	public List<String> getMessages(){ return this.messages; }
 	

@@ -42,7 +42,7 @@ public class CommandMechanics implements Mechanic{
 	@Override
 	public void Initialize() {
 		JavaPlugin plugin = TerraCraft.Plugin();
-		CommandHandler.registerCommands(plugin, new TestCommand());
+		CommandRegistry.registerCommands(plugin, new TestCommand());
 	}
 	
 	@Override

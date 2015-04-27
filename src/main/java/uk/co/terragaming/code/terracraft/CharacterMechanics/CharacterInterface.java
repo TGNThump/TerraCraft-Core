@@ -61,7 +61,7 @@ public class CharacterInterface {
 		Character[] chars = CharacterMechanics.getInstance().getCharactersByAccount(account);
 		for (Character character1 : chars){
 			if(i == 8){
-				TerraLogger.debug(account.getTerraTag() + "has more than 8 characters");
+				TerraLogger.error(account.getTerraTag() + "has more than 8 characters");
 				break;
 			}
 			CustomItem item = new CustomItem(Material.SKULL_ITEM);
