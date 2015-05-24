@@ -5,28 +5,15 @@ public enum ItemBindType {
 	PICKUP("Pickup"),
 	EQUIP("Equip"),
 	ACCOUNT("Account");
-
-	private final String binding;
 	
-	ItemBindType(String binding){
-		this.binding = binding;
+	private final String bindType;
+	
+	private ItemBindType(final String bindType){
+		this.bindType = bindType;
 	}
-
-	public String getAttribute() {
-		return binding;
-	}
-
-	public static ItemBindType getBindType(String string) {
-		if (string == null){
-			return ItemBindType.NONE;
-		} else if (string.equals("Pickup")){
-			return ItemBindType.PICKUP;
-		} else if (string.equals("Equip")){
-			return ItemBindType.EQUIP;
-		} else if (string.equals("Account")){
-			return ItemBindType.ACCOUNT;
-		} else {
-			return ItemBindType.NONE;
-		}
+	
+	@Override
+	public String toString(){
+		return bindType;
 	}
 }

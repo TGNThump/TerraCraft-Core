@@ -24,7 +24,9 @@ public class Txt {
 	public static final int PAGEHEIGHT_CONSOLE = 50;
 	
 	public static final Map<String, String> parseReplacements;
+	public static final Map<String, String> consoleParseReplacements;
 	public static final Pattern parsePattern;
+	public static final Pattern consoleParsePattern;
 	
 	public static final long millisPerSecond = 1000;
 	public static final long millisPerMinute = 60 * millisPerSecond;
@@ -51,6 +53,9 @@ public class Txt {
 	);
 	
 	static {
+		
+		// In Game
+		
 		parseReplacements = new HashMap<String, String>();
 		
 		parseReplacements.put("<empty>", "");
@@ -86,8 +91,6 @@ public class Txt {
 		// Color by semantic functionality
 		parseReplacements.put("<l>", "\u00A73");
 		parseReplacements.put("<logo>", "\u00A73");
-		parseReplacements.put("<a>", "\u00A76");
-		parseReplacements.put("<art>", "\u00A76");
 		parseReplacements.put("<n>", "\u00A77");
 		parseReplacements.put("<notice>", "\u00A77");
 		parseReplacements.put("<i>", "\u00A7e");
@@ -133,31 +136,118 @@ public class Txt {
 		String patternString = patternStringBuilder.toString();
 		patternString = patternString.substring(0, patternString.length()-1); // Remove the last |
 		parsePattern = Pattern.compile(patternString);
+		
+		// Console
+		
+		consoleParseReplacements = new HashMap<String, String>();
+		
+		consoleParseReplacements.put("<empty>", "");
+		consoleParseReplacements.put("<black>", ConsoleColor.BLACK);
+		consoleParseReplacements.put("<navy>", ConsoleColor.GREEN);
+		consoleParseReplacements.put("<green>", ConsoleColor.GREEN);
+		consoleParseReplacements.put("<teal>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<red>", ConsoleColor.RED);
+		consoleParseReplacements.put("<purple>", ConsoleColor.MAGENTA);
+		consoleParseReplacements.put("<gold>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<orange>", ConsoleColor.RED);
+		consoleParseReplacements.put("<silver>", ConsoleColor.WHITE);
+		consoleParseReplacements.put("<gray>", ConsoleColor.BLACK);
+		consoleParseReplacements.put("<grey>", ConsoleColor.BLACK);
+		consoleParseReplacements.put("<blue>", ConsoleColor.WHITE);
+		consoleParseReplacements.put("<lime>", ConsoleColor.GREEN);
+		consoleParseReplacements.put("<aqua>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<rose>", ConsoleColor.RED);
+		consoleParseReplacements.put("<pink>", ConsoleColor.MAGENTA);
+		consoleParseReplacements.put("<yellow>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<white>", ConsoleColor.WHITE);
+		consoleParseReplacements.put("<magic>", "");
+		consoleParseReplacements.put("<bold>", "");
+		consoleParseReplacements.put("<strong>", "");
+		consoleParseReplacements.put("<strike>", "");
+		consoleParseReplacements.put("<strikethrough>", "");
+		consoleParseReplacements.put("<under>", "");
+		consoleParseReplacements.put("<underline>", "");
+		consoleParseReplacements.put("<italic>", "");
+		consoleParseReplacements.put("<em>", "");
+		consoleParseReplacements.put("<reset>", ConsoleColor.RESET);
+		
+		// Color by semantic functionality
+		consoleParseReplacements.put("<l>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<logo>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<n>", "");
+		consoleParseReplacements.put("<notice>", "");
+		consoleParseReplacements.put("<i>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<info>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<g>", ConsoleColor.GREEN);
+		consoleParseReplacements.put("<good>", ConsoleColor.GREEN);
+		consoleParseReplacements.put("<b>", ConsoleColor.RED);
+		consoleParseReplacements.put("<bad>", ConsoleColor.RED);
+		consoleParseReplacements.put("<r>", ConsoleColor.RESET);
+		
+		consoleParseReplacements.put("<k>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<key>", ConsoleColor.CYAN);
+		
+		consoleParseReplacements.put("<v>", ConsoleColor.RED);
+		consoleParseReplacements.put("<value>", ConsoleColor.RED);
+		consoleParseReplacements.put("<h>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<highlight>", ConsoleColor.YELLOW);
+		
+		consoleParseReplacements.put("<c>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<command>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<p>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("<parameter>", ConsoleColor.CYAN);
+		consoleParseReplacements.put("&", "");
+		consoleParseReplacements.put("§", "");
+		
+		// Build the parse pattern and compile it
+		patternStringBuilder = new StringBuilder();
+		for (String find : consoleParseReplacements.keySet())
+		{
+			patternStringBuilder.append('(');
+			patternStringBuilder.append(Pattern.quote(find));
+			patternStringBuilder.append(")|");
+		}
+		patternString = patternStringBuilder.toString();
+		patternString = patternString.substring(0, patternString.length()-1); // Remove the last |
+		consoleParsePattern = Pattern.compile(patternString);
 	}
 
 	
 	// Parse
 	
-	public static String parse(String string){
+	public static String parse(String string, boolean console){
 		StringBuffer ret = new StringBuffer();
-		Matcher matcher = parsePattern.matcher(string);
+		Matcher matcher = (console ? consoleParsePattern.matcher(string) : parsePattern.matcher(string));
+		
 		while (matcher.find()){
-			matcher.appendReplacement(ret, parseReplacements.get(matcher.group(0)));
+			matcher.appendReplacement(ret, (console ? consoleParseReplacements.get(matcher.group(0)) : parseReplacements.get(matcher.group(0))));
 		}
 		matcher.appendTail(ret);
 		return ret.toString();
 	}
 	
-	public static String parse(String string, Object... args){
-		return String.format(parse(string), args);
+	public static String parse(String string){
+		return parse(string, false);
 	}
 	
-	public static ArrayList<String> parse(Collection<String> strings){
+	public static String parse(String string, boolean console, Object... args){
+		return String.format(parse(string, console), args);
+	}
+	
+	public static ArrayList<String> parse(Collection<String> strings, boolean console){
 		ArrayList<String> ret = new ArrayList<String>(strings.size());
 		for (String string : strings){
-			ret.add(parse(string));
+			ret.add(parse(string, console));
 		}
 		return ret;
+	}
+	
+	public static String parse(String string, Object... args){
+		return parse(string, false, args);
+	}
+	
+	public static ArrayList<String> parse(Collection<String> string){
+		return parse(string, false);
 	}
 	
 	// Wrap
@@ -176,12 +266,12 @@ public class Txt {
 	
 	// Parse and Wrap
 	
-	public static ArrayList<String> parseWrap(final String string){
-		return wrap(parse(string));
+	public static ArrayList<String> parseWrap(final String string, boolean console){
+		return wrap(parse(string, console));
 	}
 	
-	public static ArrayList<String> parseWrap(final Collection<String> strings){
-		return wrap(parse(strings));
+	public static ArrayList<String> parseWrap(final Collection<String> strings, boolean console){
+		return wrap(parse(strings, console));
 	}
 	
 	// Standard Text Utils
@@ -349,39 +439,39 @@ public class Txt {
 	private final static String titleizeLine = repeat("-", 48);
 	private final static int titleizeBalance = -1;
 	
-	public static String titleize(String str){
-		String center = "- [ " + parse("<l>") + str + parse("<r>") + " ] -";
+	public static String titleize(String str, boolean console){
+		String center = "- [ " + parse("<l>", console) + str + parse("<r>", console) + " ] -";
 		int centerlen = ChatColor.stripColor(center).length();
 		int pivot = titleizeLine.length() / 2;
 		int eatLeft = (centerlen / 2) - titleizeBalance;
 		int eatRight = (centerlen - eatLeft) + titleizeBalance;
 
 		if (eatLeft < pivot)
-			return parse("<r>")+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+			return parse("<r>", console)+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
 		else
-			return parse("<r>")+center;
+			return parse("<r>", console)+center;
 	}
 	
-	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title){
-		return getPage(lines, pageHumanBased, title, PAGEHEIGHT_PLAYER);
+	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, boolean console){
+		return getPage(lines, pageHumanBased, title, PAGEHEIGHT_PLAYER, console);
 	}
 	
 	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, CommandSender sender){
-		return getPage(lines, pageHumanBased, title, (sender instanceof Player) ? Txt.PAGEHEIGHT_PLAYER : Txt.PAGEHEIGHT_CONSOLE);
+		return getPage(lines, pageHumanBased, title, (sender instanceof Player) ? Txt.PAGEHEIGHT_PLAYER : Txt.PAGEHEIGHT_CONSOLE, !(sender instanceof Player));
 	}
 	
-	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, int pageheight){
+	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, int pageheight, boolean console){
 		ArrayList<String> ret = new ArrayList<String>();
 		int pageZeroBased = pageHumanBased - 1;
 		int pagecount = (int) Math.ceil(((double) lines.size()) / pageheight);
 		
-		ret.add(parse("[<l>TerraCraft<r>] ") + titleize(title + parse("<a>") + " [" + pageHumanBased + "/" + pagecount + "]"));
+		ret.add(parse("[<l>TerraCraft<r>] ", console) + titleize(title + parse("<gold>", console) + " [" + pageHumanBased + "/" + pagecount + "]", console));
 		
 		if (pagecount == 0){
-			ret.add(parse("[<l>TerraCraft<r>]") +  " Sorry. No Pages available.");
+			ret.add(parse("[<l>TerraCraft<r>]", console) +  " Sorry. No Pages available.");
 			return ret;
 		} else if (pageZeroBased < 0 || pageHumanBased > pagecount){
-			ret.add(parse("[<l>TerraCraft<r>] <i>Invalid page. Must be between 1 and " + pagecount));
+			ret.add(parse("[<l>TerraCraft<r>] <i>Invalid page. Must be between 1 and " + pagecount, console));
 			return ret;
 		}
 		
@@ -394,7 +484,7 @@ public class Txt {
 		List<String> subList = lines.subList(from, to);
 		
 		for(int i = 0; i<subList.size();i++){
-			subList.set(i, parse("[<l>TerraCraft<r>] ") + subList.get(i));
+			subList.set(i, parse("[<l>TerraCraft<r>] ", console) + subList.get(i));
 		}
 		
 		ret.addAll(subList);

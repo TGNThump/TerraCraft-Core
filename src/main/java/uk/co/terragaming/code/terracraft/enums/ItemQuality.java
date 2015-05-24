@@ -10,15 +10,16 @@ public enum ItemQuality {
 	EPIC("EPIC"),
 	LEGENDARY("LEGENDARY"),
 	ARTIFACT("ARTIFACT");
-
-	private final String itemQuality;
 	
-	ItemQuality(String itemQuality){
-		this.itemQuality = itemQuality;
+	private final String quality;
+	
+	private ItemQuality(final String quality){
+		this.quality = quality;
 	}
-
-	public String getItemQuality() {
-		return itemQuality;
+	
+	@Override
+	public String toString(){
+		return quality;
 	}
 	
 	public static ChatColor getChatColor(ItemQuality quality) {
@@ -38,29 +39,5 @@ public enum ItemQuality {
 			return ChatColor.YELLOW;
 		}
 		return ChatColor.WHITE;
-	}
-
-	public static ItemQuality getQuality(String string) {
-		if(string == null){
-			return null;
-		}
-		
-		string = string.toUpperCase();
-		if (string.equals("POOR")){
-			return ItemQuality.POOR;
-		} else if (string.equals("COMMON")){
-			return ItemQuality.COMMON;
-		} else if (string.equals("UNCOMMON")){
-			return ItemQuality.UNCOMMON;
-		} else if (string.equals("RARE")){
-			return ItemQuality.RARE;
-		} else if (string.equals("EPIC")){
-			return ItemQuality.EPIC;
-		} else if (string.equals("LEGENDARY")){
-			return ItemQuality.LEGENDARY;
-		} else if (string.equals("ARTIFACT")){
-			return ItemQuality.ARTIFACT;
-		}
-		return null;
 	}
 }

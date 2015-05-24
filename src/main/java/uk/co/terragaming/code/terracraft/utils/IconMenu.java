@@ -54,8 +54,10 @@ public class IconMenu implements Listener {
 	}
 
 	public IconMenu close(Player p) {
-		if (p.getOpenInventory().getTitle().equals(name))
+		if (p.getOpenInventory().getTitle().equals(name)){
+			viewing.remove(p.getName());
 			p.closeInventory();
+		}
 		return this;
 	}
 
@@ -71,16 +73,22 @@ public class IconMenu implements Listener {
 		if (viewing.contains(event.getWhoClicked().getName())) {
 			event.setCancelled(true);
 			Player p = (Player) event.getWhoClicked();
-			Row row = getRowFromSlot(event.getSlot());
-			if (!click.click(p, this, row, event.getSlot() - row.getRow() * 9, event.getCurrentItem()))
-				close(p);
+			if (event.getSlot() < size){
+				Row row = getRowFromSlot(event.getSlot());
+				if (!click.click(p, this, row, event.getSlot() - row.getRow() * 9, event.getCurrentItem())){
+					TerraLogger.debug("Close()");
+					close(p);
+				}
+			}
 		}
 	}
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if (viewing.contains(event.getPlayer().getName()))
+		if (viewing.contains(event.getPlayer().getName())){
 			viewing.remove(event.getPlayer().getName());
+			click.close((Player) event.getPlayer());
+		}
 	}
 
 	public IconMenu addButton(Row row, int position, ItemStack item) {
@@ -103,6 +111,7 @@ public class IconMenu implements Listener {
 
 	public interface onClick {
 		public abstract boolean click(Player clicker, IconMenu menu, Row row, int slot, ItemStack item);
+		public abstract void close(Player player); // Only happens on escape, not on item selection
 	}
 
 	public class Row {
@@ -131,7 +140,7 @@ public class IconMenu implements Listener {
 		}
 	}
 	
-	private ItemStack getItem(ItemStack item, String name, String... lore) {
+	public static ItemStack getItem(ItemStack item, String name, String... lore) {
 		ItemMeta im = item.getItemMeta();
 		im.setDisplayName(name);
 		im.setLore(Arrays.asList(lore));

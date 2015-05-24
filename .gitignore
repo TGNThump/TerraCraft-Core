@@ -2,6 +2,7 @@
 /.classpath
 /.project
 /.settings
+/src/main/java/uk/co/terragaming/oldCode
 
 # NetBeans
 /nbproject

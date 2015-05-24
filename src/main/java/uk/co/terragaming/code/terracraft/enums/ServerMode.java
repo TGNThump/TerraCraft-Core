@@ -2,6 +2,7 @@ package uk.co.terragaming.code.terracraft.enums;
 
 public enum ServerMode {
 	LOADING,		// NOBODY
+	SHUTDOWN,
 	LOCKED, 		// TGN Staff, Developers, Moderators Only
 	DEVELOPMENT,	// TGN Staff & Developers Only
 	CLOSED_BETA,	// TGN Beta Members Only
