@@ -39,6 +39,7 @@ public class AccountEvents {
 	}
 	
 	public static void onLogin(Player player){
+		if (!accountRegistry.hasAccount(player)) return;
 		Account account = accountRegistry.getAccount(player);
 		account.setPlayer(player);
 	}

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.CharacterChangeEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.utils.Lang;
@@ -26,6 +27,10 @@ public class CharacterManager {
 	
 	public static void setActiveCharacter(Account account, Character character) throws SQLException {
 		Player player = account.getPlayer();
+		
+		CharacterChangeEvent event = new CharacterChangeEvent(player, account, character);
+		
+		TerraCraft.server.getPluginManager().callEvent(event);
 		
 		// TODO: Items
 		

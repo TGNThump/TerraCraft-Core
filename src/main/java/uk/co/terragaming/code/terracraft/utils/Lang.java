@@ -62,12 +62,22 @@ public class Lang {
 		
 		add(Language.ENGLISH, "characterShiftMenuSwearFealty", "<gold>Swear Fealty");
 		add(Language.ENGLISH, "characterShiftMenuSwearFealtyDesc", "<l>Click here to Swear Fealty to %s."); // characterName
+		add(Language.ENGLISH, "characterShiftMenuSwearFealtyBreak", "<b> This will break your oath with %s."); // characterName
+		
+		add(Language.ENGLISH, "characterSwearFealty", "I swear, on my honour and life, from this day until the end of days, to serve, protect  %s."); // characterName
+		
 		
 		add(Language.ENGLISH, "characterShiftMenuAddFriend", "<gold>Add as Friend");
 		add(Language.ENGLISH, "characterShiftMenuAddFriendDesc", "<l>Click here to add %s as a Friend."); // characterName
 		
+		add(Language.ENGLISH, "characterShiftMenuAddToParty", "<gold>Add to Party");
+		add(Language.ENGLISH, "characterShiftMenuAddToPartyDesc", "<l>Click here to add %s to your Party."); // characterName
 		
 		add(Language.ENGLISH, "commandSetLanguage", "Your language has been set to ENGLISH.");
+		
+		add(Language.ENGLISH, "ChatInvalidChannel", "<b>There is no chat channel with the name %s."); // channelName
+		add(Language.ENGLISH, "ChatSetDefaultChannel", "Your default Channel has been set to %s."); // channelName
+		
 		
 		// Norwegian
 		
@@ -109,6 +119,7 @@ public class Lang {
 		
 		add(Language.NORWEGIAN, "ArgReaderIntegerName", "nummer");
 		add(Language.NORWEGIAN, "ArgReaderStringName", "tekst");
+		
 
 	}
 

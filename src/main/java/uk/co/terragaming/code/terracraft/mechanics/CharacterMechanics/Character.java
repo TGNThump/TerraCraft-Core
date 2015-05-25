@@ -7,7 +7,9 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "tcCharacters")
@@ -112,6 +114,12 @@ public class Character {
 //	@ForeignCollectionField(eager = true)
 //	private ForeignCollection<ItemInstance> items;
 	
+	@ForeignCollectionField(eager = true, foreignFieldName = "patron")
+	private ForeignCollection<Character> vassals;
+	
+	@DatabaseField(canBeNull = true, columnName = "patronId", foreign = true)
+	private Character patron;
+	
 	// Non Database Fields
 	
 	private Location location = TerraCraft.server.getWorlds().get(0).getSpawnLocation();
@@ -159,6 +167,9 @@ public class Character {
 	public String getDescription(){ return description; }
 	public String getDescriptionOOC(){ return descriptionOOC; }
 	public String getNotes(){ return notes; }
+	
+	public Character getPatron(){ return patron; }
+	public ForeignCollection<Character> getVassals(){ return vassals; }
 	
 //	public ForeignCollection<ItemInstance> getItems(){ return items; } 
 	
@@ -232,6 +243,8 @@ public class Character {
 	public void setDescription(String description){ this.description = description; }
 	public void setDescriptionOOC(String descriptionOOC){ this.descriptionOOC = descriptionOOC; }
 	public void setNotes(String notes){ this.notes = notes; }
+	
+	public void setPatron(Character patron){ this.patron = patron; }
 	
 	public void setLocation(Location loc){
 		this.location = loc;

@@ -10,10 +10,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import uk.co.terragaming.code.terracraft.enums.ChatChannel;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;
@@ -80,7 +82,6 @@ public class CharacterSelectInterface{
 			List<Character> chars = CharacterMechanics.getInstance().getCharacterDao().queryForFieldValues(conditions);
 		
 			for(Character character : chars){
-				account.setActiveCharacter(character);
 				CharacterManager.setActiveCharacter(account, character);
 				break;
 			}
@@ -109,6 +110,12 @@ public class CharacterSelectInterface{
 			VanishEffect.canSeeVanished.add(player.getUniqueId());
 			VanishEffect.vanishRefresh(player);
 		}
+		
+		ChatChannelManager.addToChannel(player, ChatChannel.STAFF);
+		ChatChannelManager.addToChannel(player, ChatChannel.LOCAL);
+		ChatChannelManager.addToChannel(player, ChatChannel.GLOBAL);
+		ChatChannelManager.addToChannel(player, ChatChannel.OOC);
+		ChatChannelManager.setDefaultChannel(player, ChatChannel.STAFF);
 		
 	}
 	

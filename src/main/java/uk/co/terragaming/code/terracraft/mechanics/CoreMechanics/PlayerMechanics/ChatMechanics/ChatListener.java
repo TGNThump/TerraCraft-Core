@@ -17,9 +17,7 @@ public class ChatListener implements Listener{
 		Account account = registry.getAccount(event.getPlayer());
 		
 		event.setFormat("<" + account.getTerraTag() + "> " + event.getMessage());
-		
-		// TODO: Fix Groups In Chat
-		
+
 //		String group = account.getGroupsAsArray()[0].getGroupName().toLowerCase();
 //		if (group.equals("staff")){
 //			event.setFormat(ChatColor.DARK_AQUA + "<Staff><" + account.getTerraTag() + "> " + ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', event.getMessage()));
