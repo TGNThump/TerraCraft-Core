@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.listeners;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import uk.co.terragaming.code.terracraft.enums.ChatChannel;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.CharacterChangeEvent;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatChannelManager;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.ChatChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
@@ -202,9 +202,10 @@ public class ChatEventListener implements Listener{
 		ChatChannelManager.clearChannels(uuid);
 		
 		atPMNames.remove(uuid);
-
-		for (Entry<String, UUID> entry : atPMNamesReverse){
-			if (entry.getValue().equals(uuid)) atPMNamesReverse.remove(entry);
+		
+		for (Iterator<Entry<String, UUID>> it = atPMNamesReverse.iterator(); it.hasNext();){
+			Entry<String, UUID> entry = it.next();
+			if (entry.getValue().equals(uuid)) it.remove();
 		}
 		
 	}

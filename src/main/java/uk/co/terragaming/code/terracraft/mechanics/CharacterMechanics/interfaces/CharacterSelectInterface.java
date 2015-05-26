@@ -15,7 +15,7 @@ import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterMechanics;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatChannelManager;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.ChatChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;

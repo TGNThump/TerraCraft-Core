@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -17,12 +18,14 @@ import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class LogoutListener implements Listener{
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onLogout(PlayerQuitEvent event){
 		Player player = event.getPlayer();
+		
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-		if (!registry.hasAccount(player)) return;
 		UUID uuid = player.getUniqueId();
+		if (!registry.hasAccount(uuid)) return;
+		
 		Account account = registry.getAccount(uuid);
 		if (account.getActiveCharacter() == null) return;
 		

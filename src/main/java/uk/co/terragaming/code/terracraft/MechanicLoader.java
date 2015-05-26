@@ -90,6 +90,7 @@ public class MechanicLoader implements Comparator<Class<? extends Mechanic>>{
 			
 			TerraLogger.info(TerraLogger.tools.repeat("  ", tabs) + mechanicName + " Initialized");
 		}
+		TerraLogger.blank();
 	}
 	
 	private static List<Class<? extends Mechanic>> getClasses(){

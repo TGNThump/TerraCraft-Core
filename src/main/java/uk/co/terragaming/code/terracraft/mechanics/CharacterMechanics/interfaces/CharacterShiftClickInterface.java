@@ -1,14 +1,17 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.ChatChannel;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.ChatChannelManager;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.listeners.ChatEventListener;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
@@ -46,12 +49,24 @@ public class CharacterShiftClickInterface {
 			new CallBack("trade", this)
 		);
 
-		if (!yourChar.getPatron().equals(targetChar)){
+		boolean targetIsYourPatron = false;
+		
+		if (yourChar.getPatron() != null)
+			if (yourChar.getPatron().equals(targetChar)) targetIsYourPatron = true;
+		
+		if (!targetIsYourPatron){
 			iface.addIcon(IconMenu.getItem(
 					new ItemStack(Material.MONSTER_EGG),
 					Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealty")),
 					Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyDesc"), targetChar.getName()) + (yourChar.getPatron() != null ? Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyBreak"), yourChar.getPatron().getName()) : "")),
 					new CallBack("swearFealty", this)
+				);
+		} else {
+			iface.addIcon(IconMenu.getItem(
+					new ItemStack(Material.MONSTER_EGG),
+					Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealty")),
+					Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealtyDesc"), targetChar.getName())),
+					new CallBack("breakFealty", this)
 				);
 		}
 		
@@ -90,19 +105,74 @@ public class CharacterShiftClickInterface {
 		
 		yourChar.setPatron(targetChar);
 
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "In the name and sight of the Gods,");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "I, " + yourChar.getName() + ",");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "from this day, until my last day,");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "pledge my sword and my soul,");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "my land and my life,");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "to the service and defence of");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, targetChar.getName() + ".");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "So mote it be.");
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "");
+		for (Player player : Bukkit.getOnlinePlayers()){
+			if (ChatChannelManager.isInChannel(player, ChatChannel.LOCAL)){
+				player.sendMessage(" ");
+			}
+		}
+
+		int delay = 40;
 		
+		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "In the name and sight of the Gods,");
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "I, " + yourChar.getName() + ",");
+			}
+		}, delay * 1);
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "from this day, until my last day,");
+			}
+		}, delay * 2);
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "pledge my sword and my soul,");
+			}
+		}, delay * 3);
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "my land and my life,");
+			}
+		}, delay * 4);
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "to the service and defence of");
+			}
+		}, delay * 5);
+		
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+			public void run() {
+				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, targetChar.getName() + ".");
+				
+				for (Player player : Bukkit.getOnlinePlayers()){
+					if (ChatChannelManager.isInChannel(player, ChatChannel.LOCAL)){
+						player.sendMessage("");
+					}
+				}
+			}
+		}, delay * 6);
+
+	}
 	
-	
+	@Callback
+	public void breakFealty(){
+		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+		
+		Account yourAcc = registry.getAccount(you);
+		Account targetAcc = registry.getAccount(target);
+		
+		Character yourChar = yourAcc.getActiveCharacter();
+		Character targetChar = registry.getAccount(target).getActiveCharacter();
+		
+		yourChar.setPatron(null);
+		
+		you.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(yourAcc.getLanguage(), "characterBreakFealty"), targetChar.getName()));
+		target.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(targetAcc.getLanguage(), "characterBreakFealtyToYou"), yourChar.getName()));
 	}
 	
 	@Callback

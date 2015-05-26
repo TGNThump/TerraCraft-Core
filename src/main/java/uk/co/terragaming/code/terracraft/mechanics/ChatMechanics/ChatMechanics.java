@@ -1,10 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
 
-import org.bukkit.Bukkit;
-
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
 
 public class ChatMechanics implements Mechanic{
 
@@ -26,7 +23,7 @@ public class ChatMechanics implements Mechanic{
 
 	@Override
 	public void PreInitialize() {
-		Bukkit.getPluginManager().registerEvents(new ChatEventListener(), TerraCraft.plugin);
+		
 	}
 
 	@Override

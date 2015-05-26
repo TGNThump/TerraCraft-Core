@@ -13,6 +13,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.Cha
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.utils.Lang;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.j256.ormlite.dao.Dao;
@@ -26,6 +27,9 @@ public class CharacterManager {
 	}
 	
 	public static void setActiveCharacter(Account account, Character character) throws SQLException {
+
+		downloadCharacter(character, account);
+		
 		Player player = account.getPlayer();
 		
 		CharacterChangeEvent event = new CharacterChangeEvent(player, account, character);
@@ -83,5 +87,15 @@ public class CharacterManager {
 	private static void updateCharacter(Character character) throws SQLException {
 		charactersDao.update(character);
 //		character.getItems().updateAll();
+		
+		TerraLogger.info("Uploaded Character Data of " + character.getAccount().getTerraTag() + "'s" + character.getName() + ".");
+	}
+	
+	private static void downloadCharacter(Character character, Account account) throws SQLException {
+		charactersDao.refresh(character);
+		charactersDao.refresh(character.getPatron());
+//		character.getItems().refreshAll();
+		
+		TerraLogger.info("Downloaded Character Data of " + account.getTerraTag() + "'s" + character.getName() + ".");
 	}
 }

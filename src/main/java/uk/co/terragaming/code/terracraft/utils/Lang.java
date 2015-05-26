@@ -63,9 +63,13 @@ public class Lang {
 		add(Language.ENGLISH, "characterShiftMenuSwearFealty", "<gold>Swear Fealty");
 		add(Language.ENGLISH, "characterShiftMenuSwearFealtyDesc", "<l>Click here to Swear Fealty to %s."); // characterName
 		add(Language.ENGLISH, "characterShiftMenuSwearFealtyBreak", "<b> This will break your oath with %s."); // characterName
+		add(Language.ENGLISH, "characterShiftMenuBreakFealty", "<gold>Break Fealty");
+		add(Language.ENGLISH, "characterShiftMenuBreakFealtyDesc", "<l>Click here to break your oath of fealty to %s."); // characterName
 		
 		add(Language.ENGLISH, "characterSwearFealty", "I swear, on my honour and life, from this day until the end of days, to serve, protect  %s."); // characterName
 		
+		add(Language.ENGLISH, "characterBreakFealty", "You broke your oath of allegiance to %s."); // characterName
+		add(Language.ENGLISH, "characterBreakFealtyToYou", "%s broke thier oath of allegiance to you."); // characterName
 		
 		add(Language.ENGLISH, "characterShiftMenuAddFriend", "<gold>Add as Friend");
 		add(Language.ENGLISH, "characterShiftMenuAddFriendDesc", "<l>Click here to add %s as a Friend."); // characterName

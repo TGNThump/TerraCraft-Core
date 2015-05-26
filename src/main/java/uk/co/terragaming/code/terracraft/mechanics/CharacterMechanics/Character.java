@@ -114,7 +114,7 @@ public class Character {
 //	@ForeignCollectionField(eager = true)
 //	private ForeignCollection<ItemInstance> items;
 	
-	@ForeignCollectionField(eager = true, foreignFieldName = "patron")
+	@ForeignCollectionField(eager = true, columnName = "patronId", foreignFieldName = "patron")
 	private ForeignCollection<Character> vassals;
 	
 	@DatabaseField(canBeNull = true, columnName = "patronId", foreign = true)

@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1;
 
 import java.util.HashMap;
 import java.util.List;

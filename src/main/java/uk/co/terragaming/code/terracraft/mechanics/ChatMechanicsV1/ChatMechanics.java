@@ -1,16 +1,17 @@
-package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1;
+
+import org.bukkit.Bukkit;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.listeners.ChatEventListener;
 
-@MechanicParent("CoreMechanics.PlayerMechanics")
 public class ChatMechanics implements Mechanic{
 
-	public boolean isEnabled()	{ return true; }
+	public boolean isEnabled()	{ return false; }
 	
 	public static ChatMechanics getInstance(){
-		return (ChatMechanics) TerraCraft.getMechanic("CoreMechanics.PlayerMechanics.ChatMechanics");
+		return (ChatMechanics) TerraCraft.getMechanic("ChatMechanics");
 	}
 	
 	// Mechanic Variables
@@ -25,7 +26,7 @@ public class ChatMechanics implements Mechanic{
 
 	@Override
 	public void PreInitialize() {
-		TerraCraft.server.getPluginManager().registerEvents(new ChatListener(), TerraCraft.plugin);
+		Bukkit.getPluginManager().registerEvents(new ChatEventListener(), TerraCraft.plugin);
 	}
 
 	@Override
