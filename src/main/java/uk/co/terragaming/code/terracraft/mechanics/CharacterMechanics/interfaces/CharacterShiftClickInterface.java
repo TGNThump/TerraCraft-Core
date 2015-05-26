@@ -1,17 +1,15 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.enums.ChatChannel;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.ChatChannelManager;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanicsV1.listeners.ChatEventListener;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
@@ -104,56 +102,49 @@ public class CharacterShiftClickInterface {
 		Character targetChar = registry.getAccount(target).getActiveCharacter();
 		
 		yourChar.setPatron(targetChar);
-
-		for (Player player : Bukkit.getOnlinePlayers()){
-			if (ChatChannelManager.isInChannel(player, ChatChannel.LOCAL)){
-				player.sendMessage(" ");
-			}
-		}
+		
+		Channel local = ChannelManager.getChannel(0);
+		local.processChatEvent(null, "");
 
 		int delay = 40;
 		
-		ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "In the name and sight of the Gods,");
+		local.processChatEvent(you, "In the name and sight of the Gods,");
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "I, " + yourChar.getName() + ",");
+				local.processChatEvent(you, "I, " + yourChar.getName() + ",");
 			}
 		}, delay * 1);
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "from this day, until my last day,");
+				local.processChatEvent(you, "from this day, until my last day,");
 			}
 		}, delay * 2);
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "pledge my sword and my soul,");
+				local.processChatEvent(you, "pledge my sword and my soul,");
 			}
 		}, delay * 3);
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "my land and my life,");
+				local.processChatEvent(you, "my land and my life,");
 			}
 		}, delay * 4);
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, "to the service and defence of");
+				local.processChatEvent(you, "to the service and defence of");
 			}
 		}, delay * 5);
 		
 		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
 			public void run() {
-				ChatEventListener.sendMessageToChannel(you, ChatChannel.LOCAL, targetChar.getName() + ".");
+				local.processChatEvent(you, targetChar.getName() + ".");
 				
-				for (Player player : Bukkit.getOnlinePlayers()){
-					if (ChatChannelManager.isInChannel(player, ChatChannel.LOCAL)){
-						player.sendMessage("");
-					}
-				}
+				local.processChatEvent(null, "");
 			}
 		}, delay * 6);
 

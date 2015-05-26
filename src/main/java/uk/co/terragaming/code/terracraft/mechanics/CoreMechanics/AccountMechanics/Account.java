@@ -9,6 +9,7 @@ import uk.co.terragaming.code.terracraft.enums.Gender;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -70,6 +71,7 @@ public class Account{
 	private Player player;
 	private Character activeCharacter;
 	private AccountSession activeSession;
+	private Channel activeChannel;
 
 	// Getters
 	
@@ -93,6 +95,7 @@ public class Account{
 	public Player getPlayer(){ return player; }
 	public AccountSession getActiveSession(){ return activeSession; }
 	public Character getActiveCharacter(){ return activeCharacter; }
+	public Channel getActiveChannel(){ return activeChannel; }
 		
 	// Setters
 	
@@ -110,6 +113,7 @@ public class Account{
 	public void setPlayer(Player player){ this.player = player; }
 	public void setActiveSession(AccountSession activeSession){ this.activeSession = activeSession; }
 	public void setActiveCharacter(Character activeCharacter){ this.activeCharacter = activeCharacter; }
+	public void setActiveChannel(Channel activeChannel){ this.activeChannel = activeChannel; }
 	
 	// Init
 	

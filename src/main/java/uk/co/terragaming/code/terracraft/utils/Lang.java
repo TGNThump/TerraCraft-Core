@@ -79,9 +79,12 @@ public class Lang {
 		
 		add(Language.ENGLISH, "commandSetLanguage", "Your language has been set to ENGLISH.");
 		
-		add(Language.ENGLISH, "ChatInvalidChannel", "<b>There is no chat channel with the name %s."); // channelName
-		add(Language.ENGLISH, "ChatSetDefaultChannel", "Your default Channel has been set to %s."); // channelName
-		
+		add(Language.ENGLISH, "ChatInvalidChannel", "<b>There is no chat channel or player with the name '%s'."); // channelName
+		add(Language.ENGLISH, "ChatSetDefaultChannel", "Your default channel has been set to '%s'."); // channelName
+		add(Language.ENGLISH, "ChatChannelMuted", "<b>You have been muted in this channel.");
+		add(Language.ENGLISH, "ChatNoChannelPerm", "<b>You do not have permission to join the '%s' channel.");
+		add(Language.ENGLISH, "chatLocalOutOfRange", "[<l>TerraCraft<r>] <b>Nobody heard you...\n[<l>TerraCraft<r>] <b>Try talking in global chat by typing @global [message].");
+		add(Language.ENGLISH, "ChatResetActiveChannel", "Your default chat channel has been deleted. Your default channel has been reset to 'local'.");
 		
 		// Norwegian
 		

@@ -57,7 +57,7 @@ public class PlayerMechanics implements Mechanic{
 
 	@Override
 	public void PostDenitialize() {
-		VanishEffect.potionManager.close();
+		
 	}
 
 }

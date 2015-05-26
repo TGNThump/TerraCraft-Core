@@ -3,31 +3,119 @@ package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.entity.Player;
 
+import com.google.common.collect.Lists;
+
+import uk.co.terragaming.zoldCode.V1.terracraft.CoreMechanics.AccountMechanics.Account;
 
 public abstract class Channel {
 
+	private Integer id;
 	private String name;
 	private String tag;
 	
-	private Integer range;
+	private boolean autojoin = false;
+	private boolean leaveable = true;
 	
-	private ArrayList<UUID> joinedPlayers;
+	private Integer range = -1;
 	
-	public void addPlayer(UUID uuid){
+	private ArrayList<UUID> joinedPlayers = Lists.newArrayList();
+	private ArrayList<UUID> mutedPlayers = Lists.newArrayList();
+	
+	public ArrayList<UUID> getJoinedPlayers(){
+		return joinedPlayers;
+	}
+	
+	public ArrayList<UUID> getMutedPlayers(){
+		return mutedPlayers;
+	}
+	
+	public void add(UUID uuid){
+		if (contains(uuid)) return;
 		joinedPlayers.add(uuid);
 	}
 	
-	public void removePlayer(UUID uuid){
+	public void add(Player player){
+		add(player.getUniqueId());
+	}
+	
+	public void add(Account account){
+		add(account.getPlayerUUID());
+	}
+	
+	public void remove(UUID uuid){
+		if (!contains(uuid)) return;
 		joinedPlayers.remove(uuid);
 	}
 	
-	public boolean hasPlayer(UUID uuid){
+	public void remove(Player player){
+		remove(player.getUniqueId());
+	}
+	
+	public void remove(Account account){
+		remove(account.getPlayerUUID());
+	}
+	
+	public boolean contains(UUID uuid){
 		return joinedPlayers.contains(uuid);
 	}
 	
-	public abstract void processChatEvent(AsyncPlayerChatEvent event);
+	public boolean contains(Player player){
+		return contains(player.getUniqueId());
+	}
+	
+	public boolean contains(Account account){
+		return contains(account.getPlayerUUID());
+	}
+	
+	public void mute(UUID uuid){
+		if (isMuted(uuid)) return;
+		mutedPlayers.add(uuid);
+	}
+	
+	public void mute(Player player){
+		mute(player.getUniqueId());
+	}
+	
+	public void mute(Account account){
+		mute(account.getPlayerUUID());
+	}
+	
+	public void unmute(UUID uuid){
+		if (!isMuted(uuid)) return;
+		mutedPlayers.remove(uuid);
+	}
+	
+	public void unmute(Player player){
+		unmute(player.getUniqueId());
+	}
+	
+	public void unmute(Account account){
+		unmute(account.getPlayerUUID());
+	}
+	
+	public boolean isMuted(UUID uuid){
+		return mutedPlayers.contains(uuid);
+	}
+	
+	public boolean isMuted(Player player){
+		return isMuted(player.getUniqueId());
+	}
+	
+	public boolean isMuted(Account account){
+		return isMuted(account.getPlayerUUID());
+	}
+	
+	public abstract void processChatEvent(Player sender, String message);
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -51,5 +139,34 @@ public abstract class Channel {
 
 	public void setRange(Integer range) {
 		this.range = range;
+	}
+
+	public boolean isAutojoin() {
+		return autojoin;
+	}
+
+	public void setAutojoin(boolean autojoin) {
+		this.autojoin = autojoin;
+	}
+	
+	public void autojoin(){
+		this.autojoin = true;
+	}
+	
+	public boolean canJoin(Player player){
+		// TODO: Add Permissions
+		return true;
+	}
+
+	public boolean isLeaveable() {
+		return leaveable;
+	}
+
+	public void setLeaveable(boolean leaveable) {
+		this.leaveable = leaveable;
+	}
+	
+	public String getDisplayName(Player player){
+		return name;
 	}
 }
