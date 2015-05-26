@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.commands.ChannelCommands;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
 
 public class ChatMechanics implements Mechanic{
 
@@ -27,6 +29,7 @@ public class ChatMechanics implements Mechanic{
 	@Override
 	public void PreInitialize() {
 		Bukkit.getPluginManager().registerEvents(new ChatEventListener(), TerraCraft.plugin);
+		CommandRegistry.registerCommands(TerraCraft.plugin, new ChannelCommands());
 		
 		Channel local = new SimpleChannel();
 			local.setName("local");

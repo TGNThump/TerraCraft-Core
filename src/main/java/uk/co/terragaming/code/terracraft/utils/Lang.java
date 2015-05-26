@@ -85,6 +85,8 @@ public class Lang {
 		add(Language.ENGLISH, "ChatNoChannelPerm", "<b>You do not have permission to join the '%s' channel.");
 		add(Language.ENGLISH, "chatLocalOutOfRange", "[<l>TerraCraft<r>] <b>Nobody heard you...\n[<l>TerraCraft<r>] <b>Try talking in global chat by typing @global [message].");
 		add(Language.ENGLISH, "ChatResetActiveChannel", "Your default chat channel has been deleted. Your default channel has been reset to 'local'.");
+		add(Language.ENGLISH, "chatChannelJoin", "You have joined the '%s' channel."); // chanelName
+		add(Language.ENGLISH, "chatChannelLeave", "You have left the '%S' channel."); // chanelName
 		
 		// Norwegian
 		

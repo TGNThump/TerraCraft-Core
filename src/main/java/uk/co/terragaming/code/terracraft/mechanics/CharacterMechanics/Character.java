@@ -61,6 +61,12 @@ public class Character {
 	private Integer curHunger;
 	
 	@DatabaseField(canBeNull = false)
+	private Integer curSaturation;
+	
+	@DatabaseField(canBeNull = false)
+	private Integer curExhaustion;
+	
+	@DatabaseField(canBeNull = false)
 	private Integer maxMana;
 	
 	@DatabaseField(canBeNull = false)
@@ -145,6 +151,9 @@ public class Character {
 	public Integer getMaxHunger(){ return maxHunger; }
 	public Integer getCurHunger(){ return curHunger; }
 	
+	public Integer getCurExhaustion(){ return curExhaustion; }
+	public Integer getCurSaturation(){ return curSaturation; }
+	
 	public Integer getMaxMana(){ return maxMana; }
 	public Integer getCurMana(){ return curMana; }
 	
@@ -195,6 +204,9 @@ public class Character {
 	
 	public void setMaxHunger(Integer maxHunger){ this.maxHunger = maxHunger; }
 	public void setCurHunger(Integer curHunger){ this.curHunger = curHunger; }
+	
+	public void setCurExhaustion(Integer curExhaustion){ this.curExhaustion = curExhaustion; }
+	public void setCurSaturation(Integer curSaturation){ this.curSaturation = curSaturation; }
 	
 	public void setCurLevel(Integer curLevel){ this.curLevel = curLevel; }
 	public void setCurExp(Integer curExp){ this.curExp = curExp; }

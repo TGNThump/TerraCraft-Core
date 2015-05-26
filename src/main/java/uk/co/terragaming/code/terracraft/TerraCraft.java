@@ -33,11 +33,11 @@ public class TerraCraft extends JavaPlugin{
 		saveConfig();
 		getConfig();
 		
-		loader.constructMechanics();
-		loader.preInitMechanics();
-		
 		Lang.load();
 		
+		loader.constructMechanics();
+		loader.preInitMechanics();
+
 		TerraCraft.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			public void run(){
 				loader.initMechanics();

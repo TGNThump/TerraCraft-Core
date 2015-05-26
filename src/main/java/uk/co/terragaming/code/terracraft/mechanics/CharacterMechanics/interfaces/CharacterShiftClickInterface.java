@@ -2,6 +2,7 @@ package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interface
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -104,8 +105,15 @@ public class CharacterShiftClickInterface {
 		yourChar.setPatron(targetChar);
 		
 		Channel local = ChannelManager.getChannel(0);
-		local.processChatEvent(null, "");
 
+		for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())){
+			if (!(entity instanceof Player)) continue;
+			Player reciever = (Player) entity;
+			if (local.contains(reciever.getUniqueId())){
+				reciever.sendMessage("");
+			}
+		}
+		
 		int delay = 40;
 		
 		local.processChatEvent(you, "In the name and sight of the Gods,");
@@ -144,7 +152,13 @@ public class CharacterShiftClickInterface {
 			public void run() {
 				local.processChatEvent(you, targetChar.getName() + ".");
 				
-				local.processChatEvent(null, "");
+				for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())){
+					if (!(entity instanceof Player)) continue;
+					Player reciever = (Player) entity;
+					if (local.contains(reciever.getUniqueId())){
+						reciever.sendMessage("");
+					}
+				}
 			}
 		}, delay * 6);
 

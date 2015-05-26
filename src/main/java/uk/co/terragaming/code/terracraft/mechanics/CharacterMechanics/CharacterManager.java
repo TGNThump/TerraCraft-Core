@@ -46,6 +46,8 @@ public class CharacterManager {
 		player.setLevel(character.getCurLevel());
 		player.setExp(((float) character.getCurExp()) / 100f);
 		player.setFoodLevel(character.getCurHunger());
+		player.setExhaustion(character.getCurExhaustion());
+		player.setSaturation(character.getCurSaturation());
 		player.teleport(character.getLocation());
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCustomName(character.getName());
@@ -79,6 +81,8 @@ public class CharacterManager {
 		character.setCurExp(Math.round(player.getExp() * 100));
 		character.setCurHitpoints((int) Math.round(player.getHealth()));
 		character.setCurHunger(player.getFoodLevel());
+		character.setCurExhaustion((int) player.getExhaustion());
+		character.setCurSaturation((int) player.getSaturation());
 		character.setCurLevel(player.getLevel());
 		
 		updateCharacter(character);

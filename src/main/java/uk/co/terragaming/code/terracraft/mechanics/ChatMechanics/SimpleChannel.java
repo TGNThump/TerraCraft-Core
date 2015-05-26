@@ -43,14 +43,14 @@ public class SimpleChannel extends Channel{
 				reciever.sendMessage(Txt.parse("[<l>%s<r>]%s %s", getTag(), (sender == null ? "" : " <" + name + ">"), message));
 			}
 		} else {
-			sender.sendMessage(Txt.parse("[<l>%s<r>]%s %s", getTag(), (sender == null ? "" : " <" + name + ">"), message));
+			sender.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
 			boolean heared = false;
 			for (Entity entity : sender.getNearbyEntities(range, 500, range)){
 				if (!(entity instanceof Player)) continue;
 				Player reciever = (Player) entity;
 				if (contains(reciever.getUniqueId())){
 					heared = true;
-					reciever.sendMessage(Txt.parse("[<l>%s<r>]%s %s", getTag(), (sender == null ? "" : " <" + name + ">"), message));
+					reciever.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
 				}
 			}
 			if (!heared){
