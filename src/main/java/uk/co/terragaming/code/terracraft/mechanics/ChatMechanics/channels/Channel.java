@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
 import java.util.ArrayList;
 import java.util.UUID;

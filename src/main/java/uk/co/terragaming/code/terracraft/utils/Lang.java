@@ -89,6 +89,9 @@ public class Lang {
 		add(Language.ENGLISH, "ChatResetActiveChannel", "Your default chat channel has been deleted. Your default channel has been reset to 'local'.");
 		add(Language.ENGLISH, "chatChannelJoin", "You have joined the '%s' channel."); // chanelName
 		add(Language.ENGLISH, "chatChannelLeave", "You have left the '%S' channel."); // chanelName
+		add(Language.ENGLISH, "channelListPreText", "You are part of the following channels:");
+		add(Language.ENGLISH, "chatDefaultChannel", "Your default channel is set to '%s'"); // channelName
+		add(Language.ENGLISH, "chatNoChannels", "<b>You are not joined to any channels.");
 		
 		add(Language.ENGLISH, "fealtyPatronBecomeVassal", "Your patron has become one of your vassals. You are now in charge of your fealty group.");
 		

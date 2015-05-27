@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
 import org.bukkit.entity.Player;
 

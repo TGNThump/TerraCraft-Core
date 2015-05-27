@@ -9,14 +9,16 @@ import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.Language;
+import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterMechanics;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NotificationMechanics.NotificationManager;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -75,8 +77,21 @@ public class FealtyManager {
 		
 		Account account = theirPatron.getAccount();
 		Player player = account.getPlayer();
-		// TODO: Add notification system
-		if (player == null) return;
+		
+		if (player == null){
+			try {
+				NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
+				return;
+			} catch (TerraException e) { return; }
+		} else if (account.getActiveCharacter() != theirPatron){
+			if (account.getActiveCharacter() != theirPatron) {
+				try {
+					NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
+					return;
+				} catch (TerraException e) { return; }
+			}
+		}
+			
 		Language lang = Language.ENGLISH;
 		if (account.getLanguage() != null)
 			lang = account.getLanguage();

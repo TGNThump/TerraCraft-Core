@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,10 +6,14 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
-import uk.co.terragaming.code.terracraft.utils.ChatUtils;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.Txt;
+
+import com.google.common.collect.Lists;
 
 public class WhisperChannel extends Channel{
 
@@ -47,7 +51,17 @@ public class WhisperChannel extends Channel{
 	
 		sender.sendMessage(Txt.parse("[<l>%s<r> to <italic><pink>%s<r>] %s", getTag(), theirName, message));
 		reciever.sendMessage(Txt.parse("[<l>%s<r> from <italic><pink>%s<r>] %s", getTag(), yourName, message));
-}
+	
+		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+		
+		if (registry.hasAccount(sender)){
+			Account account = registry.getAccount(sender);
+			Character character = account.getActiveCharacter();
+		
+			ChatLogger.log(account, character, this, message);
+		}
+		
+	}
 	
 	@Override
 	public boolean canJoin(Player player){
@@ -56,15 +70,10 @@ public class WhisperChannel extends Channel{
 	
 	@Override
 	public String getDisplayName(Player player){
-		for (UUID uuid : getJoinedPlayers()){
-			if (player.getUniqueId().equals(uuid)) continue;
-			
-			Player reciever = Bukkit.getPlayer(uuid);
-			String theirName = ChatUtils.getName(reciever, this);
-			
-			return theirName;
-		}
-		return "";
+		if (player.getUniqueId().equals(you))
+			return this.theirName;
+		
+		return this.yourName;
 	}
 	
 	public List<String> getJoinedPlayerNames(){

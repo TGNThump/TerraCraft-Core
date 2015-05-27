@@ -25,9 +25,7 @@ public class FealtyCommands {
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(sender);
 		Character character = account.getActiveCharacter();
 		
-		long millis = System.currentTimeMillis();
 		List<Character> characters = FealtyManager.getVassalsRecursively(character);
-		TerraLogger.debug("Took " + (System.currentTimeMillis() - millis) + "ms");
 		
 		List<String> names = Lists.newArrayList();
 		

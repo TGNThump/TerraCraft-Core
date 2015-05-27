@@ -7,10 +7,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.PartyChannel;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.WhisperChannel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.PartyChannel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.WhisperChannel;
 
 import com.google.common.collect.Lists;
 

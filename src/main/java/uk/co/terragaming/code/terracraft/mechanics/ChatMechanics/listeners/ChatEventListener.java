@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.CharacterChangeEvent;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.WhisperChannel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.WhisperChannel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
@@ -55,6 +55,10 @@ public class ChatEventListener implements Listener{
 				}
 				channel.add(player);
 				account.setActiveChannel(channel);
+				if (channel.getId() == 0){
+					ChannelManager.getChannel("yell").add(player);
+					ChannelManager.getChannel("emote").add(player);
+				}
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatSetDefaultChannel"), channel.getDisplayName(player)));
 			} else {
 				channel.add(player);
@@ -72,6 +76,10 @@ public class ChatEventListener implements Listener{
 				channel = ChannelManager.getChannel(0);
 				account.setActiveChannel(channel);
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatResetActiveChannel")));
+				return;
+			}
+			if (!channel.contains(account)){
+				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "chatNoChannels")));
 				return;
 			}
 			account.getActiveChannel().processChatEvent(player, message);

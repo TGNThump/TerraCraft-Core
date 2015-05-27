@@ -216,10 +216,12 @@ public class CommandExecutor implements TabExecutor{
 				
 			// ... or if the parameter is optional ...
 			} else if (param.isOptional()){
-				
 				// ... attempt to read the default value.
-				arg = param.getArgReader().read(param.getDefaultValue(), sender);
-				
+				if (param.getDefaultValue().equals("")){
+					arg = null;
+				} else {
+					arg = param.getArgReader().read(param.getDefaultValue(), sender);
+				}
 			// ... otherwise ...
 			} else {
 				

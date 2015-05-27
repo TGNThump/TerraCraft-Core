@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics;
+package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +8,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
@@ -59,6 +62,13 @@ public class SimpleChannel extends Channel{
 					sender.sendMessage(msg);
 				}
 			}
+		}
+		
+		if (registry.hasAccount(sender)){
+			Account account = registry.getAccount(sender);
+			Character character = account.getActiveCharacter();
+		
+			ChatLogger.log(account, character, this, message);
 		}
 	}
 

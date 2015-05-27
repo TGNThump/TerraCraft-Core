@@ -4,9 +4,15 @@ import org.bukkit.Bukkit;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.EmoteChannel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.SimpleChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.commands.ChannelCommands;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
+
+import com.j256.ormlite.dao.Dao;
 
 public class ChatMechanics implements Mechanic{
 
@@ -18,11 +24,14 @@ public class ChatMechanics implements Mechanic{
 	
 	// Mechanic Variables
 	
-	
+	private DatabaseMechanics databaseMechanics;
+	private Dao<ChatLogEntry, Integer> chatLogDao;
 	
 	// Mechanic Methods
 	
-	
+	public Dao<ChatLogEntry, Integer> getChatLogDao(){
+		return chatLogDao;
+	}
 	
 	// Mechanic Events
 
@@ -67,9 +76,12 @@ public class ChatMechanics implements Mechanic{
 		ChannelManager.addChannel(staff);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
-		
+		databaseMechanics = DatabaseMechanics.getInstance();
+		chatLogDao = (Dao<ChatLogEntry, Integer>) databaseMechanics.getDao(ChatLogEntry.class);
+		ChatLogger.init();
 	}
 
 	@Override
@@ -84,7 +96,7 @@ public class ChatMechanics implements Mechanic{
 
 	@Override
 	public void Denitialize() {
-		
+		ChatLogger.deinit();
 	}
 
 	@Override

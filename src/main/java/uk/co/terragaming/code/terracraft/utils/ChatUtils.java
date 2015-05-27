@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
-import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
