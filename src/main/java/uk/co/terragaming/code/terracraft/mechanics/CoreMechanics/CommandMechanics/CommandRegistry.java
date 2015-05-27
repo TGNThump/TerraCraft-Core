@@ -44,7 +44,11 @@ public class CommandRegistry {
 		// ... and For each method in the handler class ...
 		for (Iterator<Method> iter = methods.iterator(); iter.hasNext();){
 			Method method = iter.next();
-			registerMethod(plugin, handler, method);
+			try {
+				registerMethod(plugin, handler, method);
+			} catch (TerraException e) {
+				break;
+			}
 		}
 		
 		TerraLogger.blank();
@@ -52,33 +56,35 @@ public class CommandRegistry {
 	
 	// Register A Command from a Method
 	
-	public static void registerMethod(JavaPlugin plugin, Object handler, Method method){
-		try {			
-			// If the method is a commandMethod ...
-			if (!CommandMethod.isCommand(method)){ return; }
-			
-			String name = CommandMethod.getCommandName(method);
-			
-			List<String> aliases = CommandMethod.getCommandAliases(method);
-			String description = "";
-			String usage = null;
-			Optional<Command> parent = Optional.empty();
-			
-			if (CommandMethod.hasDescription(method)){
-				description = CommandMethod.getDescription(method);
-			}
-			
-			if (CommandMethod.hasUsage(method)){
-				usage = CommandMethod.getUsage(method);
-			}
-			
-			if (CommandMethod.hasParent(method)){
-				parent = CommandMethod.getParent(method);
-				if (!parent.isPresent()){
-					TerraLogger.error("Command Registered Before Parent: " + method.getName() + " [" + CommandMethod.getParentString(method) + "]"); return;
-				}
-			}
+	public static void registerMethod(JavaPlugin plugin, Object handler, Method method) throws TerraException{
 		
+		// If the method is a commandMethod ...
+		if (!CommandMethod.isCommand(method)){ return; }
+		
+		String name = CommandMethod.getCommandName(method);
+		
+		List<String> aliases = CommandMethod.getCommandAliases(method);
+		String description = "";
+		String usage = null;
+		Optional<Command> parent = Optional.empty();
+		
+		if (CommandMethod.hasDescription(method)){
+			description = CommandMethod.getDescription(method);
+		}
+		
+		if (CommandMethod.hasUsage(method)){
+			usage = CommandMethod.getUsage(method);
+		}
+		
+		if (CommandMethod.hasParent(method)){
+			parent = CommandMethod.getParent(method);
+			if (!parent.isPresent()){
+				TerraLogger.error("Command Registered Before Parent: " + method.getName() + " [" + CommandMethod.getParentString(method) + "]");
+				throw new TerraException();
+			}
+		}
+			
+		try {	
 			CommandParameter[] params = getParams(method);
 		
 			Optional<Command> ret = createCommand(plugin, handler, method, name, aliases, description, usage, parent, params);

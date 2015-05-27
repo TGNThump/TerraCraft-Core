@@ -1,13 +1,19 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 
+import java.sql.SQLException;
+
 import org.bukkit.Material;
 
 import uk.co.terragaming.code.terracraft.enums.ItemBindType;
 import uk.co.terragaming.code.terracraft.enums.ItemClass;
 import uk.co.terragaming.code.terracraft.enums.ItemQuality;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.MaterialPersister;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "tcItems")
@@ -22,10 +28,10 @@ public class Item {
 	@DatabaseField(canBeNull = true, persisterClass = MaterialPersister.class)
 	private Material material;
 
-	@DatabaseField(canBeNull = true)
+	@DatabaseField(canBeNull = false)
 	private ItemQuality quality;
 
-	@DatabaseField(canBeNull = true, columnName = "bindType")
+	@DatabaseField(canBeNull = true, columnName = "bind")
 	private ItemBindType bindType;
 
 	@DatabaseField(canBeNull = true, columnName = "class")
@@ -33,6 +39,15 @@ public class Item {
 
 	@DatabaseField(canBeNull = true)
 	private String type;
+	
+	@DatabaseField(canBeNull = false)
+	private Integer minBaseDamage;
+	
+	@DatabaseField(canBeNull = false)
+	private Integer maxBaseDamage;
+	
+	@DatabaseField(canBeNull = true)
+	private String data;
 
 	@DatabaseField(canBeNull = false)
 	private Integer requiredStrength;
@@ -96,6 +111,9 @@ public class Item {
 
 	@DatabaseField(canBeNull = false)
 	private Integer maxDurability;
+	
+	@ForeignCollectionField(eager = false, columnName = "itemId", foreignFieldName = "item")
+	private ForeignCollection<ItemInstance> instances;
 
 	// Getters
 	
@@ -107,6 +125,11 @@ public class Item {
 	public ItemClass getItemClass() { return itemClass; }
 	public String getType() { return type; }
 
+	public String getData() { return data; }
+	
+	public Integer getMinBaseDamage() { return minBaseDamage; }
+	public Integer getMaxBaseDamage() { return maxBaseDamage; }
+	
 	public Integer getRequiredStrength() { return requiredStrength; }
 	public Integer getRequiredAgility() { return requiredAgility; }
 	public Integer getRequiredStamina() { return requiredStamina; }
@@ -131,6 +154,8 @@ public class Item {
 	public Integer getCost() { return cost; }
 	public Integer getMaxDurability() { return maxDurability; }
 
+	public ForeignCollection<ItemInstance> getInstances(){ return instances; }
+	
 	// Setters
 	
 	public void setId(Integer id) { this.id = id; }
@@ -141,6 +166,10 @@ public class Item {
 	public void setItemClass(ItemClass itemClass) { this.itemClass = itemClass; }
 	public void setType(String type) { this.type = type; }
 
+	public void setData(String data) { this.data = data; }
+	public void setMinBaseDamage(Integer minBaseDamage) { this.minBaseDamage = minBaseDamage; }
+	public void setMaxBaseDamage(Integer maxBaseDamage) { this.maxBaseDamage = maxBaseDamage; }
+	
 	public void setRequiredStrength(Integer requiredStrength) { this.requiredStrength = requiredStrength; }
 	public void setRequiredAgility(Integer requiredAgility) { this.requiredAgility = requiredAgility; }
 	public void setRequiredStamina(Integer requiredStamina) { this.requiredStamina = requiredStamina; }
@@ -170,13 +199,20 @@ public class Item {
 	public Item(){}
 	
 	// Methods
-	
+
 	public ItemInstance createInstance(){
 		ItemInstance instance = new ItemInstance();
 		instance.setItem(this);
 		instance.setCurDurability(this.getMaxDurability());
 		
-		
+		Dao<ItemInstance, Integer> itemInstanceDao = ItemMechanics.getInstance().getItemInstanceDao();
+		try {
+			itemInstanceDao.create(instance);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			TerraLogger.debug("Failed to create Item Instance in Database...");
+			return null;
+		}
 		
 		return instance;
 	}

@@ -32,9 +32,10 @@ public class CallBack {
 	public void invoke(){
 		try {
 			method.invoke(object, args);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			TerraLogger.error("Failed to invoke method for callback to " + method.getName());
+		} catch (IllegalAccessException  | IllegalArgumentException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.getCause().printStackTrace();
 		}
 	}
 }

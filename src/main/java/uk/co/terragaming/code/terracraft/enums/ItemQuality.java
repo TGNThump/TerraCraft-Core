@@ -23,6 +23,7 @@ public enum ItemQuality {
 	}
 	
 	public static ChatColor getChatColor(ItemQuality quality) {
+		if (quality == null) return ChatColor.RED;
 		if (quality.equals(ItemQuality.POOR)){
 			return ChatColor.DARK_GRAY;
 		} else if (quality.equals(ItemQuality.COMMON)){

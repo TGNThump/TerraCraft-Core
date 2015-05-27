@@ -123,6 +123,7 @@ public class CharacterSelectInterface{
 		player.setHealth(20d);
 		player.setFoodLevel(200);
 		player.getInventory().clear();
+		player.getInventory().setArmorContents(new ItemStack[4]);
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCanPickupItems(false);
 		player.setNoDamageTicks(0);

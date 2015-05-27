@@ -35,19 +35,31 @@ public class TerraCraft extends JavaPlugin{
 		
 		Lang.load();
 		
-		loader.constructMechanics();
-		loader.preInitMechanics();
+		try{
+			loader.constructMechanics();
+			loader.preInitMechanics();
+		} catch (Exception e){
+			TerraLogger.error("Server encountered an error while loading... Shutting Down...");
+			e.printStackTrace();
+			server.shutdown();
+		}
 
 		TerraCraft.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			public void run(){
-				loader.initMechanics();
-				loader.postInitMechanics();
-				TerraLogger.blank();
-				TerraLogger.info("All Enabled Mechanics have been Loaded.");
-				TerraLogger.blank();
-				serverMode = ServerMode.fromString(getConfig().get("TerraCraft.Server.Mode").toString());
-				if (serverMode.equals(ServerMode.BIFROST)){
-					TerraLogger.info("<l>Server launched in BIFROST Registration Mode!");
+				try{
+					loader.initMechanics();
+					loader.postInitMechanics();
+					TerraLogger.blank();
+					TerraLogger.info("All Enabled Mechanics have been Loaded.");
+					TerraLogger.blank();
+					serverMode = ServerMode.fromString(getConfig().get("TerraCraft.Server.Mode").toString());
+					if (serverMode.equals(ServerMode.BIFROST)){
+						TerraLogger.info("<l>Server launched in BIFROST Registration Mode!");
+					}
+				} catch (Exception e){
+					TerraLogger.error("Server encountered an error while loading... Shutting Down...");
+					e.printStackTrace();
+					server.shutdown();
 				}
 			}
 		}, 1L);

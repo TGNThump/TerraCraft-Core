@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -117,8 +118,8 @@ public class Character {
 	@DatabaseField(canBeNull = true)
 	private String notes;
 	
-//	@ForeignCollectionField(eager = true)
-//	private ForeignCollection<ItemInstance> items;
+	@ForeignCollectionField(eager = true, columnName = "charId", foreignFieldName = "character")
+	private ForeignCollection<ItemInstance> items;
 	
 	@ForeignCollectionField(eager = true, columnName = "patronId", foreignFieldName = "patron")
 	private ForeignCollection<Character> vassals;
@@ -180,7 +181,7 @@ public class Character {
 	public Character getPatron(){ return patron; }
 	public ForeignCollection<Character> getVassals(){ return vassals; }
 	
-//	public ForeignCollection<ItemInstance> getItems(){ return items; } 
+	public ForeignCollection<ItemInstance> getItems(){ return items; } 
 	
 	public Location getLocation(){ return location.clone(); }
 	
