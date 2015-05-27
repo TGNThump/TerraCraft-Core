@@ -81,16 +81,16 @@ public class Lang {
 		
 		add(Language.ENGLISH, "commandSetLanguage", "Your language has been set to ENGLISH.");
 		
-		add(Language.ENGLISH, "ChatInvalidChannel", "<b>There is no chat channel or player with the name '%s'."); // channelName
-		add(Language.ENGLISH, "ChatSetDefaultChannel", "Your default channel has been set to '%s'."); // channelName
+		add(Language.ENGLISH, "ChatInvalidChannel", "<b>There is no chat channel or player with the name '<h>%s<b>'."); // channelName
+		add(Language.ENGLISH, "ChatSetDefaultChannel", "Your default channel has been set to '<h>%s<r>'."); // channelName
 		add(Language.ENGLISH, "ChatChannelMuted", "<b>You have been muted in this channel.");
-		add(Language.ENGLISH, "ChatNoChannelPerm", "<b>You do not have permission to join the '%s' channel.");
+		add(Language.ENGLISH, "ChatNoChannelPerm", "<b>You do not have permission to join the '<h>%s<b>' channel.");
 		add(Language.ENGLISH, "chatLocalOutOfRange", "[<l>TerraCraft<r>] <b>Nobody heard you...\n[<l>TerraCraft<r>] <b>Try talking in global chat by typing @global [message].");
 		add(Language.ENGLISH, "ChatResetActiveChannel", "Your default chat channel has been deleted. Your default channel has been reset to 'local'.");
-		add(Language.ENGLISH, "chatChannelJoin", "You have joined the '%s' channel."); // chanelName
-		add(Language.ENGLISH, "chatChannelLeave", "You have left the '%S' channel."); // chanelName
+		add(Language.ENGLISH, "chatChannelJoin", "You have joined the '<h>%s<r>' channel."); // chanelName
+		add(Language.ENGLISH, "chatChannelLeave", "You have left the '<h>%s<r>' channel."); // chanelName
 		add(Language.ENGLISH, "channelListPreText", "You are part of the following channels:");
-		add(Language.ENGLISH, "chatDefaultChannel", "Your default channel is set to '%s'"); // channelName
+		add(Language.ENGLISH, "chatDefaultChannel", "Your default channel is set to '<h>%s<r>'"); // channelName
 		add(Language.ENGLISH, "chatNoChannels", "<b>You are not joined to any channels.");
 		
 		add(Language.ENGLISH, "fealtyPatronBecomeVassal", "Your patron has become one of your vassals. You are now in charge of your fealty group.");

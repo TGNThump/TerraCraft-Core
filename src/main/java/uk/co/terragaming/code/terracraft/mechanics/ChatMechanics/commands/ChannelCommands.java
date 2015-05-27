@@ -10,7 +10,9 @@ import com.google.common.collect.Lists;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.OptArg;
@@ -50,6 +52,20 @@ public class ChannelCommands {
 	@CommandDescription("Join a chat channel")
 	public void onJoinCommand(Player sender, Language language, Channel channel){
 		if (channel.canJoin(sender)){
+			AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+			Account account = registry.getAccount(sender);
+			UUID uuid = sender.getUniqueId();
+			List<Channel> joinedChannels = Lists.newArrayList();
+			for (Channel c : ChannelManager.getChannels()){
+				if (c.getJoinedPlayers().contains(uuid)){
+					joinedChannels.add(c);
+				}
+			}
+			
+			if (joinedChannels.size() == 0){
+				account.setActiveChannel(channel);
+			}
+			
 			channel.add(sender);
 			if (channel.getId() == 0){
 				ChannelManager.getChannel("yell").add(sender);
@@ -65,11 +81,14 @@ public class ChannelCommands {
 	@CommandDescription("Leave a chat channel")
 	public void onLeaveCommand(Player sender, Language language, Channel channel){
 		channel.remove(sender);
+		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "chatChannelLeave"), channel.getDisplayName(sender)));
+		
 		if (channel.getId() == 0){
 			ChannelManager.getChannel("yell").remove(sender);
 			ChannelManager.getChannel("emote").remove(sender);
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "chatChannelLeave"), "yell"));
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "chatChannelLeave"), "emote"));
 		}
 		
-		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "chatChannelLeave"), channel.getDisplayName(sender)));
 	}
 }
