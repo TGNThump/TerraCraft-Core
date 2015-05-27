@@ -26,7 +26,6 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.utils.CustomItem;
 import uk.co.terragaming.code.terracraft.utils.IconMenu;
 import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class CharacterSelectInterface{
@@ -34,12 +33,16 @@ public class CharacterSelectInterface{
 	private final Player player;
 	
 	public CharacterSelectInterface(Player player){
-		
-		PlayerInterface iface = new PlayerInterface(Txt.parse("<gold>Your Characters"), 1);
-		
 		this.player = player;
-		
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+		
+		int i = 2;
+		if (player.isOp()) i++; // TODO: If Player has staff account.
+		i += account.getCharacters().size();
+		
+		int rows = i / 9;
+		rows = rows + 1;
+		PlayerInterface iface = new PlayerInterface(Txt.parse("<gold>Your Characters"), rows);
 		
 		iface.addIcon(0, 8, IconMenu.getItem(new ItemStack(Material.BOOK_AND_QUILL), ChatColor.GOLD + "New Character", ChatColor.DARK_AQUA + "Click here to create a new RP Character"), new CallBack("createNewCharacter", this));
 		iface.addIcon(0, 7, IconMenu.getItem(new ItemStack(Material.IRON_BARDING), ChatColor.GOLD + "Leave Server", ChatColor.DARK_AQUA + "Click here to leave TerraCraft."), new CallBack("quitGame", this));
@@ -49,20 +52,13 @@ public class CharacterSelectInterface{
 			iface.addIcon(0, 6, IconMenu.getItem(new ItemStack(Material.GOLD_HELMET), ChatColor.GOLD + "Enter Staff Mode", ChatColor.DARK_AQUA + "Click here to enter the game in Staff Mode."), new CallBack("staffModeActivate", this));
 		}
 		
-		int i = 0;
 		for (Character character : account.getCharacters()){
-			if (i > 7){
-				TerraLogger.error("Account " + account.getTerraTag() + " has more than 8 characters.");
-				break;
-			}
-			
 			CustomItem item = new CustomItem(Material.SKULL_ITEM);
 			
 			item.setName(ChatColor.GOLD + character.getName());
 			item.addLore(ChatColor.DARK_AQUA + "Click here to become " + character.getName() + ".");
 			
 			iface.addIcon(item.getItemStack(), new CallBack("selectCharacter", this, character.getId()));
-			i++;
 		}
 		
 		iface.closable = false;

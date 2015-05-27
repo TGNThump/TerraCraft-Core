@@ -9,6 +9,8 @@ public class Lang {
 
 	public static void load() {
 
+		// [<l>TerraCraft<r>] 
+		
 		// English
 		
 		add(Language.ENGLISH, "internalException", "<b>An internal error has occurred.");
@@ -87,6 +89,8 @@ public class Lang {
 		add(Language.ENGLISH, "ChatResetActiveChannel", "Your default chat channel has been deleted. Your default channel has been reset to 'local'.");
 		add(Language.ENGLISH, "chatChannelJoin", "You have joined the '%s' channel."); // chanelName
 		add(Language.ENGLISH, "chatChannelLeave", "You have left the '%S' channel."); // chanelName
+		
+		add(Language.ENGLISH, "fealtyPatronBecomeVassal", "Your patron has become one of your vassals. You are now in charge of your fealty group.");
 		
 		// Norwegian
 		

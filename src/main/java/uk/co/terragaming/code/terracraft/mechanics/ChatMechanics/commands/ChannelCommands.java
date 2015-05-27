@@ -7,7 +7,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.zoldCode.V1.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class ChannelCommands {
 

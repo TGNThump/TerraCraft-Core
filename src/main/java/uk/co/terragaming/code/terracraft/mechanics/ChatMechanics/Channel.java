@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 
-import uk.co.terragaming.zoldCode.V1.terracraft.CoreMechanics.AccountMechanics.Account;
+import com.google.common.collect.Lists;
 
 public abstract class Channel {
 
@@ -41,7 +41,7 @@ public abstract class Channel {
 	}
 	
 	public void add(Account account){
-		add(account.getPlayerUUID());
+		add(account.getPlayer());
 	}
 	
 	public void remove(UUID uuid){
@@ -54,7 +54,7 @@ public abstract class Channel {
 	}
 	
 	public void remove(Account account){
-		remove(account.getPlayerUUID());
+		remove(account.getPlayer());
 	}
 	
 	public boolean contains(UUID uuid){
@@ -66,7 +66,7 @@ public abstract class Channel {
 	}
 	
 	public boolean contains(Account account){
-		return contains(account.getPlayerUUID());
+		return contains(account.getPlayer());
 	}
 	
 	public void mute(UUID uuid){
@@ -79,7 +79,7 @@ public abstract class Channel {
 	}
 	
 	public void mute(Account account){
-		mute(account.getPlayerUUID());
+		mute(account.getPlayer());
 	}
 	
 	public void unmute(UUID uuid){
@@ -92,7 +92,7 @@ public abstract class Channel {
 	}
 	
 	public void unmute(Account account){
-		unmute(account.getPlayerUUID());
+		unmute(account.getPlayer());
 	}
 	
 	public boolean isMuted(UUID uuid){
@@ -104,7 +104,7 @@ public abstract class Channel {
 	}
 	
 	public boolean isMuted(Account account){
-		return isMuted(account.getPlayerUUID());
+		return isMuted(account.getPlayer());
 	}
 	
 	public abstract void processChatEvent(Player sender, String message);

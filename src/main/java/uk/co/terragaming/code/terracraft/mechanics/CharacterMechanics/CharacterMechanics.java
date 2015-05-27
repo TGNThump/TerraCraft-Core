@@ -1,5 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics;
 
+import java.sql.SQLException;
+
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
@@ -45,6 +47,11 @@ public class CharacterMechanics implements Mechanic{
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();
 		charactersDao = (Dao<Character, Integer>) databaseMechanics.getDao(Character.class);
+		try {
+			charactersDao.setObjectCache(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		CharacterManager.init();
 		TerraCraft.server.getPluginManager().registerEvents(new LoginListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new LogoutListener(), TerraCraft.plugin);

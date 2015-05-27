@@ -29,7 +29,6 @@ public class ChatMechanics implements Mechanic{
 	@Override
 	public void PreInitialize() {
 		Bukkit.getPluginManager().registerEvents(new ChatEventListener(), TerraCraft.plugin);
-		CommandRegistry.registerCommands(TerraCraft.plugin, new ChannelCommands());
 		
 		Channel local = new SimpleChannel();
 			local.setName("local");
@@ -75,7 +74,7 @@ public class ChatMechanics implements Mechanic{
 
 	@Override
 	public void PostInitialize() {
-		
+		CommandRegistry.registerCommands(TerraCraft.plugin, new ChannelCommands());
 	}
 
 	@Override

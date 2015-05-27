@@ -8,13 +8,13 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
+
+import com.google.common.collect.Lists;
 
 public class ChannelManager {
 
@@ -147,8 +147,9 @@ public class ChannelManager {
 			ret.add("@" + channel.getDisplayName(sender));
 		}
 		
-		for (List<String> names : ChannelManager.atPMNames.values()){
-			for (String name : names){
+		for (UUID uuid : ChannelManager.atPMNames.keySet()){
+			if (sender.getUniqueId().equals(uuid)) continue;
+			for (String name : ChannelManager.atPMNames.get(uuid)){
 				ret.add("@" + name);
 			}
 		}

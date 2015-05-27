@@ -111,10 +111,12 @@ public class ChatEventListener implements Listener{
 			}
 			String oldName = ChannelManager.parseName(oldChar.getName());
 			names.remove(oldName);
+		} else {
+			event.getAccount().setActiveChannel(ChannelManager.getChannel(0));
 		}
 		
 		String newName = ChannelManager.parseName(newChar.getName());
-		
+
 		names.add(newName);
 	}
 	

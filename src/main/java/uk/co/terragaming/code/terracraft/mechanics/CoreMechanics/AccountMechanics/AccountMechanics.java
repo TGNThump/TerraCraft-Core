@@ -1,5 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics;
 
+import java.sql.SQLException;
+
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
@@ -54,6 +56,12 @@ public class AccountMechanics implements Mechanic{
 		databaseMechanics = DatabaseMechanics.getInstance();
 		accountsDao = (Dao<Account, Integer>) databaseMechanics.getDao(Account.class);
 		sessionsDao = (Dao<AccountSession, Integer>) databaseMechanics.getDao(AccountSession.class);
+		
+		try {
+			accountsDao.setObjectCache(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		AccountEvents.init();
 		AccountManager.init();
