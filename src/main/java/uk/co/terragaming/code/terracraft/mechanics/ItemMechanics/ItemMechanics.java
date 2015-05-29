@@ -62,6 +62,7 @@ public class ItemMechanics implements Mechanic{
 
 	@Override
 	public void PreInitialize() {
+		uuid = AttributeUtil.computeUUID("TerraGamingNetwork-TerraCraft");
 		itemRegistry = new ItemRegistry();
 		itemInstanceRegistry = new ItemInstanceRegistry();
 		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
@@ -78,7 +79,6 @@ public class ItemMechanics implements Mechanic{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		uuid = AttributeUtil.computeUUID("TerraGamingNetwork-TerraCraft");
 		
 		try {
 			for (Iterator<Item> iter = itemDao.iterator(); iter.hasNext();){
