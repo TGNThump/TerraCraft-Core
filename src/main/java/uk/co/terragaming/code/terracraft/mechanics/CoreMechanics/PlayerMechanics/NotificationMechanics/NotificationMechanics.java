@@ -13,11 +13,14 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import com.j256.ormlite.dao.Dao;
 
 @MechanicParent("CoreMechanics.PlayerMechanics")
-public class NotificationMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return true; }
+public class NotificationMechanics implements Mechanic {
 	
-	public static NotificationMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	public static NotificationMechanics getInstance() {
 		return (NotificationMechanics) TerraCraft.getMechanic("CoreMechanics.PlayerMechanics.NotificationMechanics");
 	}
 	
@@ -28,17 +31,17 @@ public class NotificationMechanics implements Mechanic{
 	
 	// Mechanic Methods
 	
-	public Dao<Notification, Integer> getNotificationDao(){
+	public Dao<Notification, Integer> getNotificationDao() {
 		return notificationDao;
 	}
 	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
@@ -50,25 +53,25 @@ public class NotificationMechanics implements Mechanic{
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public void PostInitialize() {
 		Bukkit.getPluginManager().registerEvents(new NotificationListener(), TerraCraft.plugin);
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		
 	}
-
+	
 }

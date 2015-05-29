@@ -18,10 +18,10 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import com.j256.ormlite.dao.Dao;
 
 public class SessionManager {
-
+	
 	private static Dao<AccountSession, Integer> sessionsDao;
 	
-	public static void init(){
+	public static void init() {
 		sessionsDao = AccountMechanics.getInstance().getSessionsDao();
 	}
 	
@@ -32,24 +32,22 @@ public class SessionManager {
 		conditions.put("userAgent", "Minecraft (" + uuid.toString() + ")");
 		List<AccountSession> sessions = sessionsDao.queryForFieldValues(conditions);
 		
-		for (AccountSession session : sessions){
-			if (session.getIpAddress().equals(address.toString().substring(1))){
-				if (!session.isEnabled()){
+		for (AccountSession session : sessions) {
+			if (session.getIpAddress().equals(address.toString().substring(1))) {
+				if (!session.isEnabled())
 					throw new WhitelistException(Lang.get(Language.ENGLISH, "accountAccessRevoked"));
-				}
 				return session;
 			}
 		}
 		
 		AccountSession session = new AccountSession();
 		
-		if (sessions.size() > 0){
+		if (sessions.size() > 0) {
 			session.setAccount(sessions.get(0).getAccount());
-		} else if (TerraCraft.serverMode.equals(ServerMode.PUBLIC)){
+		} else if (TerraCraft.serverMode.equals(ServerMode.PUBLIC)) {
 			TerraLogger.info("Non Bifrost Player '" + name + "' Joining...");
-		} else {
+		} else
 			throw new WhitelistException(Lang.get(Language.ENGLISH, "accountNotLinked"));
-		}
 		
 		session.setServiceId(3);
 		session.setIpAddress(address);
@@ -59,13 +57,17 @@ public class SessionManager {
 		
 		return session;
 	}
-
+	
 	public static void updateSession(Account account, boolean active) throws SQLException {
 		AccountSession session = account.getActiveSession();
 		session.setActive(active);
-		if (active) session.setLastUsed(DateTime.now());
-		if (!account.getSessions().contains(session)) account.getSessions().add(session);
+		if (active) {
+			session.setLastUsed(DateTime.now());
+		}
+		if (!account.getSessions().contains(session)) {
+			account.getSessions().add(session);
+		}
 		sessionsDao.createOrUpdate(session);
 	}
-
+	
 }

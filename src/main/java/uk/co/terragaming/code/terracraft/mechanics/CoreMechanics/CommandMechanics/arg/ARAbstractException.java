@@ -10,16 +10,16 @@ public abstract class ARAbstractException<T> extends ARAbstract<T> {
 	public abstract T valueOf(String arg, CommandSender sender) throws Exception;
 	
 	@Override
-	public T read(String arg, CommandSender sender) throws CommandException{
-		try{
+	public T read(String arg, CommandSender sender) throws CommandException {
+		try {
 			return this.valueOf(arg, sender);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw (CommandException) new CommandException().addMessage(this.extractErrorMessage(arg, sender, e));
 		}
 	}
 	
-	public String extractErrorMessage(String arg, CommandSender sender, Exception e){
+	public String extractErrorMessage(String arg, CommandSender sender, Exception e) {
 		return Txt.parse("<b>%s", e.getMessage());
-
+		
 	}
 }

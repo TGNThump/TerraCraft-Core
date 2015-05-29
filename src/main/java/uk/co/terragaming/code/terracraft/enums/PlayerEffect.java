@@ -7,12 +7,12 @@ public enum PlayerEffect {
 	
 	private final String effect;
 	
-	private PlayerEffect(final String effect){
+	private PlayerEffect(final String effect) {
 		this.effect = effect;
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return effect;
 	}
 }

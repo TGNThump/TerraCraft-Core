@@ -14,11 +14,14 @@ import com.j256.ormlite.dao.Dao;
 
 @MechanicParent("CoreMechanics")
 @MechanicRequires("CoreMechanics.DatabaseMechanics")
-public class AccountMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return true; }
+public class AccountMechanics implements Mechanic {
 	
-	public static AccountMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	public static AccountMechanics getInstance() {
 		return (AccountMechanics) TerraCraft.getMechanic("CoreMechanics.AccountMechanics");
 	}
 	
@@ -31,25 +34,25 @@ public class AccountMechanics implements Mechanic{
 	
 	// Mechanic Methods
 	
-	public AccountRegistry getRegistry(){
+	public AccountRegistry getRegistry() {
 		return accountRegistry;
 	}
 	
-	public Dao<Account, Integer> getAccountsDao(){
+	public Dao<Account, Integer> getAccountsDao() {
 		return accountsDao;
 	}
 	
-	public Dao<AccountSession, Integer> getSessionsDao(){
+	public Dao<AccountSession, Integer> getSessionsDao() {
 		return sessionsDao;
 	}
 	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		accountRegistry = new AccountRegistry();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
@@ -74,20 +77,20 @@ public class AccountMechanics implements Mechanic{
 	public void PostInitialize() {
 		
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		
 	}
-
+	
 }

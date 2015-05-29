@@ -111,7 +111,7 @@ public class Character {
 	
 	@DatabaseField(canBeNull = true)
 	private String description;
-
+	
 	@DatabaseField(canBeNull = true, columnName = "description_ooc")
 	private String descriptionOOC;
 	
@@ -133,163 +133,341 @@ public class Character {
 	
 	// Getters
 	
-	public Integer getId(){ return id; }
-	public Account getAccount(){ return account; }
-	public CharacterRace getRace(){ return race; }
-	public String getName(){ return name; }
+	public Integer getId() {
+		return id;
+	}
 	
-	public Integer getAttrStrength(){ return attrStrength; }
-	public Integer getAttrAgility(){ return attrAgility; }
-	public Integer getAttrStamina(){ return attrStamina; }
-	public Integer getAttrSprit(){ return attrSpirit; }
-	public Integer getAttrResistance(){ return attrResistance; }
-	public Integer getAttrIntellect(){ return attrIntellect; }
-	public Integer getAttrVitality(){ return attrVitality; }
+	public Account getAccount() {
+		return account;
+	}
 	
-	public Integer getMaxHitpoints(){ return maxHitpoints; }
-	public Integer getCurHitpoints(){ return curHitpoints; }
+	public CharacterRace getRace() {
+		return race;
+	}
 	
-	public Integer getMaxHunger(){ return maxHunger; }
-	public Integer getCurHunger(){ return curHunger; }
+	public String getName() {
+		return name;
+	}
 	
-	public Integer getCurExhaustion(){ return curExhaustion; }
-	public Integer getCurSaturation(){ return curSaturation; }
+	public Integer getAttrStrength() {
+		return attrStrength;
+	}
 	
-	public Integer getMaxMana(){ return maxMana; }
-	public Integer getCurMana(){ return curMana; }
+	public Integer getAttrAgility() {
+		return attrAgility;
+	}
 	
-	public Integer getCurLevel(){ return curLevel; }
-	public Integer getCurExp(){ return curExp; }
+	public Integer getAttrStamina() {
+		return attrStamina;
+	}
 	
-	public Integer getMoney(){ return money; }
-	public Integer getBankMoney(){ return bankMoney; }
+	public Integer getAttrSprit() {
+		return attrSpirit;
+	}
 	
-	public String getLocWorld(){ return locWorld; }
-	public Integer getLocX(){ return locX; }
-	public Integer getLocY(){ return locY; }
-	public Integer getLocZ(){ return locZ; }
-	public Integer getLocPitch(){ return locPitch; }
-	public Integer getLocYaw(){ return locYaw; }
+	public Integer getAttrResistance() {
+		return attrResistance;
+	}
 	
-	public DateTime getLastLoginDate(){ return lastLoginDate; }
-	public DateTime getCreateDate(){ return createDate; }
+	public Integer getAttrIntellect() {
+		return attrIntellect;
+	}
 	
-	public String getDescription(){ return description; }
-	public String getDescriptionOOC(){ return descriptionOOC; }
-	public String getNotes(){ return notes; }
+	public Integer getAttrVitality() {
+		return attrVitality;
+	}
 	
-	public Character getPatron(){ return patron; }
-	public ForeignCollection<Character> getVassals(){ return vassals; }
+	public Integer getMaxHitpoints() {
+		return maxHitpoints;
+	}
 	
-	public ForeignCollection<ItemInstance> getItems(){ return items; } 
+	public Integer getCurHitpoints() {
+		return curHitpoints;
+	}
 	
-	public Location getLocation(){ return location.clone(); }
+	public Integer getMaxHunger() {
+		return maxHunger;
+	}
+	
+	public Integer getCurHunger() {
+		return curHunger;
+	}
+	
+	public Integer getCurExhaustion() {
+		return curExhaustion;
+	}
+	
+	public Integer getCurSaturation() {
+		return curSaturation;
+	}
+	
+	public Integer getMaxMana() {
+		return maxMana;
+	}
+	
+	public Integer getCurMana() {
+		return curMana;
+	}
+	
+	public Integer getCurLevel() {
+		return curLevel;
+	}
+	
+	public Integer getCurExp() {
+		return curExp;
+	}
+	
+	public Integer getMoney() {
+		return money;
+	}
+	
+	public Integer getBankMoney() {
+		return bankMoney;
+	}
+	
+	public String getLocWorld() {
+		return locWorld;
+	}
+	
+	public Integer getLocX() {
+		return locX;
+	}
+	
+	public Integer getLocY() {
+		return locY;
+	}
+	
+	public Integer getLocZ() {
+		return locZ;
+	}
+	
+	public Integer getLocPitch() {
+		return locPitch;
+	}
+	
+	public Integer getLocYaw() {
+		return locYaw;
+	}
+	
+	public DateTime getLastLoginDate() {
+		return lastLoginDate;
+	}
+	
+	public DateTime getCreateDate() {
+		return createDate;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getDescriptionOOC() {
+		return descriptionOOC;
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
+	
+	public Character getPatron() {
+		return patron;
+	}
+	
+	public ForeignCollection<Character> getVassals() {
+		return vassals;
+	}
+	
+	public ForeignCollection<ItemInstance> getItems() {
+		return items;
+	}
+	
+	public Location getLocation() {
+		return location.clone();
+	}
 	
 	// Setters
 	
-	public void setId(Integer id){ this.id = id; }
-	public void setAccount(Account account){ this.account = account; }
-	public void setRace(CharacterRace race){ this.race = race; }
-	public void setName(String name){ this.name = name; }
-	
-	public void setAttrStrength(Integer attr){ this.attrStrength = attr; }
-	public void setAttrAgility(Integer attr){ this.attrAgility = attr; }
-	public void setAttrStamina(Integer attr){ this.attrStamina = attr; }
-	public void setAttrSprit(Integer attr){ this.attrSpirit = attr; }
-	public void setAttrResistance(Integer attr){ this.attrResistance = attr; }
-	public void setAttrIntellect(Integer attr){ this.attrIntellect = attr; }
-	public void setAttrVitality(Integer attr){ this.attrVitality = attr; }
-
-	public void setMaxHitpoints(Integer maxHitpoints){ this.maxHitpoints = maxHitpoints; }
-	public void setCurHitpoints(Integer curHitpoints){ this.curHitpoints = curHitpoints; }
-	
-	public void setMaxHunger(Integer maxHunger){ this.maxHunger = maxHunger; }
-	public void setCurHunger(Integer curHunger){ this.curHunger = curHunger; }
-	
-	public void setCurExhaustion(Integer curExhaustion){ this.curExhaustion = curExhaustion; }
-	public void setCurSaturation(Integer curSaturation){ this.curSaturation = curSaturation; }
-	
-	public void setCurLevel(Integer curLevel){ this.curLevel = curLevel; }
-	public void setCurExp(Integer curExp){ this.curExp = curExp; }
-	
-	public void setMoney(Integer money){ this.money = money; }
-	public void setBankMoney(Integer bankMoney){ this.bankMoney = bankMoney; }
-	
-	public void setLocWorld(String world){
-		this.locWorld = world;
-		this.location.setWorld(TerraCraft.server.getWorld(world));
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
-	public void setLocX(Integer x){
-		this.locX = x;
-		if (x == null) return;
-		this.location.setX(x);
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	
-	public void setLocY(Integer y){
-		this.locY = y;
-		if (y == null) return;
-		this.location.setY(y);
+	public void setRace(CharacterRace race) {
+		this.race = race;
 	}
 	
-	public void setLocZ(Integer z){
-		this.locZ = z;
-		if (z == null) return;
-		this.location.setZ(z);
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public void setLocPitch(Integer pitch){
-		this.locPitch = pitch;
-		if (pitch == null) return;
-		this.location.setPitch(pitch);
+	public void setAttrStrength(Integer attr) {
+		attrStrength = attr;
 	}
 	
-	public void setLocYaw(Integer yaw){
-		this.locYaw = yaw;
-		if (yaw == null) return;
-		this.location.setYaw(yaw);
+	public void setAttrAgility(Integer attr) {
+		attrAgility = attr;
 	}
 	
-	public void setLastLoginDate(DateTime lastLoginDate){ this.lastLoginDate = lastLoginDate; }
-	public void setCreateDate(DateTime createDate){ this.createDate = createDate; }
+	public void setAttrStamina(Integer attr) {
+		attrStamina = attr;
+	}
 	
-	public void setDescription(String description){ this.description = description; }
-	public void setDescriptionOOC(String descriptionOOC){ this.descriptionOOC = descriptionOOC; }
-	public void setNotes(String notes){ this.notes = notes; }
+	public void setAttrSprit(Integer attr) {
+		attrSpirit = attr;
+	}
 	
-	public void setPatron(Character patron){ this.patron = patron; }
+	public void setAttrResistance(Integer attr) {
+		attrResistance = attr;
+	}
 	
-	public void setLocation(Location loc){
-		this.location = loc;
-		this.locWorld = loc.getWorld().getName();
-		this.locX = loc.getBlockX();
-		this.locY = loc.getBlockY() + 1;
-		this.locZ = loc.getBlockZ();
-		this.locPitch = Math.round(loc.getPitch());
-		this.locYaw = Math.round(loc.getYaw());
+	public void setAttrIntellect(Integer attr) {
+		attrIntellect = attr;
+	}
+	
+	public void setAttrVitality(Integer attr) {
+		attrVitality = attr;
+	}
+	
+	public void setMaxHitpoints(Integer maxHitpoints) {
+		this.maxHitpoints = maxHitpoints;
+	}
+	
+	public void setCurHitpoints(Integer curHitpoints) {
+		this.curHitpoints = curHitpoints;
+	}
+	
+	public void setMaxHunger(Integer maxHunger) {
+		this.maxHunger = maxHunger;
+	}
+	
+	public void setCurHunger(Integer curHunger) {
+		this.curHunger = curHunger;
+	}
+	
+	public void setCurExhaustion(Integer curExhaustion) {
+		this.curExhaustion = curExhaustion;
+	}
+	
+	public void setCurSaturation(Integer curSaturation) {
+		this.curSaturation = curSaturation;
+	}
+	
+	public void setCurLevel(Integer curLevel) {
+		this.curLevel = curLevel;
+	}
+	
+	public void setCurExp(Integer curExp) {
+		this.curExp = curExp;
+	}
+	
+	public void setMoney(Integer money) {
+		this.money = money;
+	}
+	
+	public void setBankMoney(Integer bankMoney) {
+		this.bankMoney = bankMoney;
+	}
+	
+	public void setLocWorld(String world) {
+		locWorld = world;
+		location.setWorld(TerraCraft.server.getWorld(world));
+	}
+	
+	public void setLocX(Integer x) {
+		locX = x;
+		if (x == null)
+			return;
+		location.setX(x);
+	}
+	
+	public void setLocY(Integer y) {
+		locY = y;
+		if (y == null)
+			return;
+		location.setY(y);
+	}
+	
+	public void setLocZ(Integer z) {
+		locZ = z;
+		if (z == null)
+			return;
+		location.setZ(z);
+	}
+	
+	public void setLocPitch(Integer pitch) {
+		locPitch = pitch;
+		if (pitch == null)
+			return;
+		location.setPitch(pitch);
+	}
+	
+	public void setLocYaw(Integer yaw) {
+		locYaw = yaw;
+		if (yaw == null)
+			return;
+		location.setYaw(yaw);
+	}
+	
+	public void setLastLoginDate(DateTime lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+	
+	public void setCreateDate(DateTime createDate) {
+		this.createDate = createDate;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public void setDescriptionOOC(String descriptionOOC) {
+		this.descriptionOOC = descriptionOOC;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
+	public void setPatron(Character patron) {
+		this.patron = patron;
+	}
+	
+	public void setLocation(Location loc) {
+		location = loc;
+		locWorld = loc.getWorld().getName();
+		locX = loc.getBlockX();
+		locY = loc.getBlockY() + 1;
+		locZ = loc.getBlockZ();
+		locPitch = Math.round(loc.getPitch());
+		locYaw = Math.round(loc.getYaw());
 	}
 	
 	// Init
 	
-	public Character(){}
+	public Character() {}
 	
 	// Override Methods
 	
 	@Override
-	public int hashCode(){
+	public int hashCode() {
 		return id.hashCode();
 	}
 	
 	@Override
-	public boolean equals(Object other){
-		if (other == null || other.getClass() != getClass()) return false;
+	public boolean equals(Object other) {
+		if (other == null || other.getClass() != getClass())
+			return false;
 		return id.equals(((Character) other).getId());
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return "Character[ID: " + getId() + ", Name: " + getName() + ", Owner: " + getAccount().toString() + "]";
 	}
+	
 	public String getColouredName() {
 		return getName();
 	}

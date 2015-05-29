@@ -2,10 +2,10 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechani
 
 import org.bukkit.command.CommandSender;
 
-public class ARInteger extends ARAbstractNumber<Integer>{
-
+public class ARInteger extends ARAbstractNumber<Integer> {
+	
 	@Override
-	public String getTypeName(){
+	public String getTypeName() {
 		return "number";
 	}
 	
@@ -13,6 +13,5 @@ public class ARInteger extends ARAbstractNumber<Integer>{
 	public Integer valueOf(String arg, CommandSender sender) throws Exception {
 		return Integer.parseInt(arg);
 	}
-
 	
 }

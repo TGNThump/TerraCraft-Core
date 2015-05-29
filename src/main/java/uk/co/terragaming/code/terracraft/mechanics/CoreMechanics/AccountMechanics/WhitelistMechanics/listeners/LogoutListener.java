@@ -9,11 +9,12 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class LogoutListener implements Listener{
-
+public class LogoutListener implements Listener {
+	
 	@EventHandler
-	public void onQuit(PlayerQuitEvent event){
-		if (!AccountMechanics.getInstance().getRegistry().hasAccount(event.getPlayer().getUniqueId())) return;
+	public void onQuit(PlayerQuitEvent event) {
+		if (!AccountMechanics.getInstance().getRegistry().hasAccount(event.getPlayer().getUniqueId()))
+			return;
 		
 		try {
 			AccountEvents.onLogout(event.getPlayer());

@@ -16,11 +16,14 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechani
 import com.j256.ormlite.dao.Dao;
 
 @MechanicRequires("CoreMechanics.DatabaseMechanics")
-public class CharacterMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return true; }
+public class CharacterMechanics implements Mechanic {
 	
-	public static CharacterMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	public static CharacterMechanics getInstance() {
 		return (CharacterMechanics) TerraCraft.getMechanic("CharacterMechanics");
 	}
 	
@@ -36,12 +39,12 @@ public class CharacterMechanics implements Mechanic{
 	}
 	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
@@ -57,26 +60,26 @@ public class CharacterMechanics implements Mechanic{
 		TerraCraft.server.getPluginManager().registerEvents(new LogoutListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new ShiftClickListener(), TerraCraft.plugin);
 	}
-
+	
 	@Override
 	public void PostInitialize() {
 		CommandRegistry.registerCommands(TerraCraft.plugin, new CharacterStaffCommands());
 		CommandRegistry.registerCommands(TerraCraft.plugin, new CharacterCommands());
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		
 	}
-
+	
 }

@@ -7,15 +7,17 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterShiftClickInterface;
 
-public class ShiftClickListener implements Listener{
-
+public class ShiftClickListener implements Listener {
+	
 	@EventHandler
-	public void onShiftClick(PlayerInteractEntityEvent event){
-		if(!(event.getRightClicked() instanceof Player)) return;
+	public void onShiftClick(PlayerInteractEntityEvent event) {
+		if (!(event.getRightClicked() instanceof Player))
+			return;
 		Player you = event.getPlayer();
 		Player target = (Player) event.getRightClicked();
 		
-		if (!you.isSneaking()) return;
+		if (!you.isSneaking())
+			return;
 		
 		new CharacterShiftClickInterface(you, target);
 	}

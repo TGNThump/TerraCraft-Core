@@ -12,14 +12,15 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class ReloadHandler {
-	public static void run(){
+	
+	public static void run() {
 		Server server = TerraCraft.server;
-		if (server.getOnlinePlayers().size() > 0){
+		if (server.getOnlinePlayers().size() > 0) {
 			AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 			
-			for (Player player : server.getOnlinePlayers()){
+			for (Player player : server.getOnlinePlayers()) {
 				TerraLogger.info("Kicking " + player.getName());
-				if (registry.hasAccount(player)){
+				if (registry.hasAccount(player)) {
 					player.kickPlayer(Txt.parse(Lang.get(registry.getAccount(player).getLanguage(), "accountServerMode"), TerraCraft.getServerName(), "Restarting"));
 				} else {
 					player.kickPlayer(Txt.parse(Lang.get(Language.ENGLISH, "accountServerMode"), TerraCraft.getServerName(), "Restarting"));

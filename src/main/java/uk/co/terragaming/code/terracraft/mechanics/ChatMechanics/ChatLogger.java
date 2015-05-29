@@ -16,8 +16,8 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
 
-public class ChatLogger implements Runnable{
-
+public class ChatLogger implements Runnable {
+	
 	private static final int PERIOD = 6000; // 5 mins in ticks
 	
 	public static List<ChatLogEntry> entries = Lists.newArrayList();
@@ -28,7 +28,7 @@ public class ChatLogger implements Runnable{
 		Bukkit.getScheduler().runTaskTimer(TerraCraft.plugin, instance, PERIOD, PERIOD);
 	}
 	
-	public static void log(Account account, Character character, Channel channel, String message){
+	public static void log(Account account, Character character, Channel channel, String message) {
 		ChatLogEntry entry = new ChatLogEntry();
 		entry.setAccount(account);
 		entry.setCharacter(character);
@@ -40,19 +40,20 @@ public class ChatLogger implements Runnable{
 		entries.add(entry);
 	}
 	
-	public static void deinit(){
+	public static void deinit() {
 		instance.run();
 	}
-
+	
 	@Override
 	public void run() {
 		Dao<ChatLogEntry, Integer> logDao = ChatMechanics.getInstance().getChatLogDao();
 		try {
-			logDao.callBatchTasks(new Callable<Void>(){
+			logDao.callBatchTasks(new Callable<Void>() {
+				
 				@Override
 				public Void call() throws Exception {
 					
-					for (Iterator<ChatLogEntry> iter = entries.iterator(); iter.hasNext();){
+					for (Iterator<ChatLogEntry> iter = entries.iterator(); iter.hasNext();) {
 						ChatLogEntry entry = iter.next();
 						logDao.create(entry);
 						iter.remove();

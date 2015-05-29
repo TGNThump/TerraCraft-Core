@@ -9,12 +9,12 @@ public enum ItemClass {
 	
 	private final String itemClass;
 	
-	private ItemClass(final String itemClass){
+	private ItemClass(final String itemClass) {
 		this.itemClass = itemClass;
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return itemClass;
 	}
 }

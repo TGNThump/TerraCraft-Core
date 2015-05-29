@@ -19,19 +19,19 @@ import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class CharacterStaffCommands {
-
-	@Command({"char", "character","c"})
+	
+	@Command({ "char", "character", "c" })
 	@CommandDescription("Staff Command Set")
 	@CommandParent("staff")
 	@HelpCommand
-	public void onCharCommand(CommandSender sender, Language language){
+	public void onCharCommand(CommandSender sender, Language language) {
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "commandHelpUsage", !(sender instanceof Player)), "staff char help"));
 	}
 	
-	@Command({"download", "down", "d"})
+	@Command({ "download", "down", "d" })
 	@CommandDescription("Force Character Download")
 	@CommandParent("staff char")
-	public void onCharDownloadCommand(Player sender){
+	public void onCharDownloadCommand(Player sender) {
 		try {
 			AccountMechanics accountMechanics = AccountMechanics.getInstance();
 			
@@ -42,7 +42,7 @@ public class CharacterStaffCommands {
 				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
 				return;
 			}
-		
+			
 			CharacterManager.setActiveCharacter(account, character);
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully download character from database."));
 		} catch (SQLException e) {
@@ -51,10 +51,10 @@ public class CharacterStaffCommands {
 		}
 	}
 	
-	@Command({"upload", "up", "u"})
+	@Command({ "upload", "up", "u" })
 	@CommandDescription("Force Character Upload")
 	@CommandParent("staff char")
-	public void onCharUploadCommand(Player sender){
+	public void onCharUploadCommand(Player sender) {
 		try {
 			AccountMechanics accountMechanics = AccountMechanics.getInstance();
 			
@@ -68,7 +68,6 @@ public class CharacterStaffCommands {
 			
 			CharacterManager.updateActiveCharacter(account.getPlayer(), character);
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully uploaded character to database."));
-		
 			
 		} catch (SQLException e) {
 			// TODO: Error Recovery
@@ -77,17 +76,17 @@ public class CharacterStaffCommands {
 		}
 	}
 	
-	@Command({"switch","s"})
+	@Command({ "switch", "s" })
 	@CommandDescription("Switch Character")
 	@CommandParent("staff char")
-	public void onCharSwitchCommand(Player sender){
+	public void onCharSwitchCommand(Player sender) {
 		try {
 			AccountMechanics accountMechanics = AccountMechanics.getInstance();
 			
 			Account account = accountMechanics.getRegistry().getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
-			if (character != null){
+			if (character != null) {
 				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
 			}
 			

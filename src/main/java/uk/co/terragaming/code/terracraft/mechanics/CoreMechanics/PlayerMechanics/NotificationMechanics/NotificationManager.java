@@ -12,8 +12,8 @@ import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
 
 public class NotificationManager {
-
-	public static List<Notification> getNotifications(Account account){
+	
+	public static List<Notification> getNotifications(Account account) {
 		try {
 			Dao<Notification, Integer> notificationDao = NotificationMechanics.getInstance().getNotificationDao();
 			return notificationDao.query(notificationDao.queryBuilder().where().eq("accountId", account.getId()).and().isNull("characterId").prepare());
@@ -23,7 +23,7 @@ public class NotificationManager {
 		}
 	}
 	
-	public static List<Notification> getNotifications(Character character){
+	public static List<Notification> getNotifications(Character character) {
 		HashMap<String, Object> conditions = new HashMap<String, Object>();
 		conditions.put("accountId", character.getAccount().getId());
 		conditions.put("characterId", character.getId());
@@ -35,7 +35,7 @@ public class NotificationManager {
 		}
 	}
 	
-	public static void createNotification(Account account, String message) throws TerraException{
+	public static void createNotification(Account account, String message) throws TerraException {
 		Notification notification = new Notification();
 		notification.setAccount(account);
 		notification.setMessage(message);
@@ -47,7 +47,7 @@ public class NotificationManager {
 		}
 	}
 	
-	public static void createNotification(Character character, String message) throws TerraException{
+	public static void createNotification(Character character, String message) throws TerraException {
 		Notification notification = new Notification();
 		notification.setAccount(character.getAccount());
 		notification.setCharacter(character);
@@ -59,7 +59,7 @@ public class NotificationManager {
 			throw new TerraException("Failed to create notification");
 		}
 	}
-
+	
 	public static void remove(Notification notification) {
 		try {
 			NotificationMechanics.getInstance().getNotificationDao().delete(notification);

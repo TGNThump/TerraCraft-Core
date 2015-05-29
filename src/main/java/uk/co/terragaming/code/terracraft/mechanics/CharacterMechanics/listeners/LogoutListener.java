@@ -16,18 +16,20 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class LogoutListener implements Listener{
-
+public class LogoutListener implements Listener {
+	
 	@EventHandler(priority = EventPriority.LOW)
-	public void onLogout(PlayerQuitEvent event){
+	public void onLogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		UUID uuid = player.getUniqueId();
-		if (!registry.hasAccount(uuid)) return;
+		if (!registry.hasAccount(uuid))
+			return;
 		
 		Account account = registry.getAccount(uuid);
-		if (account.getActiveCharacter() == null) return;
+		if (account.getActiveCharacter() == null)
+			return;
 		
 		try {
 			CharacterManager.updateActiveCharacter(player, account.getActiveCharacter());

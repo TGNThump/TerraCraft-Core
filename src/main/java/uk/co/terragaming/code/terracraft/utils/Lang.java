@@ -5,11 +5,12 @@ import java.util.HashMap;
 import uk.co.terragaming.code.terracraft.enums.Language;
 
 public class Lang {
+	
 	private static HashMap<String, HashMap<Language, String>> messages = new HashMap<>();
-
+	
 	public static void load() {
-
-		// [<l>TerraCraft<r>] 
+		
+		// [<l>TerraCraft<r>]
 		
 		// English
 		
@@ -29,7 +30,8 @@ public class Lang {
 		add(Language.ENGLISH, "accountUploadFailed", "<b>Failed to uplaod account to database.");
 		add(Language.ENGLISH, "accountDownloadFailed", "<b>Failed to downlaod account from database.");
 		
-		add(Language.ENGLISH, "accountServerMode", "<b>TerraCraft %s is currently '%s'."); // serverName, serverMode
+		add(Language.ENGLISH, "accountServerMode", "<b>TerraCraft %s is currently '%s'."); // serverName,
+																							// serverMode
 		
 		add(Language.ENGLISH, "bifrostAllreadyLinked", "<b>Your account is already linked to a Terra Gaming Network Account.");
 		add(Language.ENGLISH, "bifrostLinkFail", "<b>We could not link your Mojang Account to your Terra Gaming Network Account.");
@@ -42,10 +44,13 @@ public class Lang {
 		add(Language.ENGLISH, "commandUnknown", "Unknown command. Type \"<c>/%s help<r>\" for help."); // commandPath
 		
 		add(Language.ENGLISH, "commandHelpUsage", "Use <c>/%s<r> for a list of commands."); // commandPath
-		add(Language.ENGLISH, "helpCommandTitle", "Help for \"/%s\" command"); // Command Path
+		add(Language.ENGLISH, "helpCommandTitle", "Help for \"/%s\" command"); // Command
+																				// Path
 		
-		add(Language.ENGLISH, "ArgReaderError", "<b>\"<h>%s<b>\"<b> is not a %s."); // arg, argType
-		add(Language.ENGLISH, "ArgReaderErrorSelect", "<b>No %s matches \"<h>%s<b>\"."); // argTypeName, arg
+		add(Language.ENGLISH, "ArgReaderError", "<b>\"<h>%s<b>\"<b> is not a %s."); // arg,
+																					// argType
+		add(Language.ENGLISH, "ArgReaderErrorSelect", "<b>No %s matches \"<h>%s<b>\"."); // argTypeName,
+																							// arg
 		
 		add(Language.ENGLISH, "ArgReaderBooleanYes", "yes");
 		add(Language.ENGLISH, "ArgReaderBooleanNo", "no");
@@ -127,8 +132,10 @@ public class Lang {
 		
 		add(Language.NORWEGIAN, "commandHelpUsage", "Bruk <c>/%s<r> for en liste av kommandoer."); // commandPath
 		
-		add(Language.NORWEGIAN, "ArgReaderError", "<b>\"<h>%s<b>\"<b> er ikke en %s."); // arg, argType
-		add(Language.NORWEGIAN, "ArgReaderErrorSelect", "<b>Ingen %s ligner \"<h>%s<b>\"."); // argTypeName, arg
+		add(Language.NORWEGIAN, "ArgReaderError", "<b>\"<h>%s<b>\"<b> er ikke en %s."); // arg,
+																						// argType
+		add(Language.NORWEGIAN, "ArgReaderErrorSelect", "<b>Ingen %s ligner \"<h>%s<b>\"."); // argTypeName,
+																								// arg
 		
 		add(Language.NORWEGIAN, "ArgReaderBooleanYes", "ja");
 		add(Language.NORWEGIAN, "ArgReaderBooleanNo", "nei");
@@ -139,32 +146,34 @@ public class Lang {
 		add(Language.NORWEGIAN, "ArgReaderIntegerName", "nummer");
 		add(Language.NORWEGIAN, "ArgReaderStringName", "tekst");
 		
-
 	}
-
+	
 	public static String get(String key) {
 		return get(Language.ENGLISH, key, true, false);
 	}
-
-	public static String get(Language lang, String key){
+	
+	public static String get(Language lang, String key) {
 		return get(lang, key, true, false);
 	}
 	
 	public static String get(Language lang, String key, boolean console) {
 		return get(lang, key, true, console);
 	}
-
+	
 	public static String get(Language lang, String key, boolean parsed, boolean console) {
 		HashMap<Language, String> values = messages.get(key);
 		
-		if (!values.containsKey(lang)){ TerraLogger.error("No translation for '" + key + "' in language '" + lang.toString() + "'."); }
+		if (!values.containsKey(lang)) {
+			TerraLogger.error("No translation for '" + key + "' in language '" + lang.toString() + "'.");
+		}
 		
 		String ret = values.getOrDefault(lang, values.get(Language.ENGLISH));
-		if (parsed)
+		if (parsed) {
 			ret = Txt.parse(ret, console);
+		}
 		return ret;
 	}
-
+	
 	private static void add(Language lang, String key, String msg) {
 		if (messages.containsKey(key)) {
 			messages.get(key).put(lang, msg);

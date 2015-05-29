@@ -27,14 +27,14 @@ import com.google.common.collect.Lists;
 
 public class FealtyManager {
 	
-	public static boolean hasVassalRecursively(Character you, Character them){
+	public static boolean hasVassalRecursively(Character you, Character them) {
 		if (you.getVassals().isEmpty())
 			return false;
 		
 		if (you.getVassals().contains(them))
 			return true;
 		
-		for(Character vassal : you.getVassals()){
+		for (Character vassal : you.getVassals()) {
 			if (hasVassalRecursively(vassal, them))
 				return true;
 		}
@@ -42,30 +42,37 @@ public class FealtyManager {
 		return false;
 	}
 	
-	public static List<Character> getVassalsRecursively(Character character){
-		if (character == null) return Lists.newArrayList();
-		if (character.getVassals() == null) return Lists.newArrayList();
+	public static List<Character> getVassalsRecursively(Character character) {
+		if (character == null)
+			return Lists.newArrayList();
+		if (character.getVassals() == null)
+			return Lists.newArrayList();
 		if (character.getVassals().isEmpty())
 			return Lists.newArrayList();
 		
 		List<Character> ret = Lists.newArrayList();
-		for(Character c : character.getVassals()){
+		for (Character c : character.getVassals()) {
 			ret.add(c);
 			ret.addAll(getVassalsRecursively(c));
 		}
 		return ret;
 	}
 	
-	public static void fixVassalDiscrepancy(Character you, Character them){
+	public static void fixVassalDiscrepancy(Character you, Character them) {
 		Character theirPatron = null;
 		
-		for (Character vassal : you.getVassals()){
-			if ((!vassal.equals(them)) & (!hasVassalRecursively(you, them))) continue;
+		for (Character vassal : you.getVassals()) {
+			if (!vassal.equals(them) & !hasVassalRecursively(you, them)) {
+				continue;
+			}
 			theirPatron = vassal;
 			break;
 		}
 		
-		if (theirPatron == null){ TerraLogger.error("fixVassalDiscrepency called when no discrepancy exists..."); return; }
+		if (theirPatron == null) {
+			TerraLogger.error("fixVassalDiscrepency called when no discrepancy exists...");
+			return;
+		}
 		
 		theirPatron.setPatron(null);
 		
@@ -80,29 +87,35 @@ public class FealtyManager {
 		Account account = theirPatron.getAccount();
 		Player player = account.getPlayer();
 		
-		if (player == null){
+		if (player == null) {
 			try {
 				NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
 				return;
-			} catch (TerraException e) { return; }
-		} else if (account.getActiveCharacter() != theirPatron){
+			} catch (TerraException e) {
+				return;
+			}
+		} else if (account.getActiveCharacter() != theirPatron) {
 			if (account.getActiveCharacter() != theirPatron) {
 				try {
 					NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
 					return;
-				} catch (TerraException e) { return; }
+				} catch (TerraException e) {
+					return;
+				}
 			}
 		}
-			
+		
 		Language lang = Language.ENGLISH;
-		if (account.getLanguage() != null)
+		if (account.getLanguage() != null) {
 			lang = account.getLanguage();
+		}
 		
 		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "fealtyPatronBecomeVassal")));
 	}
-		
-	@Callback // Used in characterShiftClickInterface
-	public static void swearFealty(Player you, Player target){
+	
+	@Callback
+	// Used in characterShiftClickInterface
+	public static void swearFealty(Player you, Player target) {
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
 		Account yourAcc = registry.getAccount(you);
@@ -112,7 +125,7 @@ public class FealtyManager {
 		
 		// Do Checks to prevent infinite loops in recursive vassal getting.
 		
-		if (hasVassalRecursively(yourChar, targetChar)){
+		if (hasVassalRecursively(yourChar, targetChar)) {
 			fixVassalDiscrepancy(yourChar, targetChar);
 		}
 		
@@ -128,13 +141,15 @@ public class FealtyManager {
 		swearFealtyText(you, yourChar, target, targetChar);
 	}
 	
-	public static void swearFealtyText(Player you, Character yourChar, Player target, Character targetChar){
+	public static void swearFealtyText(Player you, Character yourChar, Player target, Character targetChar) {
 		Channel local = ChannelManager.getChannel(0);
-
-		for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())){
-			if (!(entity instanceof Player)) continue;
+		
+		for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())) {
+			if (!(entity instanceof Player)) {
+				continue;
+			}
 			Player reciever = (Player) entity;
-			if (local.contains(reciever.getUniqueId())){
+			if (local.contains(reciever.getUniqueId())) {
 				reciever.sendMessage("");
 			}
 		}
@@ -143,44 +158,58 @@ public class FealtyManager {
 		
 		local.processChatEvent(you, "In the name and sight of the Gods,");
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, "I, " + yourChar.getName() + ",");
 			}
 		}, delay * 1);
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, "from this day, until my last day,");
 			}
 		}, delay * 2);
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, "pledge my sword and my soul,");
 			}
 		}, delay * 3);
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, "my land and my life,");
 			}
 		}, delay * 4);
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, "to the service and defence of");
 			}
 		}, delay * 5);
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
 			public void run() {
 				local.processChatEvent(you, targetChar.getName() + ".");
 				
-				for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())){
-					if (!(entity instanceof Player)) continue;
+				for (Entity entity : you.getNearbyEntities(local.getRange(), 500, local.getRange())) {
+					if (!(entity instanceof Player)) {
+						continue;
+					}
 					Player reciever = (Player) entity;
-					if (local.contains(reciever.getUniqueId())){
+					if (local.contains(reciever.getUniqueId())) {
 						reciever.sendMessage("");
 					}
 				}
@@ -188,8 +217,9 @@ public class FealtyManager {
 		}, delay * 6);
 	}
 	
-	@Callback // Used in characterShiftClickInterface
-	public static void breakFealty(Player you, Player target){
+	@Callback
+	// Used in characterShiftClickInterface
+	public static void breakFealty(Player you, Player target) {
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
 		Account yourAcc = registry.getAccount(you);

@@ -23,28 +23,28 @@ import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class StaffItemCommands {
-
-	@Command({"item", "i"})
+	
+	@Command({ "item", "i" })
 	@CommandDescription("Staff Item Command Set")
 	@CommandParent("staff")
 	@HelpCommand
-	public void onStaffItemCommand(Player sender, Language language){
+	public void onStaffItemCommand(Player sender, Language language) {
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "commandHelpUsage", !(sender instanceof Player)), "staff item help"));
 	}
 	
-	@Command({"create", "c"})
+	@Command({ "create", "c" })
 	@CommandDescription("Create an Item")
 	@CommandParent("staff item")
-	public void onStaffItemCreateCommand(Player sender, @TagArg boolean perm, Integer itemId){
+	public void onStaffItemCreateCommand(Player sender, @TagArg boolean perm, Integer itemId) {
 		ItemRegistry registry = ItemMechanics.getInstance().getItemRegistry();
 		
-		if (registry.hasItem(itemId)){
+		if (registry.hasItem(itemId)) {
 			ItemInstance item = registry.getItem(itemId).createInstance();
 			Account account = AccountMechanics.getInstance().getRegistry().getAccount(sender);
 			Character character = account.getActiveCharacter();
 			item.setCharacter(character);
-			if (character == null){
-				if (perm){
+			if (character == null) {
+				if (perm) {
 					ItemMechanics.getInstance().getItemInstanceRegistry().addItemIfAbsent(item);
 					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Permanent Item: " + item.getColouredName()));
 				} else {
@@ -56,7 +56,7 @@ public class StaffItemCommands {
 					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Temporary Item: " + item.getColouredName()));
 				}
 			} else {
-				if (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT)){
+				if (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT)) {
 					ItemMechanics.getInstance().getItemInstanceRegistry().addItemToCharacter(character, item);
 					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Item %s.", item.getColouredName()));
 				} else {
@@ -71,10 +71,10 @@ public class StaffItemCommands {
 		}
 	}
 	
-	@Command({"clearcache", "clearCache"})
+	@Command({ "clearcache", "clearCache" })
 	@CommandDescription("Clear the Item Cache")
 	@CommandParent("staff item")
-	public void onClearItemCache(Player sender){
+	public void onClearItemCache(Player sender) {
 		ItemMechanics.getInstance().getItemDao().clearObjectCache();
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Cleared Item Cache"));
 	}

@@ -2,6 +2,6 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechani
 
 import org.bukkit.event.Listener;
 
-public class PingListener implements Listener{
-
+public class PingListener implements Listener {
+	
 }

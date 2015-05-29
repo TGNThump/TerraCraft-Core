@@ -11,34 +11,41 @@ import com.comphenix.attribute.AttributeStorage;
 
 public class ItemManager {
 	
-	public static Integer getItemInstanceId(ItemStack is){
-		if (is.getType().equals(Material.AIR)) return null;
+	public static Integer getItemInstanceId(ItemStack is) {
+		if (is.getType().equals(Material.AIR))
+			return null;
 		UUID uuid = ItemMechanics.getInstance().getAttributeUUID();
 		AttributeStorage storage = AttributeStorage.newTarget(is, uuid);
 		String attrData = storage.getData(null);
-		if (attrData == null) return null;
-		if (!attrData.startsWith("TCID: ")) return null;
+		if (attrData == null)
+			return null;
+		if (!attrData.startsWith("TCID: "))
+			return null;
 		Integer id = Integer.parseInt(attrData.substring(6));
 		return id;
 	}
 	
-	public static ItemInstance updateItemInstance(ItemInstance item, ItemStack is){
-
+	public static ItemInstance updateItemInstance(ItemInstance item, ItemStack is) {
+		
 		return item;
 	}
 	
-	public static boolean isItemInstance(ItemStack is){
-		if (is == null) return false;
+	public static boolean isItemInstance(ItemStack is) {
+		if (is == null)
+			return false;
 		Integer id = ItemManager.getItemInstanceId(is);
-		if (id == null) return false;
+		if (id == null)
+			return false;
 		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
 		return registry.hasItem(id);
 	}
-
+	
 	public static void cleanUpItemsInInventory(Player player) {
 		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
-		for (ItemStack is : player.getInventory()){
-			if (!ItemManager.isItemInstance(is)) continue;
+		for (ItemStack is : player.getInventory()) {
+			if (!ItemManager.isItemInstance(is)) {
+				continue;
+			}
 			Integer id = ItemManager.getItemInstanceId(is);
 			
 			ItemInstance item = registry.getItem(id);

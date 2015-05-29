@@ -23,33 +23,33 @@ import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.j256.ormlite.dao.Dao;
 
-public class BifrostLoginListener implements Listener{
-
+public class BifrostLoginListener implements Listener {
+	
 	private Dao<AccountSession, Integer> sessionsDao;
 	
 	@SuppressWarnings("unchecked")
-	public BifrostLoginListener(){
+	public BifrostLoginListener() {
 		DatabaseMechanics databaseMechanics = DatabaseMechanics.getInstance();
 		sessionsDao = (Dao<AccountSession, Integer>) databaseMechanics.getDao(AccountSession.class);
 	}
 	
 	@EventHandler
-	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event){
+	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 		
-		if (TerraCraft.serverMode.equals(ServerMode.LOADING)){
+		if (TerraCraft.serverMode.equals(ServerMode.LOADING)) {
 			event.disallow(Result.KICK_OTHER, ChatColor.RED + "TerraCraft" + TerraCraft.getServerName() + " is still loading...");
 			return;
-		} else if (TerraCraft.serverMode.equals(ServerMode.SHUTDOWN)){
+		} else if (TerraCraft.serverMode.equals(ServerMode.SHUTDOWN)) {
 			event.disallow(Result.KICK_OTHER, ChatColor.RED + "TerraCraft" + TerraCraft.getServerName() + " is shutting down...");
 			return;
 		} else {
 			// Catch SQL Exceptions
-			try{
+			try {
 				
 				// Try Getting Session
 				try {
 					AccountSession session = SessionManager.getSession(event.getUniqueId(), event.getAddress(), event.getName());
-					if (session == null){
+					if (session == null) {
 						event.allow();
 						return;
 					}
@@ -63,13 +63,12 @@ public class BifrostLoginListener implements Listener{
 				event.disallow(Result.KICK_OTHER, Txt.parse(Lang.get("accountInternalError")));
 				return;
 			}
-				
+			
 		}
 	}
-
 	
 	@EventHandler
-	public void PlayerLoginEvent(PlayerLoginEvent event){
+	public void PlayerLoginEvent(PlayerLoginEvent event) {
 		try {
 			String userAgent = "Minecraft (" + event.getPlayer().getUniqueId().toString() + ")";
 			String hash = event.getHostname().substring(0, event.getHostname().indexOf("."));
@@ -80,7 +79,7 @@ public class BifrostLoginListener implements Listener{
 			conditions.put("enabled", false);
 			List<AccountSession> sessions = sessionsDao.queryForFieldValues(conditions);
 			
-			if (sessions.size() < 1){
+			if (sessions.size() < 1) {
 				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Txt.parse(Lang.get("bifrostLinkFail")));
 				return;
 			}

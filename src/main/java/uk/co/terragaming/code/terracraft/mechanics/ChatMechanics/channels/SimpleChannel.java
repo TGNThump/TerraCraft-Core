@@ -19,69 +19,76 @@ import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class SimpleChannel extends Channel{
+public class SimpleChannel extends Channel {
 	
 	@Override
 	public void processChatEvent(Player sender, String message) {
 		Language lang = Language.ENGLISH;
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
-		if (registry.hasAccount(sender))
+		if (registry.hasAccount(sender)) {
 			lang = registry.getAccount(sender).getLanguage();
+		}
 		
-		for (UUID uuid : getMutedPlayers()){
-			if (uuid.equals(sender.getUniqueId())){
+		for (UUID uuid : getMutedPlayers()) {
+			if (uuid.equals(sender.getUniqueId())) {
 				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "ChatChannelMuted")));
 				return;
 			}
 		}
 		
 		String name = "";
-		if (sender != null)
+		if (sender != null) {
 			name = ChatUtils.getName(sender, this);
-	
+		}
+		
 		Integer range = getRange();
 		
-		if (range == -1){
-			for (UUID uuid : getJoinedPlayers()){
+		if (range == -1) {
+			for (UUID uuid : getJoinedPlayers()) {
 				Player reciever = Bukkit.getPlayer(uuid);
-				reciever.sendMessage(Txt.parse("[<l>%s<r>]%s %s", getTag(), (sender == null ? "" : " <" + name + ">"), message));
+				reciever.sendMessage(Txt.parse("[<l>%s<r>]%s %s", getTag(), sender == null ? "" : " <" + name + ">", message));
 			}
 		} else {
 			sender.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
 			boolean heared = false;
-			for (Entity entity : getNearybyPlayers(sender.getLocation(), range)){
-				if (!(entity instanceof Player)) continue;
+			for (Entity entity : getNearybyPlayers(sender.getLocation(), range)) {
+				if (!(entity instanceof Player)) {
+					continue;
+				}
 				Player reciever = (Player) entity;
-				if (reciever.equals(sender)) continue;
-				if (contains(reciever.getUniqueId())){
+				if (reciever.equals(sender)) {
+					continue;
+				}
+				if (contains(reciever.getUniqueId())) {
 					heared = true;
 					reciever.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
 				}
 			}
-			if (!heared){
+			if (!heared) {
 				List<String> messages = Txt.parseWrap(Lang.get(lang, "chatLocalOutOfRange"), false);
-				for (String msg : messages){
+				for (String msg : messages) {
 					sender.sendMessage(msg);
 				}
 			}
 		}
 		
-		if (registry.hasAccount(sender)){
+		if (registry.hasAccount(sender)) {
 			Account account = registry.getAccount(sender);
 			Character character = account.getActiveCharacter();
-		
+			
 			ChatLogger.log(account, character, this, message);
 		}
 	}
 	
-	public List<Player> getNearybyPlayers(Location loc, int distance){
-	    int squaredDistance = distance*distance;
-	    List<Player> list = new ArrayList<Player>();
-	    for(Player p: Bukkit.getOnlinePlayers())
-	        if(p.getLocation().distanceSquared(loc) < squaredDistance)
-	            list.add(p);
-	    return list;
-	} 
-
+	public List<Player> getNearybyPlayers(Location loc, int distance) {
+		int squaredDistance = distance * distance;
+		List<Player> list = new ArrayList<Player>();
+		for (Player p : Bukkit.getOnlinePlayers())
+			if (p.getLocation().distanceSquared(loc) < squaredDistance) {
+				list.add(p);
+			}
+		return list;
+	}
+	
 }

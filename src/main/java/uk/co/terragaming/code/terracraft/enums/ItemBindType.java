@@ -1,19 +1,16 @@
 package uk.co.terragaming.code.terracraft.enums;
 
 public enum ItemBindType {
-	NONE(null),
-	PICKUP("Pickup"),
-	EQUIP("Equip"),
-	ACCOUNT("Account");
+	NONE(null), PICKUP("Pickup"), EQUIP("Equip"), ACCOUNT("Account");
 	
 	private final String bindType;
 	
-	private ItemBindType(final String bindType){
+	private ItemBindType(final String bindType) {
 		this.bindType = bindType;
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return bindType;
 	}
 }

@@ -16,10 +16,10 @@ import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class EmoteChannel extends Channel{
-
-	public EmoteChannel(){
-		this.setTag("L");
+public class EmoteChannel extends Channel {
+	
+	public EmoteChannel() {
+		setTag("L");
 	}
 	
 	@Override
@@ -27,42 +27,45 @@ public class EmoteChannel extends Channel{
 		Language lang = Language.ENGLISH;
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
-		if (registry.hasAccount(sender))
+		if (registry.hasAccount(sender)) {
 			lang = registry.getAccount(sender).getLanguage();
+		}
 		
-		for (UUID uuid : getMutedPlayers()){
-			if (uuid.equals(sender.getUniqueId())){
+		for (UUID uuid : getMutedPlayers()) {
+			if (uuid.equals(sender.getUniqueId())) {
 				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "ChatChannelMuted")));
 				return;
 			}
 		}
 		
 		String name = ChatUtils.getName(sender, this);
-	
+		
 		Integer range = getRange();
 		
-		if (range == -1){
-			for (UUID uuid : getJoinedPlayers()){
+		if (range == -1) {
+			for (UUID uuid : getJoinedPlayers()) {
 				Player reciever = Bukkit.getPlayer(uuid);
 				reciever.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
 			}
 		} else {
 			sender.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
-			for (Entity entity : sender.getNearbyEntities(range, 500, range)){
-				if (!(entity instanceof Player)) continue;
+			for (Entity entity : sender.getNearbyEntities(range, 500, range)) {
+				if (!(entity instanceof Player)) {
+					continue;
+				}
 				Player reciever = (Player) entity;
-				if (contains(reciever.getUniqueId())){
+				if (contains(reciever.getUniqueId())) {
 					reciever.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
 				}
 			}
 		}
 		
-		if (registry.hasAccount(sender)){
+		if (registry.hasAccount(sender)) {
 			Account account = registry.getAccount(sender);
 			Character character = account.getActiveCharacter();
-		
+			
 			ChatLogger.log(account, character, this, message);
 		}
 	}
-
+	
 }

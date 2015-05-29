@@ -32,7 +32,7 @@ public class AccountBan {
 	@DatabaseField(canBeNull = false, persisterClass = DateTimePersister.class)
 	private DateTime dateIssued;
 	
-	@DatabaseField(canBeNull = false, columnName="bannedUntil", persisterClass = DateTimePersister.class)
+	@DatabaseField(canBeNull = false, columnName = "bannedUntil", persisterClass = DateTimePersister.class)
 	private DateTime dateExpires;
 	
 	@DatabaseField(canBeNull = true, foreign = true, columnName = "issuedById")
@@ -43,51 +43,112 @@ public class AccountBan {
 	
 	// Getters
 	
-	public Integer getId(){ return id; }
-	public Account getAccount(){ return account; }
-	public Integer getServiceId(){ return serviceId; }
-	public BanType getType(){ return type; }
-	public String getReason(){ return reason; }
-	public Integer getRepLost(){ return repLost; }
-	public DateTime getDateIssued(){ return dateIssued; }
-	public DateTime getDateExpires(){ return dateExpires; }
-	public Account getIssuer(){ return issuer; }
-	public Boolean getActive(){ return active; }
+	public Integer getId() {
+		return id;
+	}
 	
-	public Boolean isActive(){ return active; }
+	public Account getAccount() {
+		return account;
+	}
+	
+	public Integer getServiceId() {
+		return serviceId;
+	}
+	
+	public BanType getType() {
+		return type;
+	}
+	
+	public String getReason() {
+		return reason;
+	}
+	
+	public Integer getRepLost() {
+		return repLost;
+	}
+	
+	public DateTime getDateIssued() {
+		return dateIssued;
+	}
+	
+	public DateTime getDateExpires() {
+		return dateExpires;
+	}
+	
+	public Account getIssuer() {
+		return issuer;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+	
+	public Boolean isActive() {
+		return active;
+	}
 	
 	// Setters
 	
-	public void setId(Integer id){ this.id = id; }
-	public void setAccount(Account account){ this.account = account; }
-	public void setServiceId(Integer serviceId){ this.serviceId = serviceId; }
-	public void setType(BanType type){ this.type = type; }
-	public void setReason(String reason){ this.reason = reason; }
-	public void setRepLost(Integer repLost){ this.repLost = repLost; }
-	public void setDateIssued(DateTime dateIssued){ this.dateIssued = dateIssued; }
-	public void setDateExpires(DateTime dateExpires){ this.dateExpires = dateExpires; }
-	public void setIssuer(Account issuer){ this.issuer = issuer; }
-	public void setActive(Boolean active){ this.active = active; }
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	
+	public void setServiceId(Integer serviceId) {
+		this.serviceId = serviceId;
+	}
+	
+	public void setType(BanType type) {
+		this.type = type;
+	}
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	
+	public void setRepLost(Integer repLost) {
+		this.repLost = repLost;
+	}
+	
+	public void setDateIssued(DateTime dateIssued) {
+		this.dateIssued = dateIssued;
+	}
+	
+	public void setDateExpires(DateTime dateExpires) {
+		this.dateExpires = dateExpires;
+	}
+	
+	public void setIssuer(Account issuer) {
+		this.issuer = issuer;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	
 	// Init
 	
-	public AccountBan(){}
+	public AccountBan() {}
 	
 	// Override Methods
 	
 	@Override
-	public int hashCode(){
+	public int hashCode() {
 		return id.hashCode();
 	}
 	
 	@Override
-	public boolean equals(Object other){
-		if (other == null || other.getClass() != getClass()) return false;
+	public boolean equals(Object other) {
+		if (other == null || other.getClass() != getClass())
+			return false;
 		return id.equals(((AccountBan) other).getId());
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return "AccountBan[ID: " + getId() + ", Account: " + getAccount().toString() + "]";
 	}
 	

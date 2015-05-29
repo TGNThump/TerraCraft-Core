@@ -16,27 +16,31 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 
 @MechanicParent("CoreMechanics")
-public class DatabaseMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return true; }
+public class DatabaseMechanics implements Mechanic {
 	
-	public static DatabaseMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	public static DatabaseMechanics getInstance() {
 		return (DatabaseMechanics) TerraCraft.getMechanic("CoreMechanics.DatabaseMechanics");
 	}
 	
 	// Mechanic Variables
 	
 	private Database database;
-	private HashMap<Class<?>, Dao<?,?>> dataAccessObjects = new HashMap<>();
+	private HashMap<Class<?>, Dao<?, ?>> dataAccessObjects = new HashMap<>();
 	
 	// Mechanic Methods
 	
-	public Connection getConnection() throws SQLException{
+	public Connection getConnection() throws SQLException {
 		return database.getConnection();
 	}
 	
-	public Dao<?, ?> getDao(Class<?> cl){
-		if (dataAccessObjects.containsKey(cl)) return dataAccessObjects.get(cl);
+	public Dao<?, ?> getDao(Class<?> cl) {
+		if (dataAccessObjects.containsKey(cl))
+			return dataAccessObjects.get(cl);
 		try {
 			Dao<?, ?> dao = DaoManager.createDao(database.getConnectionSource(), cl);
 			dataAccessObjects.put(cl, dao);
@@ -47,22 +51,22 @@ public class DatabaseMechanics implements Mechanic{
 		}
 	}
 	
-	public static void printResultSet(ResultSet rs) throws SQLException{
+	public static void printResultSet(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsmd = rs.getMetaData();
 		
 		rs.beforeFirst();
-	    int columnsNumber = rsmd.getColumnCount();
-	    while (rs.next()) {
-	        for (int i = 1; i <= columnsNumber; i++) {
-	            String columnValue = rs.getString(i);
-	            TerraLogger.debug(rsmd.getColumnName(i) + ": " + columnValue);
-	        }
-	        TerraLogger.blank();
-	    }
+		int columnsNumber = rsmd.getColumnCount();
+		while (rs.next()) {
+			for (int i = 1; i <= columnsNumber; i++) {
+				String columnValue = rs.getString(i);
+				TerraLogger.debug(rsmd.getColumnName(i) + ": " + columnValue);
+			}
+			TerraLogger.blank();
+		}
 	}
 	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		try {
@@ -76,27 +80,27 @@ public class DatabaseMechanics implements Mechanic{
 			TerraCraft.server.shutdown();
 		}
 	}
-
+	
 	@Override
 	public void Initialize() {
 		
 	}
-
+	
 	@Override
 	public void PostInitialize() {
 		
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		database.ShutDown();
@@ -106,5 +110,5 @@ public class DatabaseMechanics implements Mechanic{
 		TerraLogger.info("Database Connection Shutdown.");
 		TerraLogger.blank();
 	}
-
+	
 }

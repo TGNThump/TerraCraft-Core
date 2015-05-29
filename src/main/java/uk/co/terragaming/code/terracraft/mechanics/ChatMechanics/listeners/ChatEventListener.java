@@ -25,37 +25,38 @@ import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.google.common.collect.Lists;
 
-public class ChatEventListener implements Listener{
+public class ChatEventListener implements Listener {
 	
 	@EventHandler
-	public void onChat(AsyncPlayerChatEvent event){
+	public void onChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		Player player = event.getPlayer();
-		if (!registry.hasAccount(player)) return;
+		if (!registry.hasAccount(player))
+			return;
 		Account account = registry.getAccount(player);
 		String message = event.getMessage();
 		
-		if (message.startsWith("@")){
+		if (message.startsWith("@")) {
 			String[] parts = message.split(" ");
 			String channelName = parts[0].substring(1);
 			message = message.substring(message.indexOf(" ") + 1);
 			
 			Channel channel = ChannelManager.getChannel(player, channelName);
 			
-			if (channel == null){
+			if (channel == null) {
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatInvalidChannel"), channelName));
 				return;
 			}
 			
-			if (parts.length == 1){
-				if (!channel.canJoin(player)){
+			if (parts.length == 1) {
+				if (!channel.canJoin(player)) {
 					player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatNoChannelPerm"), channel.getDisplayName(player)));
 					return;
 				}
 				channel.add(player);
 				account.setActiveChannel(channel);
-				if (channel.getId() == 0){
+				if (channel.getId() == 0) {
 					ChannelManager.getChannel("yell").add(player);
 					ChannelManager.getChannel("emote").add(player);
 				}
@@ -66,19 +67,19 @@ public class ChatEventListener implements Listener{
 			}
 		} else {
 			Channel channel = account.getActiveChannel();
-			if (channel == null){
+			if (channel == null) {
 				channel = ChannelManager.getChannel(0);
 				account.setActiveChannel(channel);
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatResetActiveChannel")));
 				return;
 			}
-			if (!ChannelManager.hasChannel(channel.getId())){
+			if (!ChannelManager.hasChannel(channel.getId())) {
 				channel = ChannelManager.getChannel(0);
 				account.setActiveChannel(channel);
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatResetActiveChannel")));
 				return;
 			}
-			if (!channel.contains(account)){
+			if (!channel.contains(account)) {
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "chatNoChannels")));
 				return;
 			}
@@ -87,8 +88,8 @@ public class ChatEventListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onTabComplete(PlayerChatTabCompleteEvent event){
-		if (event.getLastToken().startsWith("@") && event.getChatMessage().split(" ").length == 1){
+	public void onTabComplete(PlayerChatTabCompleteEvent event) {
+		if (event.getLastToken().startsWith("@") && event.getChatMessage().split(" ").length == 1) {
 			event.getTabCompletions().clear();
 			Player player = event.getPlayer();
 			List<String> tabList = ChatUtils.getFilteredTabList(ChannelManager.getAtTabList(player), event.getLastToken());
@@ -97,7 +98,7 @@ public class ChatEventListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onCharChange(CharacterChangeEvent event){
+	public void onCharChange(CharacterChangeEvent event) {
 		Character oldChar = event.getAccount().getActiveCharacter();
 		Character newChar = event.getCharacter();
 		
@@ -105,13 +106,13 @@ public class ChatEventListener implements Listener{
 		
 		List<String> names = ChannelManager.atPMNames.get(uuid);
 		
-		if (oldChar != null){
+		if (oldChar != null) {
 			String name = ChannelManager.parseName(oldChar.getName());
 			
-			for (Channel channel : ChannelManager.getChannels()){
-				if (channel instanceof WhisperChannel){
+			for (Channel channel : ChannelManager.getChannels()) {
+				if (channel instanceof WhisperChannel) {
 					WhisperChannel wChannel = (WhisperChannel) channel;
-					if (wChannel.getJoinedPlayerNames().contains(name)){
+					if (wChannel.getJoinedPlayerNames().contains(name)) {
 						ChannelManager.removeChannel(wChannel);
 						wChannel = null;
 					}
@@ -124,17 +125,17 @@ public class ChatEventListener implements Listener{
 		}
 		
 		String newName = ChannelManager.parseName(newChar.getName());
-
+		
 		names.add(newName);
 	}
 	
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event){
+	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
 		
-		for (Channel channel : ChannelManager.getChannels()){
-			if (channel.isAutojoin()){
+		for (Channel channel : ChannelManager.getChannels()) {
+			if (channel.isAutojoin()) {
 				channel.add(player);
 			}
 		}
@@ -151,9 +152,9 @@ public class ChatEventListener implements Listener{
 		
 		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
-		if (registry.hasAccount(uuid)){
+		if (registry.hasAccount(uuid)) {
 			String terraTag = ChannelManager.parseName(registry.getAccount(uuid).getTerraTag());
-			if (!pName.equalsIgnoreCase(terraTag)){
+			if (!pName.equalsIgnoreCase(terraTag)) {
 				names.add(terraTag);
 			}
 		}
@@ -162,13 +163,13 @@ public class ChatEventListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event){
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		
-		for (Channel channel : ChannelManager.getChannels()){
-			if (channel instanceof WhisperChannel){
-				if (channel.getJoinedPlayers().contains(uuid)){
+		for (Channel channel : ChannelManager.getChannels()) {
+			if (channel instanceof WhisperChannel) {
+				if (channel.getJoinedPlayers().contains(uuid)) {
 					ChannelManager.removeChannel(channel);
 					channel = null;
 				}

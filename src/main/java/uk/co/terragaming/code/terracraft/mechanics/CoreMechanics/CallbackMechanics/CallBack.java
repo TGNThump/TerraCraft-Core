@@ -7,20 +7,24 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechani
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class CallBack {
-
+	
 	private Method method;
 	private Object object;
 	private Object[] args;
 	
-	public CallBack(String methodName, Object object, Object... args){
+	public CallBack(String methodName, Object object, Object... args) {
 		Method[] methods = object.getClass().getMethods();
 		
 		this.object = object;
 		this.args = args;
 		
-		for (Method method : methods){
-			if (!method.isAnnotationPresent(Callback.class)) continue;
-			if (method.getName() != methodName) continue;
+		for (Method method : methods) {
+			if (!method.isAnnotationPresent(Callback.class)) {
+				continue;
+			}
+			if (method.getName() != methodName) {
+				continue;
+			}
 			
 			this.method = method;
 			return;
@@ -29,10 +33,10 @@ public class CallBack {
 		TerraLogger.error("Callback Method not Found: " + methodName + " in " + object.getClass().getSimpleName());
 	}
 	
-	public void invoke(){
+	public void invoke() {
 		try {
 			method.invoke(object, args);
-		} catch (IllegalAccessException  | IllegalArgumentException e) {
+		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.getCause().printStackTrace();

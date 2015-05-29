@@ -15,38 +15,43 @@ import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.VanishEffect;
 
-public class PlayerEffectListener implements Listener{
-
+public class PlayerEffectListener implements Listener {
+	
 	@EventHandler
-	public void onEntityDamage (EntityDamageEvent event){
-		if (!(event.getEntity() instanceof Player)) return;
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof Player))
+			return;
 		Player player = (Player) event.getEntity();
-		if (!PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE)) return;
+		if (!PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE))
+			return;
 		event.setCancelled(true);
 	}
 	
 	@EventHandler
-	public void onEntityTarget (EntityTargetEvent event){
-		if (!(event.getTarget() instanceof Player)) return;
+	public void onEntityTarget(EntityTargetEvent event) {
+		if (!(event.getTarget() instanceof Player))
+			return;
 		Player player = (Player) event.getTarget();
-		if ((!PlayerEffects.hasEffect(player, PlayerEffect.INVISIBLE)) ||
-			(!PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE))) return;
+		if (!PlayerEffects.hasEffect(player, PlayerEffect.INVISIBLE) || !PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE))
+			return;
 		event.setCancelled(true);
 	}
 	
 	@EventHandler
-	public void onPlayerPickupItem (PlayerPickupItemEvent event){
-		if (PlayerEffects.hasEffect(event.getPlayer(), PlayerEffect.INVISIBLE)) event.setCancelled(true);
+	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if (PlayerEffects.hasEffect(event.getPlayer(), PlayerEffect.INVISIBLE)) {
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
-	public void onPlayerLogin (PlayerLoginEvent event){
+	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		
 		VanishEffect.potionManager.addPlayer(player);
 		
-		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable(){
-
+		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable() {
+			
 			@Override
 			public void run() {
 				VanishEffect.vanishRefresh(player);
@@ -55,7 +60,7 @@ public class PlayerEffectListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerQuit (PlayerQuitEvent event){
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
 		VanishEffect.potionManager.removePlayer(player);

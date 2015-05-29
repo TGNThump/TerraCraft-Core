@@ -36,52 +36,63 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
 
 import com.google.common.collect.Lists;
 
-public class ItemEvents implements Listener{
-
+public class ItemEvents implements Listener {
+	
 	private ItemMechanics itemMechanics;
 	public static ArrayList<Item> itemEntities;
 	private ItemInstanceRegistry registry;
 	
-	public ItemEvents(){
+	public ItemEvents() {
 		itemMechanics = ItemMechanics.getInstance();
 		itemEntities = Lists.newArrayList();
 		registry = itemMechanics.getItemInstanceRegistry();
-		Bukkit.getScheduler().runTaskTimer(TerraCraft.plugin, new Runnable(){
-			public void run() { checkItemEntities(); }
+		Bukkit.getScheduler().runTaskTimer(TerraCraft.plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				checkItemEntities();
+			}
 		}, 1, 1);
 	}
 	
 	// Inventory Events
 	
 	@EventHandler
-	public void onPrepareItemCraft(PrepareItemCraftEvent event){
-		for (ItemStack i : event.getInventory()){
-			if (!ItemManager.isItemInstance(i)) continue;
+	public void onPrepareItemCraft(PrepareItemCraftEvent event) {
+		for (ItemStack i : event.getInventory()) {
+			if (!ItemManager.isItemInstance(i)) {
+				continue;
+			}
 			event.getInventory().setResult(new ItemStack(Material.AIR));
 			return;
 		}
 	}
 	
 	@EventHandler
-	public void onPrepareItemEnchant(PrepareItemEnchantEvent event){
-		if (event.isCancelled()) return;
-		if (!ItemManager.isItemInstance(event.getItem())) return;
+	public void onPrepareItemEnchant(PrepareItemEnchantEvent event) {
+		if (event.isCancelled())
+			return;
+		if (!ItemManager.isItemInstance(event.getItem()))
+			return;
 		event.setCancelled(true);
 	}
 	
 	// Player Events
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerDropItem(PlayerDropItemEvent event){
-		if (event.isCancelled()) return;
+	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		if (event.isCancelled())
+			return;
 		Item i = event.getItemDrop();
-		if (!ItemManager.isItemInstance(i.getItemStack())) return;
+		if (!ItemManager.isItemInstance(i.getItemStack()))
+			return;
 		Integer id = ItemManager.getItemInstanceId(i.getItemStack());
 		ItemInstance item = registry.getItem(id);
 		
 		AccountRegistry accRegistry = AccountMechanics.getInstance().getRegistry();
 		Player player = event.getPlayer();
-		if (!accRegistry.hasAccount(player)) return;
+		if (!accRegistry.hasAccount(player))
+			return;
 		Account account = accRegistry.getAccount(player);
 		Character character = account.getActiveCharacter();
 		
@@ -90,7 +101,7 @@ public class ItemEvents implements Listener{
 		
 		item = ItemManager.updateItemInstance(item, i.getItemStack());
 		
-		if (character != null){
+		if (character != null) {
 			registry.removeFromCharacter(character, id);
 		}
 		
@@ -103,20 +114,26 @@ public class ItemEvents implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerPickupItem(PlayerPickupItemEvent event){
-		if (event.isCancelled()) return;
+	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if (event.isCancelled())
+			return;
 		Item i = event.getItem();
-		if (itemEntities.contains(i)) itemEntities.remove(event.getItem());
-		if (!ItemManager.isItemInstance(i.getItemStack())) return;
+		if (itemEntities.contains(i)) {
+			itemEntities.remove(event.getItem());
+		}
+		if (!ItemManager.isItemInstance(i.getItemStack()))
+			return;
 		Integer id = ItemManager.getItemInstanceId(i.getItemStack());
 		ItemInstance item = registry.getItem(id);
 		
 		AccountRegistry accRegistry = AccountMechanics.getInstance().getRegistry();
 		Player player = event.getPlayer();
-		if (!accRegistry.hasAccount(player)) return;
+		if (!accRegistry.hasAccount(player))
+			return;
 		Account account = accRegistry.getAccount(player);
 		Character character = account.getActiveCharacter();
-		if (character == null) return;
+		if (character == null)
+			return;
 		
 		item.setCharacter(character);
 		item.setSlotId(null);
@@ -132,33 +149,40 @@ public class ItemEvents implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerItemDamage(PlayerItemDamageEvent event){
-		if (event.isCancelled()) return;
-		if (!ItemManager.isItemInstance(event.getItem())) return;
+	public void onPlayerItemDamage(PlayerItemDamageEvent event) {
+		if (event.isCancelled())
+			return;
+		if (!ItemManager.isItemInstance(event.getItem()))
+			return;
 		event.setDamage(0);
 		event.setCancelled(true);
 	}
 	
 	@EventHandler
-	public void onPlayerItemConsume(PlayerItemConsumeEvent event){
-		if (event.isCancelled()) return;
-		if (!ItemManager.isItemInstance(event.getItem())) return;
+	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+		if (event.isCancelled())
+			return;
+		if (!ItemManager.isItemInstance(event.getItem()))
+			return;
 		event.setCancelled(true);
 	}
 	
 	// Entity Events
 	
 	@EventHandler
-	public void onItemSpawn(ItemSpawnEvent event){
-		if (event.isCancelled()) return;
+	public void onItemSpawn(ItemSpawnEvent event) {
+		if (event.isCancelled())
+			return;
 		Item i = event.getEntity();
-		if (!ItemManager.isItemInstance(i.getItemStack())) return;
+		if (!ItemManager.isItemInstance(i.getItemStack()))
+			return;
 		
 		itemEntities.add(i);
 	}
 	
-	public void onItemDeath(Item i){
-		if (!ItemManager.isItemInstance(i.getItemStack())) return;
+	public void onItemDeath(Item i) {
+		if (!ItemManager.isItemInstance(i.getItemStack()))
+			return;
 		Integer id = ItemManager.getItemInstanceId(i.getItemStack());
 		
 		ItemInstance item = registry.getItem(id);
@@ -172,17 +196,17 @@ public class ItemEvents implements Listener{
 		}
 	}
 	
-	public void checkItemEntities(){
+	public void checkItemEntities() {
 		ItemInstanceRegistry registry = itemMechanics.getItemInstanceRegistry();
-		for (Iterator<Item> iter = itemEntities.iterator(); iter.hasNext();){
+		for (Iterator<Item> iter = itemEntities.iterator(); iter.hasNext();) {
 			Item item = iter.next();
 			ItemStack is = item.getItemStack();
 			Integer id = ItemManager.getItemInstanceId(is);
-			if (!registry.hasDroppedItem(id)){
+			if (!registry.hasDroppedItem(id)) {
 				iter.remove();
 				continue;
 			}
-			if (!item.isValid()){
+			if (!item.isValid()) {
 				iter.remove();
 				onItemDeath(item);
 			}
@@ -192,10 +216,12 @@ public class ItemEvents implements Listener{
 	// Item Events
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onItemDespawn(ItemDespawnEvent event){
-		if (event.isCancelled()) return;
+	public void onItemDespawn(ItemDespawnEvent event) {
+		if (event.isCancelled())
+			return;
 		Item i = event.getEntity();
-		if (!ItemManager.isItemInstance(i.getItemStack())) return;
+		if (!ItemManager.isItemInstance(i.getItemStack()))
+			return;
 		Integer id = ItemManager.getItemInstanceId(i.getItemStack());
 		ItemInstance item = registry.getItem(id);
 		
@@ -212,24 +238,30 @@ public class ItemEvents implements Listener{
 	// Chunk Events
 	
 	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event){
-		for (Entity entity : event.getChunk().getEntities()){
-			if (!(entity instanceof Item)) continue;
+	public void onChunkLoad(ChunkLoadEvent event) {
+		for (Entity entity : event.getChunk().getEntities()) {
+			if (!(entity instanceof Item)) {
+				continue;
+			}
 			Item item = (Item) entity;
 			
-			if (!itemEntities.contains(item))
+			if (!itemEntities.contains(item)) {
 				itemEntities.add(item);
+			}
 		}
 	}
 	
 	@EventHandler
-	public void onChunkUnload(ChunkUnloadEvent event){
-		for (Entity entity : event.getChunk().getEntities()){
-			if (!(entity instanceof Item)) continue;
+	public void onChunkUnload(ChunkUnloadEvent event) {
+		for (Entity entity : event.getChunk().getEntities()) {
+			if (!(entity instanceof Item)) {
+				continue;
+			}
 			Item item = (Item) entity;
 			
-			if (itemEntities.contains(item))
+			if (itemEntities.contains(item)) {
 				itemEntities.remove(item);
+			}
 		}
 	}
 }

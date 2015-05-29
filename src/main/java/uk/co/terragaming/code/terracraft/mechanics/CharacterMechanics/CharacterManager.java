@@ -2,7 +2,6 @@ package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -34,12 +33,12 @@ public class CharacterManager {
 	
 	private static Dao<Character, Integer> charactersDao;
 	
-	public static void init(){
+	public static void init() {
 		charactersDao = CharacterMechanics.getInstance().getCharacterDao();
 	}
 	
 	public static void setActiveCharacter(Account account, Character character) throws SQLException {
-
+		
 		downloadCharacter(character, account);
 		
 		Player player = account.getPlayer();
@@ -56,13 +55,13 @@ public class CharacterManager {
 		registry.clearItems(character);
 		player.getInventory().clear();
 		
-		if (!player.isDead()){
+		if (!player.isDead()) {
 			applyCharacterInventory(player, character);
 		}
-			
+		
 		player.setMaxHealth(character.getMaxHitpoints());
 		player.setLevel(character.getCurLevel());
-		player.setExp(((float) character.getCurExp()) / 100f);
+		player.setExp((float) character.getCurExp() / 100f);
 		player.setFoodLevel(character.getCurHunger());
 		player.setExhaustion(character.getCurExhaustion());
 		player.setSaturation(character.getCurSaturation());
@@ -70,19 +69,22 @@ public class CharacterManager {
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCustomName(character.getName());
 		
-		if (!player.isDead())
+		if (!player.isDead()) {
 			PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
+		}
 		
 		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerability")));
 		
-		OfflinePlayer p = (OfflinePlayer) player;
+		OfflinePlayer p = player;
 		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable(){
-
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
 			@Override
 			public void run() {
-				if (account.getActiveCharacter() == null) return;
-				if (!account.getActiveCharacter().equals(character)) return;
+				if (account.getActiveCharacter() == null)
+					return;
+				if (!account.getActiveCharacter().equals(character))
+					return;
 				Player player = p.getPlayer();
 				PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire")));
@@ -104,23 +106,26 @@ public class CharacterManager {
 		ItemStack[] armour = new ItemStack[4];
 		
 		List<ItemInstance> addLater = Lists.newArrayList();
-		for (ItemInstance item : character.getItems()){
+		for (ItemInstance item : character.getItems()) {
 			registry.addItemToCharacter(character, item);
-			if (item.getSlotId() == null){ addLater.add(item); continue; }
+			if (item.getSlotId() == null) {
+				addLater.add(item);
+				continue;
+			}
 			
-			if (item.getSlotId() >= inventory.getSize()){
+			if (item.getSlotId() >= inventory.getSize()) {
 				armour[item.getSlotId() - inventory.getSize()] = item.getItemStack();
 				continue;
 			}
 			
 			inventory.setItem(item.getSlotId(), item.getItemStack());
 		}
-		for (ItemInstance item : addLater){
+		for (ItemInstance item : addLater) {
 			inventory.addItem(item.getItemStack());
 		}
 		inventory.setArmorContents(armour);
 	}
-
+	
 	public static void updateActiveCharacter(Player player, Character character) throws SQLException {
 		character.setLocation(player.getLocation());
 		character.setCurExp(Math.round(player.getExp() * 100));
@@ -130,8 +135,9 @@ public class CharacterManager {
 		character.setCurSaturation((int) player.getSaturation());
 		character.setCurLevel(player.getLevel());
 		
-		if (!player.isDead())
+		if (!player.isDead()) {
 			updateCharacterInventory(player, character);
+		}
 		
 		updateCharacter(character);
 	}
@@ -147,31 +153,37 @@ public class CharacterManager {
 		ArrayList<Integer> items = (ArrayList<Integer>) registry.getItemIds(character).clone();
 		
 		// ... then for each slot ...
-		for (int slot = 0; slot < inv.getSize() + 4; slot++){
+		for (int slot = 0; slot < inv.getSize() + 4; slot++) {
 			ItemStack is = null;
-			if (slot >= inv.getSize()){
+			if (slot >= inv.getSize()) {
 				is = inv.getArmorContents()[slot - inv.getSize()];
 			} else {
 				is = inv.getItem(slot);
 			}
 			// If the item is an ItemInstance ...
 			
-			if (is == null) continue;
-			if (is.getType().equals(Material.AIR)) continue;
+			if (is == null) {
+				continue;
+			}
+			if (is.getType().equals(Material.AIR)) {
+				continue;
+			}
 			Integer id = ItemManager.getItemInstanceId(is);
-			if (id == null) continue;
+			if (id == null) {
+				continue;
+			}
 			
 			// If the item is in the characters itemregistry ...
-			if (items.contains(id)){
+			if (items.contains(id)) {
 				ItemInstance item = registry.getItem(id);
 				item.setSlotId(slot);
 				item.setCharacter(character);
 				item = ItemManager.updateItemInstance(item, is);
 				items.remove(id);
 				toUpdate.add(item);
-			// ... or if it is not ...
+				// ... or if it is not ...
 			} else {
-				if (registry.hasItem(id)){
+				if (registry.hasItem(id)) {
 					ItemInstance item = registry.getItem(id);
 					item.setSlotId(slot);
 					item.setCharacter(character);
@@ -185,10 +197,10 @@ public class CharacterManager {
 			}
 		}
 		
-		// If there are any items in the registry that were not in the inventory ...
-		if (items.size() > 0){
-			for (Iterator<Integer> iter = items.iterator(); iter.hasNext();){
-				Integer id = iter.next();
+		// If there are any items in the registry that were not in the inventory
+		// ...
+		if (items.size() > 0) {
+			for (Integer id : items) {
 				ItemInstance item = registry.getItem(id);
 				item.setCharacter(null);
 				item.setSlotId(null);
@@ -199,13 +211,14 @@ public class CharacterManager {
 		}
 		
 		try {
-			ItemMechanics.getInstance().getItemInstanceDao().callBatchTasks(new Callable<Void>(){
-
+			ItemMechanics.getInstance().getItemInstanceDao().callBatchTasks(new Callable<Void>() {
+				
 				@Override
 				public Void call() throws Exception {
 					Dao<ItemInstance, Integer> dao = ItemMechanics.getInstance().getItemInstanceDao();
-					for (ItemInstance item : toUpdate)
+					for (ItemInstance item : toUpdate) {
 						dao.update(item);
+					}
 					return null;
 				}
 				
@@ -215,7 +228,7 @@ public class CharacterManager {
 		}
 		
 	}
-
+	
 	private static void updateCharacter(Character character) throws SQLException {
 		charactersDao.update(character);
 		

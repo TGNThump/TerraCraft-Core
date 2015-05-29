@@ -16,18 +16,18 @@ import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class StaffCommands {
 	
-	@Command({"staff","admin","a"})
+	@Command({ "staff", "admin", "a" })
 	@CommandDescription("Staff Command Set")
 	@HelpCommand
-	public void onStaffCommand(CommandSender sender, Language language){
+	public void onStaffCommand(CommandSender sender, Language language) {
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "commandHelpUsage", !(sender instanceof Player)), "staff help"));
 	}
 	
-	@Command({"vanish","v","disapear"})
+	@Command({ "vanish", "v", "disapear" })
 	@CommandDescription("Toggle Staff Invisibility")
 	@CommandParent("staff")
-	public void onVanishCommand(Player sender){
-		if (PlayerEffects.hasEffect(sender, PlayerEffect.INVISIBLE)){
+	public void onVanishCommand(Player sender) {
+		if (PlayerEffects.hasEffect(sender, PlayerEffect.INVISIBLE)) {
 			// Become Visible
 			PlayerEffects.removeEffect(sender, PlayerEffect.INVISIBLE);
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You became Visible to other players."));
@@ -38,11 +38,11 @@ public class StaffCommands {
 		}
 	}
 	
-	@Command({"seeVanished","seeInvisible"})
+	@Command({ "seeVanished", "seeInvisible" })
 	@CommandDescription("Staff Command Set")
 	@CommandParent("staff")
-	public void onSeeVanishCommand(Player sender){
-		if (VanishEffect.canSeeVanished.contains(sender.getUniqueId())){
+	public void onSeeVanishCommand(Player sender) {
+		if (VanishEffect.canSeeVanished.contains(sender.getUniqueId())) {
 			VanishEffect.canSeeVanished.remove(sender.getUniqueId());
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You can no longer see vanished players."));
 		} else {

@@ -19,11 +19,14 @@ import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
 
 import com.j256.ormlite.dao.Dao;
 
-public class ItemMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return true; }
+public class ItemMechanics implements Mechanic {
 	
-	public static ItemMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	public static ItemMechanics getInstance() {
 		return (ItemMechanics) TerraCraft.getMechanic("ItemMechanics");
 	}
 	
@@ -38,28 +41,28 @@ public class ItemMechanics implements Mechanic{
 	
 	// Mechanic Methods
 	
-	public Dao<Item, Integer> getItemDao(){
+	public Dao<Item, Integer> getItemDao() {
 		return itemDao;
 	}
 	
-	public Dao<ItemInstance, Integer> getItemInstanceDao(){
+	public Dao<ItemInstance, Integer> getItemInstanceDao() {
 		return itemInstanceDao;
 	}
 	
-	public ItemRegistry getItemRegistry(){
+	public ItemRegistry getItemRegistry() {
 		return itemRegistry;
 	}
 	
-	public ItemInstanceRegistry getItemInstanceRegistry(){
+	public ItemInstanceRegistry getItemInstanceRegistry() {
 		return itemInstanceRegistry;
 	}
 	
-	public UUID getAttributeUUID(){
+	public UUID getAttributeUUID() {
 		return uuid;
 	}
 	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		uuid = AttributeUtil.computeUUID("TerraGamingNetwork-TerraCraft");
@@ -67,7 +70,7 @@ public class ItemMechanics implements Mechanic{
 		itemInstanceRegistry = new ItemInstanceRegistry();
 		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
@@ -81,18 +84,18 @@ public class ItemMechanics implements Mechanic{
 		}
 		
 		try {
-			for (Iterator<Item> iter = itemDao.iterator(); iter.hasNext();){
+			for (Iterator<Item> iter = itemDao.iterator(); iter.hasNext();) {
 				Item item = iter.next();
 				itemRegistry.addItem(item.getId(), item);
 			}
-		} catch (IllegalStateException e){
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}
 		
 		List<ItemInstance> items;
 		try {
 			items = itemInstanceDao.query(itemInstanceDao.queryBuilder().where().isNull("charId").prepare());
-			for(ItemInstance item : items){
+			for (ItemInstance item : items) {
 				itemInstanceRegistry.addItemToDroped(item);
 			}
 		} catch (SQLException e) {
@@ -102,25 +105,25 @@ public class ItemMechanics implements Mechanic{
 		Bukkit.getPluginManager().registerEvents(new ItemUseEvents(), TerraCraft.plugin);
 		Bukkit.getPluginManager().registerEvents(new ItemBindEvents(), TerraCraft.plugin);
 	}
-
+	
 	@Override
 	public void PostInitialize() {
 		CommandRegistry.registerCommands(TerraCraft.plugin, new StaffItemCommands());
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		
 	}
-
+	
 }

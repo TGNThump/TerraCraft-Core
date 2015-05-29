@@ -32,7 +32,7 @@ public class AccountSession {
 	
 	@DatabaseField(canBeNull = true, persisterClass = DateTimePersister.class)
 	private DateTime firstUsed;
-
+	
 	@DatabaseField(canBeNull = true, persisterClass = DateTimePersister.class)
 	private DateTime lastUsed;
 	
@@ -44,53 +44,120 @@ public class AccountSession {
 	
 	// Getters
 	
-	public Integer getId(){ return id; }
-	public Account getAccount(){ return account; }
-	public Integer getServiceId(){ return serviceId; }
-	public String getIpAddress(){ return ipAddress; }
-	public String getUserAgent(){ return userAgent; }
-	public String getHash(){ return hash; }
-	public DateTime getFirstUsed(){ return firstUsed; }
-	public DateTime getLastUsed(){ return lastUsed; }
-	public Boolean getEnabled(){ return enabled; }
-	public Boolean getActive(){ return active; }
+	public Integer getId() {
+		return id;
+	}
 	
-	public Boolean isEnabled(){ return enabled; }
-	public Boolean isActive(){ return active; }
+	public Account getAccount() {
+		return account;
+	}
+	
+	public Integer getServiceId() {
+		return serviceId;
+	}
+	
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	
+	public String getUserAgent() {
+		return userAgent;
+	}
+	
+	public String getHash() {
+		return hash;
+	}
+	
+	public DateTime getFirstUsed() {
+		return firstUsed;
+	}
+	
+	public DateTime getLastUsed() {
+		return lastUsed;
+	}
+	
+	public Boolean getEnabled() {
+		return enabled;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+	
+	public Boolean isEnabled() {
+		return enabled;
+	}
+	
+	public Boolean isActive() {
+		return active;
+	}
 	
 	// Setters
 	
-	public void setId(Integer id){ this.id = id; }
-	public void setAccount(Account account){ this.account = account; }
-	public void setServiceId(Integer serviceId){ this.serviceId = serviceId; }
-	public void setIpAddress(String ipAddress){ this.ipAddress = ipAddress; }
-	public void setIpAddress(InetAddress ipAddress){ this.ipAddress = ipAddress.toString().substring(1); }
-	public void setUserAgent(String userAgent){ this.userAgent = userAgent; }
-	public void setHash(String hash){ this.hash = hash; }
-	public void setFirstUsed(DateTime firstUsed){ this.firstUsed = firstUsed; }
-	public void setLastUsed(DateTime lastUsed){ this.lastUsed = lastUsed; }
-	public void setEnabled(Boolean enabled){ this.enabled = enabled; }
-	public void setActive(Boolean active){ this.active = active; }
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	
+	public void setServiceId(Integer serviceId) {
+		this.serviceId = serviceId;
+	}
+	
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+	
+	public void setIpAddress(InetAddress ipAddress) {
+		this.ipAddress = ipAddress.toString().substring(1);
+	}
+	
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+	
+	public void setFirstUsed(DateTime firstUsed) {
+		this.firstUsed = firstUsed;
+	}
+	
+	public void setLastUsed(DateTime lastUsed) {
+		this.lastUsed = lastUsed;
+	}
+	
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	
 	// Init
 	
-	public AccountSession(){}
+	public AccountSession() {}
 	
 	// Override Methods
 	
 	@Override
-	public int hashCode(){
+	public int hashCode() {
 		return id.hashCode();
 	}
 	
 	@Override
-	public boolean equals(Object other){
-		if (other == null || other.getClass() != getClass()) return false;
+	public boolean equals(Object other) {
+		if (other == null || other.getClass() != getClass())
+			return false;
 		return id.equals(((AccountSession) other).getId());
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return "AccountSession[ID: " + getId() + ", Account: " + account.toString() + "]";
 	}
 	

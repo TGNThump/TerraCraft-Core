@@ -28,16 +28,18 @@ import uk.co.terragaming.code.terracraft.utils.IconMenu;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class CharacterSelectInterface{
-
+public class CharacterSelectInterface {
+	
 	private final Player player;
 	
-	public CharacterSelectInterface(Player player){
+	public CharacterSelectInterface(Player player) {
 		this.player = player;
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
 		
 		int i = 2;
-		if (player.isOp()) i++; // TODO: If Player has staff account.
+		if (player.isOp()) {
+			i++; // TODO: If Player has staff account.
+		}
 		i += account.getCharacters().size();
 		
 		int rows = i / 9;
@@ -48,11 +50,11 @@ public class CharacterSelectInterface{
 		iface.addIcon(0, 7, IconMenu.getItem(new ItemStack(Material.IRON_BARDING), ChatColor.GOLD + "Leave Server", ChatColor.DARK_AQUA + "Click here to leave TerraCraft."), new CallBack("quitGame", this));
 		
 		// TODO: Only appear if player has staff account
-		if (player.isOp()){
+		if (player.isOp()) {
 			iface.addIcon(0, 6, IconMenu.getItem(new ItemStack(Material.GOLD_HELMET), ChatColor.GOLD + "Enter Staff Mode", ChatColor.DARK_AQUA + "Click here to enter the game in Staff Mode."), new CallBack("staffModeActivate", this));
 		}
 		
-		for (Character character : account.getCharacters()){
+		for (Character character : account.getCharacters()) {
 			CustomItem item = new CustomItem(Material.SKULL_ITEM);
 			
 			item.setName(ChatColor.GOLD + character.getName());
@@ -67,7 +69,7 @@ public class CharacterSelectInterface{
 	}
 	
 	@Callback
-	public void selectCharacter(int charId){
+	public void selectCharacter(int charId) {
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
 		
 		HashMap<String, Object> conditions = new HashMap<String, Object>();
@@ -76,12 +78,12 @@ public class CharacterSelectInterface{
 		
 		try {
 			List<Character> chars = CharacterMechanics.getInstance().getCharacterDao().queryForFieldValues(conditions);
-		
-			for(Character character : chars){
+			
+			for (Character character : chars) {
 				CharacterManager.setActiveCharacter(account, character);
 				break;
 			}
-		
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			player.kickPlayer(Txt.parse(Lang.get(account.getLanguage(), "internalException")));
@@ -90,23 +92,23 @@ public class CharacterSelectInterface{
 	}
 	
 	@Callback
-	public void createNewCharacter(){
+	public void createNewCharacter() {
 		// TODO: Character Creation
-		//new NewCharacterInterface(player);
+		// new NewCharacterInterface(player);
 	}
 	
 	@Callback
-	public void staffModeActivate(){
+	public void staffModeActivate() {
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
 		account.setActiveCharacter(null);
 		player.setGameMode(GameMode.CREATIVE);
 		player.setAllowFlight(true);
 		PlayerEffects.addEffect(player, PlayerEffect.STAFFMODE);
-		if (!VanishEffect.canSeeVanished.contains(player.getUniqueId())){
+		if (!VanishEffect.canSeeVanished.contains(player.getUniqueId())) {
 			VanishEffect.canSeeVanished.add(player.getUniqueId());
 			VanishEffect.vanishRefresh(player);
 		}
-
+		
 		Channel staffChannel = ChannelManager.getChannel("staff");
 		
 		staffChannel.add(player);
@@ -115,7 +117,7 @@ public class CharacterSelectInterface{
 	}
 	
 	@Callback
-	public void quitGame(){
+	public void quitGame() {
 		player.kickPlayer(Txt.parse("<l>Thanks for Playing!"));
 	}
 	
@@ -134,5 +136,5 @@ public class CharacterSelectInterface{
 		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
 	}
-
+	
 }

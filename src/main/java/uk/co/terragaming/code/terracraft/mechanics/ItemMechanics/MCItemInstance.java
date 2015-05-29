@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 
 import java.io.Serializable;
 
-public class MCItemInstance extends ItemInstance implements Serializable{
-
+public class MCItemInstance extends ItemInstance implements Serializable {
+	
 	private static final long serialVersionUID = -6441279409581436346L;
 }

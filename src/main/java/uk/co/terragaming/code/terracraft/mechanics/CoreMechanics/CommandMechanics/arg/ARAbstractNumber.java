@@ -11,7 +11,7 @@ public abstract class ARAbstractNumber<T extends Number> extends ARAbstractPrimi
 	public static final List<String> TAB_LIST = Collections.singletonList("1");
 	
 	@Override
-	public Collection<String> getTabList(CommandSender sender, String arg){
+	public Collection<String> getTabList(CommandSender sender, String arg) {
 		return TAB_LIST;
 	}
 }

@@ -36,21 +36,9 @@ public class Txt {
 	public static final long millisPerMonth = 31 * millisPerDay;
 	public static final long millisPerYear = 365 * millisPerDay;
 	
-	public static final Set<String> vowel = new LinkedHashSet<String>(Arrays.asList(
-			"A", "E", "I", "O", "U", "Y", "Å", "Ä", "Ö", "Æ", "Ø",
-			"a", "e", "i", "o", "u", "y", "å", "ä", "ö", "æ", "ø"
-		)); 
+	public static final Set<String> vowel = new LinkedHashSet<String>(Arrays.asList("A", "E", "I", "O", "U", "Y", "Å", "Ä", "Ö", "Æ", "Ø", "a", "e", "i", "o", "u", "y", "å", "ä", "ö", "æ", "ø"));
 	
-
-	public static final Map<String, Long> unitMillis = ColUtil.map(
-		"years", millisPerYear,
-		"months", millisPerMonth,
-		"weeks", millisPerWeek,
-		"days", millisPerDay,
-		"hours", millisPerHour,
-		"minutes", millisPerMinute,
-		"seconds", millisPerSecond
-	);
+	public static final Map<String, Long> unitMillis = ColUtil.map("years", millisPerYear, "months", millisPerMonth, "weeks", millisPerWeek, "days", millisPerDay, "hours", millisPerHour, "minutes", millisPerMinute, "seconds", millisPerSecond);
 	
 	static {
 		
@@ -117,24 +105,27 @@ public class Txt {
 		parseReplacements.put("§§", "§");
 		
 		// Color by number/char
-		for (int i = 48; i <= 122; i++)
-		{
-			char c = (char)i;
-			parseReplacements.put("§"+c, "\u00A7"+c);
-			parseReplacements.put("&"+c, "\u00A7"+c);
-			if (i == 57) i = 96;
+		for (int i = 48; i <= 122; i++) {
+			char c = (char) i;
+			parseReplacements.put("§" + c, "\u00A7" + c);
+			parseReplacements.put("&" + c, "\u00A7" + c);
+			if (i == 57) {
+				i = 96;
+			}
 		}
 		
 		// Build the parse pattern and compile it
 		StringBuilder patternStringBuilder = new StringBuilder();
-		for (String find : parseReplacements.keySet())
-		{
+		for (String find : parseReplacements.keySet()) {
 			patternStringBuilder.append('(');
 			patternStringBuilder.append(Pattern.quote(find));
 			patternStringBuilder.append(")|");
 		}
 		String patternString = patternStringBuilder.toString();
-		patternString = patternString.substring(0, patternString.length()-1); // Remove the last |
+		patternString = patternString.substring(0, patternString.length() - 1); // Remove
+																				// the
+																				// last
+																				// |
 		parsePattern = Pattern.compile(patternString);
 		
 		// Console
@@ -201,64 +192,65 @@ public class Txt {
 		
 		// Build the parse pattern and compile it
 		patternStringBuilder = new StringBuilder();
-		for (String find : consoleParseReplacements.keySet())
-		{
+		for (String find : consoleParseReplacements.keySet()) {
 			patternStringBuilder.append('(');
 			patternStringBuilder.append(Pattern.quote(find));
 			patternStringBuilder.append(")|");
 		}
 		patternString = patternStringBuilder.toString();
-		patternString = patternString.substring(0, patternString.length()-1); // Remove the last |
+		patternString = patternString.substring(0, patternString.length() - 1); // Remove
+																				// the
+																				// last
+																				// |
 		consoleParsePattern = Pattern.compile(patternString);
 	}
-
 	
 	// Parse
 	
-	public static String parse(String string, boolean console){
+	public static String parse(String string, boolean console) {
 		StringBuffer ret = new StringBuffer();
-		Matcher matcher = (console ? consoleParsePattern.matcher(string) : parsePattern.matcher(string));
+		Matcher matcher = console ? consoleParsePattern.matcher(string) : parsePattern.matcher(string);
 		
-		while (matcher.find()){
-			matcher.appendReplacement(ret, (console ? consoleParseReplacements.get(matcher.group(0)) : parseReplacements.get(matcher.group(0))));
+		while (matcher.find()) {
+			matcher.appendReplacement(ret, console ? consoleParseReplacements.get(matcher.group(0)) : parseReplacements.get(matcher.group(0)));
 		}
 		matcher.appendTail(ret);
 		return ret.toString();
 	}
 	
-	public static String parse(String string){
+	public static String parse(String string) {
 		return parse(string, false);
 	}
 	
-	public static String parse(String string, boolean console, Object... args){
+	public static String parse(String string, boolean console, Object... args) {
 		return String.format(parse(string, console), args);
 	}
 	
-	public static ArrayList<String> parse(Collection<String> strings, boolean console){
+	public static ArrayList<String> parse(Collection<String> strings, boolean console) {
 		ArrayList<String> ret = new ArrayList<String>(strings.size());
-		for (String string : strings){
+		for (String string : strings) {
 			ret.add(parse(string, console));
 		}
 		return ret;
 	}
 	
-	public static String parse(String string, Object... args){
+	public static String parse(String string, Object... args) {
 		return parse(string, false, args);
 	}
 	
-	public static ArrayList<String> parse(Collection<String> string){
+	public static ArrayList<String> parse(Collection<String> string) {
 		return parse(string, false);
 	}
 	
 	// Wrap
 	
-	public static ArrayList<String> wrap(final String string){
+	public static ArrayList<String> wrap(final String string) {
 		return new ArrayList<String>(Arrays.asList(string.split("\\r?\\n")));
 	}
 	
-	public static ArrayList<String> wrap(final Collection<String> strings){
+	public static ArrayList<String> wrap(final Collection<String> strings) {
 		ArrayList<String> ret = new ArrayList<String>();
-		for(String string : strings){
+		for (String string : strings) {
 			ret.addAll(wrap(string));
 		}
 		return ret;
@@ -266,110 +258,117 @@ public class Txt {
 	
 	// Parse and Wrap
 	
-	public static ArrayList<String> parseWrap(final String string, boolean console){
+	public static ArrayList<String> parseWrap(final String string, boolean console) {
 		return wrap(parse(string, console));
 	}
 	
-	public static ArrayList<String> parseWrap(final Collection<String> strings, boolean console){
+	public static ArrayList<String> parseWrap(final Collection<String> strings, boolean console) {
 		return wrap(parse(strings, console));
 	}
 	
 	// Standard Text Utils
 	
-	public static String upperCaseFirst(String string){
-		if (string == null) return null;
-		if (string.length() == 0) return string;
-		return string.substring(0,1).toUpperCase()+string.substring(1);
+	public static String upperCaseFirst(String string) {
+		if (string == null)
+			return null;
+		if (string.length() == 0)
+			return string;
+		return string.substring(0, 1).toUpperCase() + string.substring(1);
 	}
 	
-	public static String repeat(String string, int times){
+	public static String repeat(String string, int times) {
 		StringBuilder ret = new StringBuilder(times);
 		
-		for(int i = 0; i < times; i++){
+		for (int i = 0; i < times; i++) {
 			ret.append(string);
 		}
 		
 		return ret.toString();
 	}
 	
-	public static String implode(final Object[] list, final String glue, final String format){
+	public static String implode(final Object[] list, final String glue, final String format) {
 		StringBuilder ret = new StringBuilder();
 		
-		for(int i = 0; i < list.length; i++){
+		for (int i = 0; i < list.length; i++) {
 			Object item = list[i];
-			String str = (item == null ? "NULL" : item.toString());
+			String str = item == null ? "NULL" : item.toString();
 			
-			if (i!=0){ ret.append(glue); }
-			if (format != null){ ret.append(String.format(format, str)); }
-			else { ret.append(str); }
+			if (i != 0) {
+				ret.append(glue);
+			}
+			if (format != null) {
+				ret.append(String.format(format, str));
+			} else {
+				ret.append(str);
+			}
 		}
 		
 		return ret.toString();
 	}
 	
-	public static String implode(final Object[] list, final String glue){
+	public static String implode(final Object[] list, final String glue) {
 		return implode(list, glue, null);
 	}
 	
-	public static String implode(final Collection<? extends Object> coll, final String glue, String format){
+	public static String implode(final Collection<? extends Object> coll, final String glue, String format) {
 		return implode(coll.toArray(new Object[0]), glue, format);
 	}
 	
-	public static String implode(final Collection<? extends Object> coll, final String glue){
+	public static String implode(final Collection<? extends Object> coll, final String glue) {
 		return implode(coll, glue, null);
 	}
 	
-	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String format, final String comma, final String and, final String dot){
-		if (objects.size() == 0) return "";
-		if (objects.size() == 1){
+	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String format, final String comma, final String and, final String dot) {
+		if (objects.size() == 0)
+			return "";
+		if (objects.size() == 1)
 			return implode(objects, comma, format);
-		}
 		
 		List<Object> ourObjects = new ArrayList<Object>(objects);
 		
-		String lastItem = ourObjects.get(ourObjects.size()-1).toString();
-		String nextToLastItem = ourObjects.get(ourObjects.size()-2).toString();
-		if (format != null){
+		String lastItem = ourObjects.get(ourObjects.size() - 1).toString();
+		String nextToLastItem = ourObjects.get(ourObjects.size() - 2).toString();
+		if (format != null) {
 			lastItem = String.format(format, lastItem);
 			nextToLastItem = String.format(format, nextToLastItem);
 		}
-		String merge = nextToLastItem+and+lastItem;
-		ourObjects.set(ourObjects.size()-2, merge);
-		ourObjects.remove(ourObjects.size()-1);
+		String merge = nextToLastItem + and + lastItem;
+		ourObjects.set(ourObjects.size() - 2, merge);
+		ourObjects.remove(ourObjects.size() - 1);
 		
-		return implode(ourObjects, comma, format)+dot;
+		return implode(ourObjects, comma, format) + dot;
 	}
 	
-	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String comma, final String and, final String dot){
+	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String comma, final String and, final String dot) {
 		return implodeCommaAndDot(objects, null, comma, and, dot);
 	}
 	
-	public static String implodeCommaAnd(final Collection<? extends Object> objects, final String comma, final String and){
+	public static String implodeCommaAnd(final Collection<? extends Object> objects, final String comma, final String and) {
 		return implodeCommaAndDot(objects, comma, and, "");
 	}
 	
-	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String color){
-		return implodeCommaAndDot(objects, color+", ", color+" and ", color+".");
+	public static String implodeCommaAndDot(final Collection<? extends Object> objects, final String color) {
+		return implodeCommaAndDot(objects, color + ", ", color + " and ", color + ".");
 	}
 	
-	public static String implodeCommaAnd(final Collection<? extends Object> objects, final String color){
-		return implodeCommaAndDot(objects, color+", ", color+" and ", "");
+	public static String implodeCommaAnd(final Collection<? extends Object> objects, final String color) {
+		return implodeCommaAndDot(objects, color + ", ", color + " and ", "");
 	}
 	
-	public static String implodeCommaAndDot(final Collection<? extends Object> objects){
+	public static String implodeCommaAndDot(final Collection<? extends Object> objects) {
 		return implodeCommaAndDot(objects, "");
 	}
 	
-	public static String implodeCommaAnd(final Collection<? extends Object> objects){
+	public static String implodeCommaAnd(final Collection<? extends Object> objects) {
 		return implodeCommaAnd(objects, "");
 	}
 	
-	public static Integer indexOfFirstDigit(final String str){
+	public static Integer indexOfFirstDigit(final String str) {
 		Integer ret = null;
-		for (int i = 0; i < str.length(); i++){
+		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-			boolean isDigit = (c >= '0' && c <= '9');
-			if (isDigit){
+			boolean isDigit = c >= '0' && c <= '9';
+			if (isDigit) {
 				ret = i;
 				break;
 			}
@@ -377,30 +376,27 @@ public class Txt {
 		return ret;
 	}
 	
-	public static String removeLeadingCommandDust(String string){
+	public static String removeLeadingCommandDust(String string) {
 		return string.replaceAll("^[/\\s]+", "");
 	}
 	
-	public static Entry<String, String> divideOnFirstSpace(String string)
-	{
+	public static Entry<String, String> divideOnFirstSpace(String string) {
 		String[] parts = string.split("\\s+", 2);
 		String first = parts[0];
 		String second = null;
-		if (parts.length > 1)
-		{
+		if (parts.length > 1) {
 			second = parts[1];
 		}
 		return new SimpleEntry<String, String>(first, second);
 	}
 	
-	public static boolean isVowel(String str)
-	{
-		if (str == null || str.length() == 0) return false;
+	public static boolean isVowel(String str) {
+		if (str == null || str.length() == 0)
+			return false;
 		return vowel.contains(str.substring(0, 1));
 	}
 	
-	public static String aan(String noun)
-	{
+	public static String aan(String noun) {
 		return isVowel(noun) ? "an" : "a";
 	}
 	
@@ -409,28 +405,28 @@ public class Txt {
 	public static final String START_COLORS_REGEX = "^((?:§.)+).*$";
 	public static final Pattern START_COLORS_PATTERN = Pattern.compile(START_COLORS_REGEX);
 	
-	public static String getStartColors(String string){
+	public static String getStartColors(String string) {
 		Matcher matcher = START_COLORS_PATTERN.matcher(string);
-		if(!matcher.find()) return "";
+		if (!matcher.find())
+			return "";
 		return matcher.group(1);
 	}
 	
 	// Material name tools
 	
-	public static String getNicedEnumString(String str){
-		List<String> parts = new ArrayList<String>();  
-		for (String part : str.toLowerCase().split("[\\s_]+"))
-		{
+	public static String getNicedEnumString(String str) {
+		List<String> parts = new ArrayList<String>();
+		for (String part : str.toLowerCase().split("[\\s_]+")) {
 			parts.add(upperCaseFirst(part));
 		}
 		return implode(parts, " ");
 	}
 	
-	public static String getNicedEnum(Object enumObject){
+	public static String getNicedEnum(Object enumObject) {
 		return getNicedEnumString(enumObject.toString());
 	}
 	
-	public static String getMaterialName(Material material){
+	public static String getMaterialName(Material material) {
 		return getNicedEnum(material);
 	}
 	
@@ -439,51 +435,51 @@ public class Txt {
 	private final static String titleizeLine = repeat("-", 48);
 	private final static int titleizeBalance = -1;
 	
-	public static String titleize(String str, boolean console){
+	public static String titleize(String str, boolean console) {
 		String center = "- [ " + parse("<l>", console) + str + parse("<r>", console) + " ] -";
 		int centerlen = ChatColor.stripColor(center).length();
 		int pivot = titleizeLine.length() / 2;
-		int eatLeft = (centerlen / 2) - titleizeBalance;
-		int eatRight = (centerlen - eatLeft) + titleizeBalance;
-
+		int eatLeft = centerlen / 2 - titleizeBalance;
+		int eatRight = centerlen - eatLeft + titleizeBalance;
+		
 		if (eatLeft < pivot)
-			return parse("<r>", console)+titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+			return parse("<r>", console) + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
 		else
-			return parse("<r>", console)+center;
+			return parse("<r>", console) + center;
 	}
 	
-	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, boolean console){
+	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, boolean console) {
 		return getPage(lines, pageHumanBased, title, PAGEHEIGHT_PLAYER, console);
 	}
 	
-	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, CommandSender sender){
-		return getPage(lines, pageHumanBased, title, (sender instanceof Player) ? Txt.PAGEHEIGHT_PLAYER : Txt.PAGEHEIGHT_CONSOLE, !(sender instanceof Player));
+	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, CommandSender sender) {
+		return getPage(lines, pageHumanBased, title, sender instanceof Player ? Txt.PAGEHEIGHT_PLAYER : Txt.PAGEHEIGHT_CONSOLE, !(sender instanceof Player));
 	}
 	
-	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, int pageheight, boolean console){
+	public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, int pageheight, boolean console) {
 		ArrayList<String> ret = new ArrayList<String>();
 		int pageZeroBased = pageHumanBased - 1;
-		int pagecount = (int) Math.ceil(((double) lines.size()) / pageheight);
+		int pagecount = (int) Math.ceil((double) lines.size() / pageheight);
 		
 		ret.add(parse("[<l>TerraCraft<r>] ", console) + titleize(title + parse("<gold>", console) + " [" + pageHumanBased + "/" + pagecount + "]", console));
 		
-		if (pagecount == 0){
-			ret.add(parse("[<l>TerraCraft<r>]", console) +  " Sorry. No Pages available.");
+		if (pagecount == 0) {
+			ret.add(parse("[<l>TerraCraft<r>]", console) + " Sorry. No Pages available.");
 			return ret;
-		} else if (pageZeroBased < 0 || pageHumanBased > pagecount){
+		} else if (pageZeroBased < 0 || pageHumanBased > pagecount) {
 			ret.add(parse("[<l>TerraCraft<r>] <i>Invalid page. Must be between 1 and " + pagecount, console));
 			return ret;
 		}
 		
 		int from = pageZeroBased * pageheight;
-		int to = from+pageheight;
-		if (to > lines.size()){
+		int to = from + pageheight;
+		if (to > lines.size()) {
 			to = lines.size();
 		}
 		
 		List<String> subList = lines.subList(from, to);
 		
-		for(int i = 0; i<subList.size();i++){
+		for (int i = 0; i < subList.size(); i++) {
 			subList.set(i, parse("[<l>TerraCraft<r>] ", console) + subList.get(i));
 		}
 		
@@ -494,32 +490,34 @@ public class Txt {
 	
 	// Describing Time
 	
-	public static String getTimeDeltaDescriptionRelNow(long millis){
+	public static String getTimeDeltaDescriptionRelNow(long millis) {
 		String ret = "";
 		
-		double millisLeft = (double) Math.abs(millis);
+		double millisLeft = Math.abs(millis);
 		
 		List<String> unitCountParts = new ArrayList<String>();
-		for (Entry<String, Long> entry : unitMillis.entrySet()){
-			if (unitCountParts.size() == 3 ) break;
+		for (Entry<String, Long> entry : unitMillis.entrySet()) {
+			if (unitCountParts.size() == 3) {
+				break;
+			}
 			String unitName = entry.getKey();
 			long unitSize = entry.getValue();
 			long unitCount = (long) Math.floor(millisLeft / unitSize);
-			if (unitCount < 1) continue;
-			millisLeft -= unitSize*unitCount;
-			unitCountParts.add(unitCount+" "+unitName);
+			if (unitCount < 1) {
+				continue;
+			}
+			millisLeft -= unitSize * unitCount;
+			unitCountParts.add(unitCount + " " + unitName);
 		}
 		
-		if (unitCountParts.size() == 0) return "just now";
+		if (unitCountParts.size() == 0)
+			return "just now";
 		
 		ret += implodeCommaAnd(unitCountParts);
 		ret += " ";
-		if (millis <= 0)
-		{
+		if (millis <= 0) {
 			ret += "ago";
-		}
-		else
-		{
+		} else {
 			ret += "from now";
 		}
 		
@@ -528,8 +526,9 @@ public class Txt {
 	
 	// Smart Quotes
 	
-	public static String removeSmartQuotes(String string){
-		if (string == null) return null;
+	public static String removeSmartQuotes(String string) {
+		if (string == null)
+			return null;
 		
 		// LEFT SINGLE QUOTATION MARK
 		string = string.replace("\u2018", "'");
@@ -551,31 +550,31 @@ public class Txt {
 		
 		// HORIZONTAL ELLIPSIS
 		string = string.replace("\u2026", "...");
-
+		
 		return string;
 	}
 	
 	// String Comparison
 	
-	public static String getBestCIStart(Collection<String> candidates, String start){
+	public static String getBestCIStart(Collection<String> candidates, String start) {
 		String ret = null;
 		int best = 0;
 		
 		start = start.toLowerCase();
 		int minlength = start.length();
-		for (String candidate : candidates)
-		{
-			if (candidate.length() < minlength) continue;
-			if ( ! candidate.toLowerCase().startsWith(start)) continue;
+		for (String candidate : candidates) {
+			if (candidate.length() < minlength) {
+				continue;
+			}
+			if (!candidate.toLowerCase().startsWith(start)) {
+				continue;
+			}
 			
 			// The closer to zero the better
 			int lendiff = candidate.length() - minlength;
 			if (lendiff == 0)
-			{
 				return candidate;
-			}
-			if (lendiff < best || best == 0)
-			{
+			if (lendiff < best || best == 0) {
 				best = lendiff;
 				ret = candidate;
 			}
@@ -585,54 +584,40 @@ public class Txt {
 	
 	// Tokenization
 	
-	public static List<String> tokenizeArguments(String str){
+	public static List<String> tokenizeArguments(String str) {
 		List<String> ret = new ArrayList<String>();
 		StringBuilder token = null;
 		boolean escaping = false;
 		boolean citing = false;
 		
-		for(int i = 0; i < str.length(); i++)
-		{
+		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-			if (token == null)
-			{
-				 token = new StringBuilder();
+			if (token == null) {
+				token = new StringBuilder();
 			}
 			
-			if (escaping)
-			{
+			if (escaping) {
 				escaping = false;
 				token.append(c);
-			}
-			else if (c == '\\')
-			{
+			} else if (c == '\\') {
 				escaping = true;
-			}
-			else if (c == '"')
-			{
-				if (citing || token.length() > 0)
-				{
+			} else if (c == '"') {
+				if (citing || token.length() > 0) {
 					ret.add(token.toString());
 					token = null;
 				}
 				citing = !citing;
-			}
-			else if (citing == false && c == ' ')
-			{
-				if (token.length() > 0)
-				{
+			} else if (citing == false && c == ' ') {
+				if (token.length() > 0) {
 					ret.add(token.toString());
 					token = null;
 				}
-			}
-			else
-			{
+			} else {
 				token.append(c);
 			}
 		}
 		
-		if (token != null)
-		{
+		if (token != null) {
 			ret.add(token.toString());
 		}
 		

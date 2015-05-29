@@ -11,12 +11,12 @@ public enum ChatChannel {
 	
 	private final String channel;
 	
-	private ChatChannel(final String channel){
+	private ChatChannel(final String channel) {
 		this.channel = channel;
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return channel;
 	}
 }

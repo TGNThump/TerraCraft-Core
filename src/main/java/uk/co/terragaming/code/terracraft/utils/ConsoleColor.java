@@ -3,6 +3,7 @@ package uk.co.terragaming.code.terracraft.utils;
 import org.fusesource.jansi.Ansi;
 
 public class ConsoleColor {
+	
 	public static final String RESET = Ansi.ansi().fg(Ansi.Color.DEFAULT).toString() + Ansi.ansi().reset();
 	
 	public static final String BLACK = Ansi.ansi().fg(Ansi.Color.BLACK).toString();

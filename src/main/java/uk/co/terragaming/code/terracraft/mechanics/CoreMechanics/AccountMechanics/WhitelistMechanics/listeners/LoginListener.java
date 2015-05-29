@@ -15,31 +15,32 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class LoginListener implements Listener{
-
+public class LoginListener implements Listener {
+	
 	@EventHandler
-	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event){
+	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 		
-		if (AccountMechanics.getInstance().getRegistry().hasAccount(event.getUniqueId())) return;
+		if (AccountMechanics.getInstance().getRegistry().hasAccount(event.getUniqueId()))
+			return;
 		
-		if (TerraCraft.serverMode.equals(ServerMode.LOADING)){
+		if (TerraCraft.serverMode.equals(ServerMode.LOADING)) {
 			event.disallow(Result.KICK_OTHER, Txt.parse(Lang.get("accountServerMode"), TerraCraft.getServerName(), "LOADING"));
 			return;
-		} else if (TerraCraft.serverMode.equals(ServerMode.SHUTDOWN)){
+		} else if (TerraCraft.serverMode.equals(ServerMode.SHUTDOWN)) {
 			event.disallow(Result.KICK_OTHER, Txt.parse(Lang.get("accountServerMode"), TerraCraft.getServerName(), "SHUTTING DOWN"));
 			return;
 		} else {
-			try{
+			try {
 				AccountEvents.onPreLogin(event.getUniqueId(), event.getAddress(), event.getName());
 				event.allow();
-			} catch (TerraException e){
+			} catch (TerraException e) {
 				event.disallow(Result.KICK_OTHER, Txt.parse(e.getMessages().get(0)));
 			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event){
+	public void onPlayerLogin(PlayerLoginEvent event) {
 		AccountEvents.onLogin(event.getPlayer());
 	}
 	

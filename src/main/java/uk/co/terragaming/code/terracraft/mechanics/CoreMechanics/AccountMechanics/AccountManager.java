@@ -8,7 +8,7 @@ public class AccountManager {
 	
 	private static Dao<Account, Integer> accountsDao;
 	
-	public static void init(){
+	public static void init() {
 		accountsDao = AccountMechanics.getInstance().getAccountsDao();
 	}
 	

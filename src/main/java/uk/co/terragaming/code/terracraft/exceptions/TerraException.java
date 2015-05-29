@@ -7,57 +7,65 @@ import java.util.List;
 
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class TerraException extends Exception{
-
+public class TerraException extends Exception {
+	
 	private static final long serialVersionUID = 128954646934669639L;
 	
 	protected List<String> messages = new ArrayList<String>();
 	
-	public TerraException(){}
-	public TerraException(String message){ addMessage(message); }
+	public TerraException() {}
 	
-	public boolean hasMessages(){ return !this.messages.isEmpty(); }
-	public List<String> getMessages(){ return this.messages; }
-	
-	@Override
-	public String getMessage(){
-		return Txt.implode(this.getMessages(), "\n");
+	public TerraException(String message) {
+		addMessage(message);
 	}
 	
-	public TerraException setMessage(String message){
-		this.messages = new ArrayList<String>();
-		this.messages.add(message);
+	public boolean hasMessages() {
+		return !messages.isEmpty();
+	}
+	
+	public List<String> getMessages() {
+		return messages;
+	}
+	
+	@Override
+	public String getMessage() {
+		return Txt.implode(getMessages(), "\n");
+	}
+	
+	public TerraException setMessage(String message) {
+		messages = new ArrayList<String>();
+		messages.add(message);
 		return this;
 	}
 	
-	public TerraException setMessage(String message, Object... args){
+	public TerraException setMessage(String message, Object... args) {
 		return this.setMessage(String.format(message, args));
 	}
 	
-	public TerraException setMessages(Collection<String> messages){
+	public TerraException setMessages(Collection<String> messages) {
 		this.messages = new ArrayList<String>(messages);
 		return this;
 	}
 	
-	public TerraException setMessages(String... messages){
+	public TerraException setMessages(String... messages) {
 		return this.setMessages(Arrays.asList(messages));
 	}
-
-	public TerraException addMessage(String message){
-		this.getMessages().add(message);
+	
+	public TerraException addMessage(String message) {
+		getMessages().add(message);
 		return this;
 	}
 	
-	public TerraException addMessage(String message, Object... args){
+	public TerraException addMessage(String message, Object... args) {
 		return this.addMessage(String.format(message, args));
 	}
 	
-	public TerraException addMessages(Collection<String> messages){
-		this.getMessages().addAll(messages);
+	public TerraException addMessages(Collection<String> messages) {
+		getMessages().addAll(messages);
 		return this;
 	}
 	
-	public TerraException addMessages(String... messages){
+	public TerraException addMessages(String... messages) {
 		return this.addMessages(Arrays.asList(messages));
 	}
 }

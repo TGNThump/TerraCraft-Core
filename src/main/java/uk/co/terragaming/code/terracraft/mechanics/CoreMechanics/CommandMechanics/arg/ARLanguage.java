@@ -10,34 +10,39 @@ import org.bukkit.command.CommandSender;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
 
-public class ARLanguage extends ARAbstractSelect<Language> implements ARAllAble<Language>{
-
+public class ARLanguage extends ARAbstractSelect<Language> implements ARAllAble<Language> {
+	
 	private static ARLanguage i = new ARLanguage();
-	public static ARLanguage get() { return i; }
+	
+	public static ARLanguage get() {
+		return i;
+	}
 	
 	// Override
-
+	
 	@Override
 	public Language select(String arg, CommandSender sender) throws CommandException {
 		
 		arg = getComparable(arg);
 		
-		for (Language lang : Language.values()){
+		for (Language lang : Language.values()) {
 			String langstr = getComparable(lang);
-			if (langstr.equals(arg)) return lang;
+			if (langstr.equals(arg))
+				return lang;
 			
 			langstr = String.valueOf(lang.ordinal());
-			if (langstr.equals(arg)) return lang;
+			if (langstr.equals(arg))
+				return lang;
 		}
 		
 		return null;
 	}
-
+	
 	@Override
 	public Collection<String> altNames(CommandSender sender) {
 		List<String> ret = new ArrayList<String>();
 		
-		for(Language lang : Language.values()){
+		for (Language lang : Language.values()) {
 			ret.add(String.valueOf(lang.ordinal()));
 			ret.add(lang.toString());
 		}
@@ -49,7 +54,7 @@ public class ARLanguage extends ARAbstractSelect<Language> implements ARAllAble<
 	public Collection<String> getTabList(CommandSender sender, String arg) {
 		List<String> ret = new ArrayList<String>();
 		
-		for (Language lang : Language.values()){
+		for (Language lang : Language.values()) {
 			ret.add(getComparable(lang.name()));
 		}
 		
@@ -57,26 +62,25 @@ public class ARLanguage extends ARAbstractSelect<Language> implements ARAllAble<
 	}
 	
 	@Override
-	public Collection<Language> getAll(CommandSender sender)
-	{
+	public Collection<Language> getAll(CommandSender sender) {
 		return Arrays.asList(Language.values());
 	}
 	
 	// Util
 	
-	public static String getComparable(Language lang)
-	{
-		if (lang == null) return null;
+	public static String getComparable(Language lang) {
+		if (lang == null)
+			return null;
 		return getComparable(lang.name());
 	}
 	
-	public static String getComparable(String string)
-	{
-		if (string == null) return null;
+	public static String getComparable(String string) {
+		if (string == null)
+			return null;
 		string = string.toLowerCase();
 		string = string.replace("_", "");
 		string = string.replace(" ", "");
 		return string;
 	}
-
+	
 }

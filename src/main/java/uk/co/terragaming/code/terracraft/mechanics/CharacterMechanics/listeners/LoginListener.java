@@ -13,37 +13,34 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class LoginListener implements Listener{
-
+public class LoginListener implements Listener {
+	
 	@EventHandler
-	public void PlayerLoginEvent(PlayerLoginEvent event){
+	public void PlayerLoginEvent(PlayerLoginEvent event) {
 		try {
 			Account account = AccountMechanics.getInstance().getRegistry().getAccount(event.getPlayer());
 			account.getCharacters().refreshCollection();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable()
-			{
-			    @Override
-			    public void run()
-			    {
-			    	event.getPlayer().kickPlayer(Txt.parse(Lang.get("internalException")));
-			    }
+			Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					event.getPlayer().kickPlayer(Txt.parse(Lang.get("internalException")));
+				}
 			});
 			return;
 		}
 		
 		Player player = event.getPlayer();
 		
-		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable()
-		{
-		    @Override
-		    public void run()
-		    {
-		    	 new CharacterSelectInterface(player);
-		    }
+		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				new CharacterSelectInterface(player);
+			}
 		});
-		
 		
 	}
 	

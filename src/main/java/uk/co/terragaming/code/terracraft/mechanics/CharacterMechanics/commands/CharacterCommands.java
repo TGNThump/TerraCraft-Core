@@ -17,10 +17,10 @@ import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class CharacterCommands {
-
-	@Command({"character", "char","c"})
+	
+	@Command({ "character", "char", "c" })
 	@CommandDescription("Switch to a diffrent Character.")
-	public void onCharCommand(Player sender, Language language){
+	public void onCharCommand(Player sender, Language language) {
 		
 		AccountMechanics accountMechanics = AccountMechanics.getInstance();
 		Account account = accountMechanics.getRegistry().getAccount(sender);
@@ -28,7 +28,7 @@ public class CharacterCommands {
 		try {
 			Character character = account.getActiveCharacter();
 			
-			if (character != null){
+			if (character != null) {
 				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
 			} else {
 				ItemManager.cleanUpItemsInInventory(account.getPlayer());
@@ -39,7 +39,9 @@ public class CharacterCommands {
 			
 			Language lang = Language.ENGLISH;
 			
-			if (account != null) lang = account.getLanguage();
+			if (account != null) {
+				lang = account.getLanguage();
+			}
 			
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "accountUploadFailed")));
 			e.printStackTrace();

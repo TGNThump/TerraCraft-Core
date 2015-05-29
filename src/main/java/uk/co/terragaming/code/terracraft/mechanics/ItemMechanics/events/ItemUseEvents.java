@@ -18,35 +18,36 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemManager;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
-public class ItemUseEvents implements Listener{
-
+public class ItemUseEvents implements Listener {
+	
 	private ItemMechanics itemMechanics;
 	private ItemInstanceRegistry registry;
 	private Random rand;
 	
-	public ItemUseEvents(){
+	public ItemUseEvents() {
 		itemMechanics = ItemMechanics.getInstance();
 		registry = itemMechanics.getItemInstanceRegistry();
 		rand = new Random();
 	}
 	
-
 	@EventHandler
-	public void onAttack(EntityDamageByEntityEvent event){
-		if (event.isCancelled()) return;
+	public void onAttack(EntityDamageByEntityEvent event) {
+		if (event.isCancelled())
+			return;
 		// If the Damager is a Player...
-		if (!(event.getDamager() instanceof Player)){ return; }
-		Player damager = (Player) event.getDamager(); 
+		if (!(event.getDamager() instanceof Player))
+			return;
+		Player damager = (Player) event.getDamager();
 		
-		if (PlayerEffects.hasEffect(damager, PlayerEffect.INVULNERABLE)){
+		if (PlayerEffects.hasEffect(damager, PlayerEffect.INVULNERABLE)) {
 			event.setCancelled(true);
 			return;
 		}
 		
 		Entity damaged = event.getEntity();
 		
-		if (damaged instanceof Player){
-			if (PlayerEffects.hasEffect((Player)damaged, PlayerEffect.INVULNERABLE)){
+		if (damaged instanceof Player) {
+			if (PlayerEffects.hasEffect((Player) damaged, PlayerEffect.INVULNERABLE)) {
 				event.setCancelled(true);
 				return;
 			}
@@ -54,16 +55,17 @@ public class ItemUseEvents implements Listener{
 		
 		// ... and the Item in hand is an TCItemInstance ...
 		ItemStack is = damager.getItemInHand();
-		if (!ItemManager.isItemInstance(is)) return;
+		if (!ItemManager.isItemInstance(is))
+			return;
 		Integer id = ItemManager.getItemInstanceId(is);
 		ItemInstance item = registry.getItem(id);
 		
 		// ... Get the name of the Damaged Entity ...
 		
 		String damagedName;
-		if (damaged.getCustomName() == null){
+		if (damaged.getCustomName() == null) {
 			damagedName = "the " + ChatColor.BOLD + damaged.getType().toString().toLowerCase();
-		} else if (damaged.getCustomName().isEmpty()){
+		} else if (damaged.getCustomName().isEmpty()) {
 			damagedName = "the " + ChatColor.BOLD + damaged.getType().toString().toLowerCase();
 		} else {
 			damagedName = ChatColor.BOLD + damaged.getCustomName();
@@ -76,7 +78,7 @@ public class ItemUseEvents implements Listener{
 		damager.sendMessage(Txt.parse("[<l>TerraCraft<r>] You dealt <gray>%s<r> damage to %s<r> using your %s<r>.", event.getDamage(), damagedName, item.getColouredName()));
 	}
 	
-	public int randInt(int min, int max){
-		return rand.nextInt((max - min) + 1) + min;
+	public int randInt(int min, int max) {
+		return rand.nextInt(max - min + 1) + min;
 	}
 }

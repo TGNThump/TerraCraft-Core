@@ -18,22 +18,25 @@ public class PlayerEffects {
 	
 	private static HashMap<UUID, List<PlayerEffect>> effects;
 	
-	public static void init (){
+	public static void init() {
 		effects = new HashMap<>();
 		Bukkit.getPluginManager().registerEvents(new PlayerEffectListener(), TerraCraft.plugin);
 	}
 	
-	public static void addEffect(Player player, PlayerEffect effect){
-		if (effects == null){ TerraLogger.error("PlayerEffects no Initialized."); return; }
+	public static void addEffect(Player player, PlayerEffect effect) {
+		if (effects == null) {
+			TerraLogger.error("PlayerEffects no Initialized.");
+			return;
+		}
 		
-		if (effect.equals(PlayerEffect.INVISIBLE)){
+		if (effect.equals(PlayerEffect.INVISIBLE)) {
 			EntityTargetEffect.removeTargets(player);
 			VanishEffect.vanishPlayer(player);
-		} else if (effect.equals(PlayerEffect.INVULNERABLE)){			
+		} else if (effect.equals(PlayerEffect.INVULNERABLE)) {
 			EntityTargetEffect.removeTargets(player);
 		}
 		
-		if (effects.containsKey(player.getUniqueId())){
+		if (effects.containsKey(player.getUniqueId())) {
 			effects.get(player.getUniqueId()).add(effect);
 		} else {
 			List<PlayerEffect> effectList = Lists.newArrayList();
@@ -42,34 +45,48 @@ public class PlayerEffects {
 		}
 	}
 	
-	public static boolean hasEffect(Player player, PlayerEffect effect){
-		if (effects == null){ TerraLogger.error("PlayerEffects no Initialized."); return false; }
-		if (!effects.containsKey(player.getUniqueId())) return false;
-		return (effects.get(player.getUniqueId()).contains(effect));
+	public static boolean hasEffect(Player player, PlayerEffect effect) {
+		if (effects == null) {
+			TerraLogger.error("PlayerEffects no Initialized.");
+			return false;
+		}
+		if (!effects.containsKey(player.getUniqueId()))
+			return false;
+		return effects.get(player.getUniqueId()).contains(effect);
 	}
 	
-	public static boolean hasEffect(UUID uuid, PlayerEffect effect){
-		if (effects == null){ TerraLogger.error("PlayerEffects no Initialized."); return false; }
-		if (!effects.containsKey(uuid)) return false;
-		return (effects.get(uuid).contains(effect));
+	public static boolean hasEffect(UUID uuid, PlayerEffect effect) {
+		if (effects == null) {
+			TerraLogger.error("PlayerEffects no Initialized.");
+			return false;
+		}
+		if (!effects.containsKey(uuid))
+			return false;
+		return effects.get(uuid).contains(effect);
 	}
 	
-	public static void removeEffect(Player player, PlayerEffect effect){
-		if (effects == null){ TerraLogger.error("PlayerEffects no Initialized."); return; }
-		if (!effects.containsKey(player.getUniqueId())) return;
+	public static void removeEffect(Player player, PlayerEffect effect) {
+		if (effects == null) {
+			TerraLogger.error("PlayerEffects no Initialized.");
+			return;
+		}
+		if (!effects.containsKey(player.getUniqueId()))
+			return;
 		List<PlayerEffect> pEffects = effects.get(player.getUniqueId());
-		if (!pEffects.contains(effect)) return;
+		if (!pEffects.contains(effect))
+			return;
 		
-		if (effect.equals(PlayerEffect.INVISIBLE)){
+		if (effect.equals(PlayerEffect.INVISIBLE)) {
 			VanishEffect.unvanishPlayer(player);
 		}
 		
 		pEffects.remove(effect);
 	}
 	
-	public static void clearEffects(Player player){
-		if (!effects.containsKey(player)) return;
-		for(PlayerEffect effect : effects.get(player.getUniqueId())){
+	public static void clearEffects(Player player) {
+		if (!effects.containsKey(player))
+			return;
+		for (PlayerEffect effect : effects.get(player.getUniqueId())) {
 			removeEffect(player, effect);
 		}
 	}

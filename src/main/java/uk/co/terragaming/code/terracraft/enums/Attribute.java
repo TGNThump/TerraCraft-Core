@@ -12,12 +12,12 @@ public enum Attribute {
 	
 	private final String attribute;
 	
-	private Attribute(final String attribute){
+	private Attribute(final String attribute) {
 		this.attribute = attribute;
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		return attribute;
 	}
 }

@@ -16,15 +16,16 @@ public class AccountEvents {
 	private static AccountMechanics accountMechanics;
 	private static AccountRegistry accountRegistry;
 	
-	public static void init(){
+	public static void init() {
 		accountMechanics = AccountMechanics.getInstance();
 		accountRegistry = accountMechanics.getRegistry();
 	}
 	
-	public static void onPreLogin(UUID uuid, InetAddress address, String name) throws WhitelistException{
-		try{
+	public static void onPreLogin(UUID uuid, InetAddress address, String name) throws WhitelistException {
+		try {
 			AccountSession session = SessionManager.getSession(uuid, address, name);
-			if (session == null) return;
+			if (session == null)
+				return;
 			Account account = AccountManager.getAccount(session);
 			WhitelistChecker.checkBans(account);
 			WhitelistChecker.checkPerms(account);
@@ -32,21 +33,23 @@ public class AccountEvents {
 			accountRegistry.addAccount(account, uuid);
 			
 			TerraLogger.info("Downloaded Account Data of %s.", account.getTerraTag());
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new WhitelistException(Lang.get("internalException"));
 		}
 	}
 	
-	public static void onLogin(Player player){
-		if (!accountRegistry.hasAccount(player)) return;
+	public static void onLogin(Player player) {
+		if (!accountRegistry.hasAccount(player))
+			return;
 		Account account = accountRegistry.getAccount(player);
 		account.setPlayer(player);
 	}
 	
-	public static void onLogout(Player player) throws WhitelistException{
+	public static void onLogout(Player player) throws WhitelistException {
 		
-		if (!accountRegistry.hasAccount(player.getUniqueId())) return;
+		if (!accountRegistry.hasAccount(player.getUniqueId()))
+			return;
 		
 		Account account = accountRegistry.getAccount(player);
 		try {
@@ -54,7 +57,7 @@ public class AccountEvents {
 			SessionManager.updateSession(account, false);
 			accountRegistry.removeAccount(account);
 			TerraLogger.info("Uploaded Account Data of %s.", account.getTerraTag());
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new WhitelistException(Lang.get(account.getLanguage(), "internalException"));
 		}

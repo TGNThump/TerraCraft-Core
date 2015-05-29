@@ -8,8 +8,8 @@ import uk.co.terragaming.code.terracraft.mechanics.ReloadHandler;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-public class TerraCraft extends JavaPlugin{
-
+public class TerraCraft extends JavaPlugin {
+	
 	private static MechanicLoader loader;
 	public static TerraCraft plugin;
 	public static Server server;
@@ -17,16 +17,17 @@ public class TerraCraft extends JavaPlugin{
 	public static ServerMode serverMode = ServerMode.LOADING;
 	public static boolean debugMode = true;
 	
-	public void onEnable(){
+	@Override
+	public void onEnable() {
 		
 		TerraLogger.blank();
-		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + this.getDescription().getVersion() + " ").length()));
-		TerraLogger.info(" <l> Launching TerraCraft V" + this.getDescription().getVersion() + " ");
-		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + this.getDescription().getVersion() + " ").length()));
+		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + getDescription().getVersion() + " ").length()));
+		TerraLogger.info(" <l> Launching TerraCraft V" + getDescription().getVersion() + " ");
+		TerraLogger.info(" " + TerraLogger.tools.repeat("-", (" Launching TerraCraft V" + getDescription().getVersion() + " ").length()));
 		TerraLogger.blank();
 		
 		plugin = this;
-		server = this.getServer();
+		server = getServer();
 		loader = new MechanicLoader();
 		
 		getConfig().options().copyDefaults(true);
@@ -35,28 +36,30 @@ public class TerraCraft extends JavaPlugin{
 		
 		Lang.load();
 		
-		try{
+		try {
 			loader.constructMechanics();
 			loader.preInitMechanics();
-		} catch (Exception e){
+		} catch (Exception e) {
 			TerraLogger.error("Server encountered an error while loading... Shutting Down...");
 			e.printStackTrace();
 			server.shutdown();
 		}
-
-		TerraCraft.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-			public void run(){
-				try{
+		
+		TerraCraft.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
 					loader.initMechanics();
 					loader.postInitMechanics();
 					TerraLogger.blank();
 					TerraLogger.info("All Enabled Mechanics have been Loaded.");
 					TerraLogger.blank();
 					serverMode = ServerMode.fromString(getConfig().get("TerraCraft.Server.Mode").toString());
-					if (serverMode.equals(ServerMode.BIFROST)){
+					if (serverMode.equals(ServerMode.BIFROST)) {
 						TerraLogger.info("<l>Server launched in BIFROST Registration Mode!");
 					}
-				} catch (Exception e){
+				} catch (Exception e) {
 					TerraLogger.error("Server encountered an error while loading... Shutting Down...");
 					e.printStackTrace();
 					server.shutdown();
@@ -67,7 +70,8 @@ public class TerraCraft extends JavaPlugin{
 		TerraLogger.blank();
 	}
 	
-	public void onDisable(){
+	@Override
+	public void onDisable() {
 		serverMode = ServerMode.SHUTDOWN;
 		
 		ReloadHandler.run();
@@ -81,11 +85,11 @@ public class TerraCraft extends JavaPlugin{
 		server = null;
 	}
 	
-	public static String getServerName(){
+	public static String getServerName() {
 		return plugin.getConfig().getString("TerraCraft.Server.Name");
 	}
 	
-	public static Mechanic getMechanic(String mechanicPath){
+	public static Mechanic getMechanic(String mechanicPath) {
 		return loader.getMechanic(mechanicPath);
 	}
 }

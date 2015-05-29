@@ -9,54 +9,53 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.WhitelistMechanics.listeners.PingListener;
 
 @MechanicParent("CoreMechanics.AccountMechanics")
-public class WhitelistMechanics implements Mechanic{
-
-	public boolean isEnabled()	{ return !ServerMode.fromString(TerraCraft.plugin.getConfig().get("TerraCraft.Server.Mode").toString()).equals(ServerMode.BIFROST); }
+public class WhitelistMechanics implements Mechanic {
 	
-	public static WhitelistMechanics getInstance(){
+	@Override
+	public boolean isEnabled() {
+		return !ServerMode.fromString(TerraCraft.plugin.getConfig().get("TerraCraft.Server.Mode").toString()).equals(ServerMode.BIFROST);
+	}
+	
+	public static WhitelistMechanics getInstance() {
 		return (WhitelistMechanics) TerraCraft.getMechanic("CoreMechanics.AccountMechanics.WhitelistMechanics");
 	}
 	
 	// Mechanic Variables
 	
-	
-	
 	// Mechanic Methods
 	
-	
-	
 	// Mechanic Events
-
+	
 	@Override
 	public void PreInitialize() {
 		TerraCraft.server.getPluginManager().registerEvents(new LoginListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new LogoutListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new PingListener(), TerraCraft.plugin);
 	}
-
+	
 	@Override
 	public void Initialize() {
 		
 	}
-
+	
 	@Override
 	public void PostInitialize() {
 		
 	}
-
+	
 	@Override
 	public void PreDenitialize() {
 		
 	}
-
+	
 	@Override
 	public void Denitialize() {
 		
 	}
-
+	
 	@Override
 	public void PostDenitialize() {
 		
 	}
-
+	
 }

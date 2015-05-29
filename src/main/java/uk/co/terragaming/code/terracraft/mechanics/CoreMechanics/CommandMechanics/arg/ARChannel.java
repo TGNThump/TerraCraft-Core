@@ -14,29 +14,38 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Whispe
 
 import com.google.common.collect.Lists;
 
-public class ARChannel extends ARAbstractSelect<Channel> implements ARAllAble<Channel>{
+public class ARChannel extends ARAbstractSelect<Channel> implements ARAllAble<Channel> {
 	
 	private static ARChannel i = new ARChannel();
-	public static ARChannel get() { return i; }
+	
+	public static ARChannel get() {
+		return i;
+	}
 	
 	// Override
-
+	
 	@Override
 	public Channel select(String arg, CommandSender sender) throws CommandException {
 		
 		return ChannelManager.getChannel(arg);
 		
 	}
-
+	
 	@Override
 	public Collection<String> altNames(CommandSender sender) {
 		List<String> ret = Lists.newArrayList();
 		
-		for(Channel channel : ChannelManager.getChannels()){
-			if (channel instanceof WhisperChannel) continue;
-			if (channel instanceof PartyChannel) continue;
-			if (sender instanceof Player){
-				if (!channel.canJoin((Player)sender)) continue;
+		for (Channel channel : ChannelManager.getChannels()) {
+			if (channel instanceof WhisperChannel) {
+				continue;
+			}
+			if (channel instanceof PartyChannel) {
+				continue;
+			}
+			if (sender instanceof Player) {
+				if (!channel.canJoin((Player) sender)) {
+					continue;
+				}
 				ret.add(channel.getDisplayName((Player) sender));
 			} else {
 				ret.add(channel.getName());
@@ -50,11 +59,17 @@ public class ARChannel extends ARAbstractSelect<Channel> implements ARAllAble<Ch
 	public Collection<String> getTabList(CommandSender sender, String arg) {
 		List<String> ret = Lists.newArrayList();
 		
-		for(Channel channel : ChannelManager.getChannels()){
-			if (channel instanceof WhisperChannel) continue;
-			if (channel instanceof PartyChannel) continue;
-			if (sender instanceof Player){
-				if (!channel.canJoin((Player)sender)) continue;
+		for (Channel channel : ChannelManager.getChannels()) {
+			if (channel instanceof WhisperChannel) {
+				continue;
+			}
+			if (channel instanceof PartyChannel) {
+				continue;
+			}
+			if (sender instanceof Player) {
+				if (!channel.canJoin((Player) sender)) {
+					continue;
+				}
 				ret.add(channel.getDisplayName((Player) sender));
 			} else {
 				ret.add(channel.getName());
@@ -65,8 +80,7 @@ public class ARChannel extends ARAbstractSelect<Channel> implements ARAllAble<Ch
 	}
 	
 	@Override
-	public Collection<Channel> getAll(CommandSender sender)
-	{
+	public Collection<Channel> getAll(CommandSender sender) {
 		return ChannelManager.getChannels();
 	}
 }
