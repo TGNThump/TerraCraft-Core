@@ -95,6 +95,9 @@ public class Lang {
 		
 		add(Language.ENGLISH, "fealtyPatronBecomeVassal", "Your patron has become one of your vassals. You are now in charge of your fealty group.");
 		
+		add(Language.ENGLISH, "itemBindOnPickup", "The %s you just picked up has bound itself to you."); // itemName
+		add(Language.ENGLISH, "itemBindAccountOnPickup", "The %s you just picked up has bound itself to your account."); // itemName
+		
 		// Norwegian
 		
 		add(Language.NORWEGIAN, "internalException", "<b>En intern feiltakelse har inntruffet.");

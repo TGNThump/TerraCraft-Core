@@ -1,7 +1,5 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners;
 
-import java.sql.SQLException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,10 +19,18 @@ public class LoginListener implements Listener{
 	public void PlayerLoginEvent(PlayerLoginEvent event){
 		try {
 			Account account = AccountMechanics.getInstance().getRegistry().getAccount(event.getPlayer());
-			account.getCharacters().refreshAll();
-		} catch (SQLException e) {
-			event.getPlayer().kickPlayer(Txt.parse(Lang.get("accountInternalError")));
+			account.getCharacters().refreshCollection();
+		} catch (Exception e) {
 			e.printStackTrace();
+			Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable()
+			{
+			    @Override
+			    public void run()
+			    {
+			    	event.getPlayer().kickPlayer(Txt.parse(Lang.get("internalException")));
+			    }
+			});
+			return;
 		}
 		
 		Player player = event.getPlayer();

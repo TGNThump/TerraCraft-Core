@@ -43,6 +43,8 @@ public class FealtyManager {
 	}
 	
 	public static List<Character> getVassalsRecursively(Character character){
+		if (character == null) return Lists.newArrayList();
+		if (character.getVassals() == null) return Lists.newArrayList();
 		if (character.getVassals().isEmpty())
 			return Lists.newArrayList();
 		

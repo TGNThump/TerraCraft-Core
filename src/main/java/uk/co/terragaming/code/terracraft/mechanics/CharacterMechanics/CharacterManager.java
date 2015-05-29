@@ -48,10 +48,18 @@ public class CharacterManager {
 		
 		TerraCraft.server.getPluginManager().callEvent(event);
 		
-		character.getItems().refreshAll();
-		applyCharacterInventory(player, character);
-		 
+		character.getItems().refreshCollection();
+		
 		player.setHealth(character.getCurHitpoints());
+		
+		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
+		registry.clearItems(character);
+		player.getInventory().clear();
+		
+		if (!player.isDead()){
+			applyCharacterInventory(player, character);
+		}
+			
 		player.setMaxHealth(character.getMaxHitpoints());
 		player.setLevel(character.getCurLevel());
 		player.setExp(((float) character.getCurExp()) / 100f);
@@ -62,7 +70,8 @@ public class CharacterManager {
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCustomName(character.getName());
 		
-		PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
+		if (!player.isDead())
+			PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
 		
 		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerability")));
 		
@@ -89,11 +98,8 @@ public class CharacterManager {
 	
 	private static void applyCharacterInventory(Player player, Character character) {
 		PlayerInventory inventory = player.getInventory();
-		inventory.clear();
 		
 		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
-		
-		registry.clearItems(character);
 		
 		ItemStack[] armour = new ItemStack[4];
 		
@@ -124,7 +130,8 @@ public class CharacterManager {
 		character.setCurSaturation((int) player.getSaturation());
 		character.setCurLevel(player.getLevel());
 		
-		updateCharacterInventory(player, character);
+		if (!player.isDead())
+			updateCharacterInventory(player, character);
 		
 		updateCharacter(character);
 	}
@@ -211,7 +218,6 @@ public class CharacterManager {
 
 	private static void updateCharacter(Character character) throws SQLException {
 		charactersDao.update(character);
-//		character.getItems().updateAll();
 		
 		TerraLogger.info("Uploaded Character Data of " + character.getAccount().getTerraTag() + "'s" + character.getName() + ".");
 	}
@@ -219,7 +225,6 @@ public class CharacterManager {
 	private static void downloadCharacter(Character character, Account account) throws SQLException {
 		charactersDao.refresh(character);
 		charactersDao.refresh(character.getPatron());
-//		character.getItems().refreshAll();
 		
 		TerraLogger.info("Downloaded Character Data of " + account.getTerraTag() + "'s" + character.getName() + ".");
 	}

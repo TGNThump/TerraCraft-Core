@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
@@ -31,6 +32,11 @@ public class PlayerEffectListener implements Listener{
 		if ((!PlayerEffects.hasEffect(player, PlayerEffect.INVISIBLE)) ||
 			(!PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE))) return;
 		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerPickupItem (PlayerPickupItemEvent event){
+		if (PlayerEffects.hasEffect(event.getPlayer(), PlayerEffect.INVISIBLE)) event.setCancelled(true);
 	}
 	
 	@EventHandler

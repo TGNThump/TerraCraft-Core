@@ -12,6 +12,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemManager;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -29,6 +30,8 @@ public class CharacterCommands {
 			
 			if (character != null){
 				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
+			} else {
+				ItemManager.cleanUpItemsInInventory(account.getPlayer());
 			}
 			
 		} catch (SQLException e) {

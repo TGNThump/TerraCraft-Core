@@ -25,6 +25,11 @@ public class FealtyCommands {
 		Account account = AccountMechanics.getInstance().getRegistry().getAccount(sender);
 		Character character = account.getActiveCharacter();
 		
+		if (character == null) {
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
+			return;
+		}
+		
 		List<Character> characters = FealtyManager.getVassalsRecursively(character);
 		
 		List<String> names = Lists.newArrayList();

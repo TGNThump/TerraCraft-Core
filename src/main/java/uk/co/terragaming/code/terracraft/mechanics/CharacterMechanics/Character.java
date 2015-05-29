@@ -290,4 +290,7 @@ public class Character {
 	public String toString(){
 		return "Character[ID: " + getId() + ", Name: " + getName() + ", Owner: " + getAccount().toString() + "]";
 	}
+	public String getColouredName() {
+		return getName();
+	}
 }

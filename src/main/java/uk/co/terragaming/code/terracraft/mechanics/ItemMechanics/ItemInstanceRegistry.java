@@ -21,6 +21,7 @@ public class ItemInstanceRegistry {
 	public void addItemToCharacter(Character character, ItemInstance item){
 		addItemIfAbsent(item);
 		
+		if (character == null) return;
 		itemsByCharacter.putIfAbsent(character, Lists.newArrayList());
 		itemsByCharacter.get(character).add(item.getId());
 	}
@@ -50,6 +51,8 @@ public class ItemInstanceRegistry {
 	public ArrayList<ItemInstance> getItems(Character character){
 		ArrayList<ItemInstance> ret = Lists.newArrayList();
 		
+		if (!itemsByCharacter.containsKey(character)) return ret;
+		
 		for (Integer id : itemsByCharacter.get(character)){
 			ret.add(getItem(id));
 		}
@@ -68,6 +71,7 @@ public class ItemInstanceRegistry {
 	}
 
 	public void removeFromCharacter(Character character, Integer id) {
+		if (!itemsByCharacter.containsKey(character)) return;
 		itemsByCharacter.get(character).remove(id);
 	}
 

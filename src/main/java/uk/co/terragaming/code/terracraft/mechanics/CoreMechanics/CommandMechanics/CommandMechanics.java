@@ -3,7 +3,7 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechani
 import java.lang.reflect.Field;
 
 import org.bukkit.command.CommandMap;
-import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;

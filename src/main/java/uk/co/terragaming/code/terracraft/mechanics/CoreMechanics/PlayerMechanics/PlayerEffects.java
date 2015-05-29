@@ -57,13 +57,14 @@ public class PlayerEffects {
 	public static void removeEffect(Player player, PlayerEffect effect){
 		if (effects == null){ TerraLogger.error("PlayerEffects no Initialized."); return; }
 		if (!effects.containsKey(player.getUniqueId())) return;
-		if (!effects.get(player.getUniqueId()).contains(effect)) return;
+		List<PlayerEffect> pEffects = effects.get(player.getUniqueId());
+		if (!pEffects.contains(effect)) return;
 		
 		if (effect.equals(PlayerEffect.INVISIBLE)){
 			VanishEffect.unvanishPlayer(player);
 		}
 		
-		effects.get(player.getUniqueId()).remove(effect);
+		pEffects.remove(effect);
 	}
 	
 	public static void clearEffects(Player player){

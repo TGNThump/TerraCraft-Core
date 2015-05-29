@@ -10,6 +10,7 @@ import uk.co.terragaming.code.terracraft.enums.ItemBinding;
 import uk.co.terragaming.code.terracraft.enums.ItemClass;
 import uk.co.terragaming.code.terracraft.enums.ItemQuality;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.MaterialPersister;
 import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
 import uk.co.terragaming.code.terracraft.utils.CustomItem;
@@ -47,7 +48,13 @@ public class ItemInstance {
 	private ItemQuality quality;
 	
 	@DatabaseField(canBeNull = true, columnName = "bound")
-	private ItemBinding binding;
+	private ItemBinding binding = ItemBinding.NONE;
+	
+	@DatabaseField(canBeNull = true, foreign = true, columnName="boundCharacter")
+	private Character boundCharacter;
+	
+	@DatabaseField(canBeNull = true, foreign = true, columnName="boundAccount")
+	private Account boundAccount;
 	
 	@DatabaseField(canBeNull = false)
 	private Integer minModDamage = 0;
@@ -99,6 +106,22 @@ public class ItemInstance {
 	}
 	
 	public String getColouredName(){
+		if (getCurDurability() == 0){
+			char[] chars = getName().toCharArray();
+			boolean italic = true;
+			String name = "";
+			
+			String color = ItemQuality.getChatColor(getQuality()).toString();
+			
+			for (char c : chars){
+				name += color;
+				if (italic == true) name += "<italic>";
+				name += c + "<reset>";
+				italic = !italic;
+			}
+			
+			return Txt.parse(name);
+		}
 		return Txt.parse(ItemQuality.getChatColor(getQuality()) + "<bold>" + getName() + "<r>");
 	}
 	
@@ -116,6 +139,9 @@ public class ItemInstance {
 		if (binding == null) return ItemBinding.NONE;
 		return binding;
 	}
+	
+	public Account getBoundAccount() { return boundAccount; }
+	public Character getBoundCharacter() { return boundCharacter; }
 	
 	public Integer getMinModDamage() { return minModDamage; }
 	public Integer getMaxModDamage() { return maxModDamage; }
@@ -168,6 +194,9 @@ public class ItemInstance {
 	public void setQuality(ItemQuality quality) { this.quality = quality; }
 	public void setBinding(ItemBinding binding) { this.binding = binding; }
 
+	public void setBoundCharacter(Character boundCharacter) { this.boundCharacter = boundCharacter; }
+	public void setBoundAccount(Account boundAccount) { this.boundAccount = boundAccount; }
+	
 	public void setMinModDamage(Integer minModDamage) { this.minModDamage = minModDamage; }
 	public void setMaxModDamage(Integer maxModDamage) { this.maxModDamage = maxModDamage; }
 
@@ -236,12 +265,20 @@ public class ItemInstance {
 				item.addLore(ChatColor.GRAY + "Soulbound");
 			}
 			
-			// Durability is weird... 0 is fully repaired, getMaxDurability() is fully broken.
-			double maxDamage  = (double) getMaterial().getMaxDurability();
-			double percent 	 = (double) getCurDurability() / 100.0;
-			double durability = Math.round((1-percent) * maxDamage);
+			if (getCurDurability() == 0){
+				// Item is broken
+				item.addLore(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Broken" + ChatColor.RESET);
+				item.setDurability((short) 0);
+			} else {
+				// Durability is weird... 0 is fully repaired, getMaxDurability() is fully broken.
+				double maxDamage  = (double) getMaterial().getMaxDurability();
+				double percent 	 = (double) getCurDurability() / getItem().getMaxDurability();
+				if (percent > 1) percent = 1;
+				if (percent < 0) percent = 0;
+				double durability = Math.round((1-percent) * maxDamage);
 
-			item.setDurability((short) (durability));
+				item.setDurability((short) (durability));
+			}
 			
 			AttributeStorage storage = AttributeStorage.newTarget(item.getItemStack(), AttributeUtil.computeUUID("TerraGamingNetwork-TerraCraft"));
 			

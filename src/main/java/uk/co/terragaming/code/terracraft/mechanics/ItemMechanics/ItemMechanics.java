@@ -12,7 +12,9 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.commands.StaffItemCommands;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events.ItemBindEvents;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events.ItemEvents;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events.ItemUseEvents;
 import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
 
 import com.j256.ormlite.dao.Dao;
@@ -62,6 +64,7 @@ public class ItemMechanics implements Mechanic{
 	public void PreInitialize() {
 		itemRegistry = new ItemRegistry();
 		itemInstanceRegistry = new ItemInstanceRegistry();
+		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -96,7 +99,8 @@ public class ItemMechanics implements Mechanic{
 			e.printStackTrace();
 		}
 		
-		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
+		Bukkit.getPluginManager().registerEvents(new ItemUseEvents(), TerraCraft.plugin);
+		Bukkit.getPluginManager().registerEvents(new ItemBindEvents(), TerraCraft.plugin);
 	}
 
 	@Override

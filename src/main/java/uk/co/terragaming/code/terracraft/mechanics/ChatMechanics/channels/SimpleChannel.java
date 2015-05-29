@@ -1,9 +1,11 @@
 package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -48,9 +50,10 @@ public class SimpleChannel extends Channel{
 		} else {
 			sender.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
 			boolean heared = false;
-			for (Entity entity : sender.getNearbyEntities(range, 500, range)){
+			for (Entity entity : getNearybyPlayers(sender.getLocation(), range)){
 				if (!(entity instanceof Player)) continue;
 				Player reciever = (Player) entity;
+				if (reciever.equals(sender)) continue;
 				if (contains(reciever.getUniqueId())){
 					heared = true;
 					reciever.sendMessage(Txt.parse("[<l>%s<r>] <%s> %s", getTag(), name, message));
@@ -71,5 +74,14 @@ public class SimpleChannel extends Channel{
 			ChatLogger.log(account, character, this, message);
 		}
 	}
+	
+	public List<Player> getNearybyPlayers(Location loc, int distance){
+	    int squaredDistance = distance*distance;
+	    List<Player> list = new ArrayList<Player>();
+	    for(Player p: Bukkit.getOnlinePlayers())
+	        if(p.getLocation().distanceSquared(loc) < squaredDistance)
+	            list.add(p);
+	    return list;
+	} 
 
 }
