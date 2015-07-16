@@ -85,10 +85,8 @@ public abstract class Item {
 			}
 		}
 		
-		// TODO: Not Compute UUID Every Item Create...
-		
 		AttributeStorage storage = AttributeStorage.newTarget(item.getItemStack(), ItemMechanics.getInstance().getAttributeUUID());
-		storage.setData("TCID: " + getId());
+		//storage.setData("TCID: " + getId());
 		
 		return storage.getTarget();
 	}

@@ -3,7 +3,7 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 import java.util.List;
 
 import uk.co.terragaming.code.terracraft.enums.ItemSource;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.attributes.DamageAttribute;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.attributes.MeleeDamageAttribute;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.attributes.ResistanceAttribute;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.item.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.item.armour.ArmourLeg;
@@ -34,7 +34,7 @@ public class ItemFactory {
 				break;
 			case MELEE:
 				item = new WeaponMelee(ItemSource.COMMAND);
-				DamageAttribute damage = (DamageAttribute) item.getAttribute(DamageAttribute.class);
+				MeleeDamageAttribute damage = (MeleeDamageAttribute) item.getAttribute(MeleeDamageAttribute.class);
 				damage.setMinDamage(i.getMinBaseDamage());
 				damage.setMaxDamage(i.getMaxBaseDamage());
 				break;
