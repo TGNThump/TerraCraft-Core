@@ -46,6 +46,7 @@ public class ChatLogger implements Runnable {
 	
 	@Override
 	public void run() {
+		if (entries.size() == 0) return;
 		Dao<ChatLogEntry, Integer> logDao = ChatMechanics.getInstance().getChatLogDao();
 		try {
 			logDao.callBatchTasks(new Callable<Void>() {

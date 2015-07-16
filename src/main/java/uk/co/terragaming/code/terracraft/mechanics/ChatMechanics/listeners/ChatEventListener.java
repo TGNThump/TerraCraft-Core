@@ -8,16 +8,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
+import uk.co.terragaming.code.terracraft.events.account.AccountLoginEvent;
+import uk.co.terragaming.code.terracraft.events.account.AccountLogoutEvent;
+import uk.co.terragaming.code.terracraft.events.character.CharacterJoinEvent;
+import uk.co.terragaming.code.terracraft.events.character.CharacterLeaveEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
-import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.CharacterChangeEvent;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.NotificationChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.WhisperChannel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
@@ -30,11 +31,10 @@ public class ChatEventListener implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		Player player = event.getPlayer();
-		if (!registry.hasAccount(player))
+		if (!AccountRegistry.hasAccount(player))
 			return;
-		Account account = registry.getAccount(player);
+		Account account = AccountRegistry.getAccount(player);
 		String message = event.getMessage();
 		
 		if (message.startsWith("@")) {
@@ -43,6 +43,8 @@ public class ChatEventListener implements Listener {
 			message = message.substring(message.indexOf(" ") + 1);
 			
 			Channel channel = ChannelManager.getChannel(player, channelName);
+			
+			if (channel instanceof NotificationChannel)channel = null;
 			
 			if (channel == null) {
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "ChatInvalidChannel"), channelName));
@@ -98,41 +100,74 @@ public class ChatEventListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onCharChange(CharacterChangeEvent event) {
-		Character oldChar = event.getAccount().getActiveCharacter();
-		Character newChar = event.getCharacter();
-		
+	public void onCharacterLeave(CharacterLeaveEvent event){
+		Character character = event.getCharacter();
 		UUID uuid = event.getPlayer().getUniqueId();
-		
 		List<String> names = ChannelManager.atPMNames.get(uuid);
 		
-		if (oldChar != null) {
-			String name = ChannelManager.parseName(oldChar.getName());
-			
-			for (Channel channel : ChannelManager.getChannels()) {
-				if (channel instanceof WhisperChannel) {
-					WhisperChannel wChannel = (WhisperChannel) channel;
-					if (wChannel.getJoinedPlayerNames().contains(name)) {
-						ChannelManager.removeChannel(wChannel);
-						wChannel = null;
-					}
+		String name = ChannelManager.parseName(character.getName());
+		
+		for (Channel channel : ChannelManager.getChannels()) {
+			if (channel instanceof WhisperChannel) {
+				WhisperChannel wChannel = (WhisperChannel) channel;
+				if (wChannel.getJoinedPlayerNames().contains(name)) {
+					ChannelManager.removeChannel(wChannel);
+					wChannel = null;
 				}
 			}
-			String oldName = ChannelManager.parseName(oldChar.getName());
-			names.remove(oldName);
-		} else {
-			event.getAccount().setActiveChannel(ChannelManager.getChannel(0));
 		}
 		
-		String newName = ChannelManager.parseName(newChar.getName());
+		names.remove(name);
 		
-		names.add(newName);
 	}
 	
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+	public void onCharacterJoin(CharacterJoinEvent event){
+		Character character = event.getCharacter();
+		UUID uuid = event.getPlayer().getUniqueId();
+		List<String> names = ChannelManager.atPMNames.get(uuid);
+		
+		String name = ChannelManager.parseName(character.getName());
+		character.getAccount().setActiveChannel(ChannelManager.getChannel(0));
+		names.add(name);
+	}
+	
+//	@EventHandler
+//	public void onCharacterJoin(CharacterChangeEvent event) {
+//		Character oldChar = event.getAccount().getActiveCharacter();
+//		Character newChar = event.getCharacter();
+//		
+//		UUID uuid = event.getPlayer().getUniqueId();
+//		
+//		List<String> names = ChannelManager.atPMNames.get(uuid);
+//		
+//		if (oldChar != null) {
+//			String name = ChannelManager.parseName(oldChar.getName());
+//			
+//			for (Channel channel : ChannelManager.getChannels()) {
+//				if (channel instanceof WhisperChannel) {
+//					WhisperChannel wChannel = (WhisperChannel) channel;
+//					if (wChannel.getJoinedPlayerNames().contains(name)) {
+//						ChannelManager.removeChannel(wChannel);
+//						wChannel = null;
+//					}
+//				}
+//			}
+//			String oldName = ChannelManager.parseName(oldChar.getName());
+//			names.remove(oldName);
+//		} else {
+//			event.getAccount().setActiveChannel(ChannelManager.getChannel(0));
+//		}
+//		
+//		String newName = ChannelManager.parseName(newChar.getName());
+//		
+//		names.add(newName);
+//	}
+	
+	@EventHandler
+	public void onAccountLogin(AccountLoginEvent event) {
+		Account account = event.getAccount();
+		Player player = account.getPlayer();
 		
 		for (Channel channel : ChannelManager.getChannels()) {
 			if (channel.isAutojoin()) {
@@ -143,17 +178,16 @@ public class ChatEventListener implements Listener {
 		Channel local = ChannelManager.getChannel(0);
 		account.setActiveChannel(local);
 		
-		UUID uuid = event.getPlayer().getUniqueId();
+		UUID uuid = player.getUniqueId();
 		List<String> names = Lists.newArrayList();
 		
 		String pName = ChannelManager.parseName(player.getName());
 		
 		names.add(pName);
 		
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
-		if (registry.hasAccount(uuid)) {
-			String terraTag = ChannelManager.parseName(registry.getAccount(uuid).getTerraTag());
+		if (AccountRegistry.hasAccount(uuid)) {
+			String terraTag = ChannelManager.parseName(AccountRegistry.getAccount(uuid).getTerraTag());
 			if (!pName.equalsIgnoreCase(terraTag)) {
 				names.add(terraTag);
 			}
@@ -163,8 +197,9 @@ public class ChatEventListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
+	public void onAccountLogout(AccountLogoutEvent event) {
+		Account account = event.getAccount();
+		Player player = account.getPlayer();
 		UUID uuid = player.getUniqueId();
 		
 		for (Channel channel : ChannelManager.getChannels()) {

@@ -4,8 +4,10 @@ import org.bukkit.Bukkit;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.EmoteChannel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.NotificationChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.SimpleChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.commands.ChannelCommands;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
@@ -14,6 +16,10 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechani
 
 import com.j256.ormlite.dao.Dao;
 
+@MechanicRequires("CoreMechanics.DatabaseMechanics")
+@MechanicRequires("CoreMechanics.CommandMechanics")
+@MechanicRequires("CoreMechanics.AccountMechanics")
+@MechanicRequires("CharacterMechanics")
 public class ChatMechanics implements Mechanic {
 	
 	@Override
@@ -48,6 +54,20 @@ public class ChatMechanics implements Mechanic {
 		local.setRange(100);
 		local.autojoin();
 		ChannelManager.addChannel(local);
+		
+		Channel deaths = new NotificationChannel();
+		deaths.setName("deaths");
+		deaths.setTag("L");
+		deaths.setRange(100);
+		deaths.autojoin();
+		ChannelManager.addChannel(deaths);
+		
+		Channel joinleave = new NotificationChannel();
+		joinleave.setName("localNotifications");
+		joinleave.setTag("L");
+		joinleave.setRange(100);
+		joinleave.autojoin();
+		ChannelManager.addChannel(joinleave);
 		
 		Channel emote = new EmoteChannel();
 		emote.setName("emote");

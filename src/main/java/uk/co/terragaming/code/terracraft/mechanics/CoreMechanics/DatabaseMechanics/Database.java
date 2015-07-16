@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import uk.co.terragaming.code.terracraft.exceptions.DatabaseException;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseCredentials;
 
 import com.j256.ormlite.jdbc.DataSourceConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
@@ -12,12 +12,13 @@ import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import com.jolbox.bonecp.BoneCPDataSource;
 
+
 public class Database {
 	
 	private final BoneCP connectionPool;
 	private final ConnectionSource connectionSource;
 	
-	public Database() throws ClassNotFoundException, SQLException, DatabaseException {
+	public Database() throws Throwable {
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		

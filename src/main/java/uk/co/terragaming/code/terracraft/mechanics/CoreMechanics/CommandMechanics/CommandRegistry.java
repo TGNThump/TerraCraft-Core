@@ -168,10 +168,11 @@ public class CommandRegistry {
 			
 			if (param.isNamePresent()) {
 				parameter.setName(param.getName());
-			} else
-				// TODO: Handle this better
+			} else {
+				TerraLogger.error("Not Using Java 8...");
 				throw new TerraException("<b>Name Not Present for Paramter");
-			
+			}
+		
 			if (paramIndex < 3 && (param.getType().equals(CommandSender.class) || param.getType().equals(Player.class) || param.getType().equals(ConsoleCommandSender.class))) {
 				parameter.setSpecial(true);
 				parameter.setName("sender");

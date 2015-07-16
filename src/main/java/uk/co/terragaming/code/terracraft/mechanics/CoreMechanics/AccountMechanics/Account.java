@@ -9,6 +9,7 @@ import uk.co.terragaming.code.terracraft.enums.Gender;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.BanMechanics.AccountBan;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
 
 import com.j256.ormlite.dao.ForeignCollection;
@@ -57,11 +58,6 @@ public class Account {
 	
 	@ForeignCollectionField(eager = true, foreignFieldName = "account")
 	private ForeignCollection<AccountBan> bans;
-	
-	// TODO: Groups
-	
-	// @ForeignCollectionField(eager = true)
-	// private ForeignCollection<AccountGroup> groups;
 	
 	@ForeignCollectionField(eager = true)
 	private ForeignCollection<Character> characters;
@@ -127,7 +123,6 @@ public class Account {
 		return bans;
 	}
 	
-	// public ForeignCollection<AccountGroup> getGroups(){ return groups; }
 	public ForeignCollection<Character> getCharacters() {
 		return characters;
 	}
@@ -205,7 +200,7 @@ public class Account {
 	public void setActiveCharacter(Character activeCharacter) {
 		this.activeCharacter = activeCharacter;
 	}
-	
+
 	public void setActiveChannel(Channel activeChannel) {
 		this.activeChannel = activeChannel;
 	}

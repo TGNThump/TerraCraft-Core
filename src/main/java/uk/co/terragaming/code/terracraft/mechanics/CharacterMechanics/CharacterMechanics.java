@@ -7,6 +7,8 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.commands.CharacterCommands;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.commands.CharacterStaffCommands;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.CharacterDeathMessages;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.CharacterJoinQuitMessages;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.LoginListener;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.LogoutListener;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.ShiftClickListener;
@@ -59,6 +61,8 @@ public class CharacterMechanics implements Mechanic {
 		TerraCraft.server.getPluginManager().registerEvents(new LoginListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new LogoutListener(), TerraCraft.plugin);
 		TerraCraft.server.getPluginManager().registerEvents(new ShiftClickListener(), TerraCraft.plugin);
+		TerraCraft.server.getPluginManager().registerEvents(new CharacterDeathMessages(), TerraCraft.plugin);
+		TerraCraft.server.getPluginManager().registerEvents(new CharacterJoinQuitMessages(), TerraCraft.plugin);
 	}
 	
 	@Override

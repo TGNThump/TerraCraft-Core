@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -11,18 +12,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
+import uk.co.terragaming.code.terracraft.events.character.CharacterLeaveEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerEffects;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.VanishEffect;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.VanishEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterface;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
 import uk.co.terragaming.code.terracraft.utils.CustomItem;
 import uk.co.terragaming.code.terracraft.utils.IconMenu;
 import uk.co.terragaming.code.terracraft.utils.Lang;
@@ -34,11 +38,11 @@ public class CharacterSelectInterface {
 	
 	public CharacterSelectInterface(Player player) {
 		this.player = player;
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+		Account account = AccountRegistry.getAccount(player);
 		
 		int i = 2;
-		if (player.isOp()) {
-			i++; // TODO: If Player has staff account.
+		if (GroupRegistry.isInGroup(account, GroupRegistry.getGroup(1))){
+			i++;
 		}
 		i += account.getCharacters().size();
 		
@@ -49,8 +53,7 @@ public class CharacterSelectInterface {
 		iface.addIcon(0, 8, IconMenu.getItem(new ItemStack(Material.BOOK_AND_QUILL), ChatColor.GOLD + "New Character", ChatColor.DARK_AQUA + "Click here to create a new RP Character"), new CallBack("createNewCharacter", this));
 		iface.addIcon(0, 7, IconMenu.getItem(new ItemStack(Material.IRON_BARDING), ChatColor.GOLD + "Leave Server", ChatColor.DARK_AQUA + "Click here to leave TerraCraft."), new CallBack("quitGame", this));
 		
-		// TODO: Only appear if player has staff account
-		if (player.isOp()) {
+		if (GroupRegistry.isInGroup(account, GroupRegistry.getGroup(1))){
 			iface.addIcon(0, 6, IconMenu.getItem(new ItemStack(Material.GOLD_HELMET), ChatColor.GOLD + "Enter Staff Mode", ChatColor.DARK_AQUA + "Click here to enter the game in Staff Mode."), new CallBack("staffModeActivate", this));
 		}
 		
@@ -70,7 +73,7 @@ public class CharacterSelectInterface {
 	
 	@Callback
 	public void selectCharacter(int charId) {
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+		Account account = AccountRegistry.getAccount(player);
 		
 		HashMap<String, Object> conditions = new HashMap<String, Object>();
 		conditions.put("characterId", charId);
@@ -99,7 +102,7 @@ public class CharacterSelectInterface {
 	
 	@Callback
 	public void staffModeActivate() {
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+		Account account = AccountRegistry.getAccount(player);
 		account.setActiveCharacter(null);
 		player.setGameMode(GameMode.CREATIVE);
 		player.setAllowFlight(true);
@@ -122,6 +125,18 @@ public class CharacterSelectInterface {
 	}
 	
 	public void preMenuOpen(Player player) {
+		
+		
+		Account account = AccountRegistry.getAccount(player);
+		if (account != null){
+			Character activeCharacter = account.getActiveCharacter();
+			if (activeCharacter != null){
+				
+				CharacterLeaveEvent event = new CharacterLeaveEvent(activeCharacter, player);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			}
+		}
+		
 		player.setHealth(20d);
 		player.setFoodLevel(200);
 		player.getInventory().clear();
@@ -135,6 +150,7 @@ public class CharacterSelectInterface {
 		PlayerEffects.clearEffects(player);
 		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
+		NickRegistry.removeNick(player.getUniqueId());
 	}
 	
 }

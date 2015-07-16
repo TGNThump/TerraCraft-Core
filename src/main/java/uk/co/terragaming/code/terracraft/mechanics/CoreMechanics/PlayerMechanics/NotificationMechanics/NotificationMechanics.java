@@ -16,9 +16,7 @@ import com.j256.ormlite.dao.Dao;
 public class NotificationMechanics implements Mechanic {
 	
 	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+	public boolean isEnabled() { return true; }
 	
 	public static NotificationMechanics getInstance() {
 		return (NotificationMechanics) TerraCraft.getMechanic("CoreMechanics.PlayerMechanics.NotificationMechanics");

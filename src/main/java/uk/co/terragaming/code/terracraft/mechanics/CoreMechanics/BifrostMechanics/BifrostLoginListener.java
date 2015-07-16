@@ -47,13 +47,15 @@ public class BifrostLoginListener implements Listener {
 			try {
 				
 				// Try Getting Session
+				AccountSession session = null;
 				try {
-					AccountSession session = SessionManager.getSession(event.getUniqueId(), event.getAddress(), event.getName());
-					if (session == null) {
-						event.allow();
-						return;
-					}
+					session = SessionManager.getSession(event.getUniqueId(), event.getAddress(), event.getName());
 				} catch (TerraException e) {}
+				
+				if (session == null) {
+					event.allow();
+					return;
+				}
 				
 				event.disallow(Result.KICK_OTHER, Txt.parse(Lang.get("bifrostAllreadyLinked")));
 				return;

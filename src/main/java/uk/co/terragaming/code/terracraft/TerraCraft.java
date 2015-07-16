@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
+import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.ReloadHandler;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
@@ -76,9 +77,13 @@ public class TerraCraft extends JavaPlugin {
 		
 		ReloadHandler.run();
 		
-		loader.preDenitializeMechanics();
-		loader.denitializeMechanics();
-		loader.postDenitializeMechanics();
+		try{
+			loader.preDenitializeMechanics();
+			loader.denitializeMechanics();
+			loader.postDenitializeMechanics();
+		} catch (TerraException e){
+			e.printStackTrace();
+		}
 		
 		loader = null;
 		plugin = null;

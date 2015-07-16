@@ -13,7 +13,6 @@ import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
@@ -24,10 +23,9 @@ public class SimpleChannel extends Channel {
 	@Override
 	public void processChatEvent(Player sender, String message) {
 		Language lang = Language.ENGLISH;
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
-		if (registry.hasAccount(sender)) {
-			lang = registry.getAccount(sender).getLanguage();
+		if (AccountRegistry.hasAccount(sender)) {
+			lang = AccountRegistry.getAccount(sender).getLanguage();
 		}
 		
 		for (UUID uuid : getMutedPlayers()) {
@@ -73,8 +71,8 @@ public class SimpleChannel extends Channel {
 			}
 		}
 		
-		if (registry.hasAccount(sender)) {
-			Account account = registry.getAccount(sender);
+		if (AccountRegistry.hasAccount(sender)) {
+			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
 			ChatLogger.log(account, character, this, message);

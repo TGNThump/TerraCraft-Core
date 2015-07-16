@@ -1,42 +1,40 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
+import uk.co.terragaming.code.terracraft.events.account.AccountLogoutEvent;
+import uk.co.terragaming.code.terracraft.events.character.CharacterLeaveEvent;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class LogoutListener implements Listener {
 	
-	@EventHandler(priority = EventPriority.LOW)
-	public void onLogout(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onAccountLogout(AccountLogoutEvent event){
+		Account account = event.getAccount();
+		Player player = account.getPlayer();
 		
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-		UUID uuid = player.getUniqueId();
-		if (!registry.hasAccount(uuid))
-			return;
+		Character activeCharacter = account.getActiveCharacter();
+		if (activeCharacter == null) return;
 		
-		Account account = registry.getAccount(uuid);
-		if (account.getActiveCharacter() == null)
-			return;
+		CharacterLeaveEvent e1 = new CharacterLeaveEvent(activeCharacter, player);
+		Bukkit.getServer().getPluginManager().callEvent(e1);
 		
-		try {
+		try{
 			CharacterManager.updateActiveCharacter(player, account.getActiveCharacter());
-		} catch (SQLException e) {
-			event.getPlayer().kickPlayer(Txt.parse(Lang.get("accountInternalError")));
+		} catch (SQLException e){
+			// TODO: Error Handling
+			player.kickPlayer(Txt.parse(Lang.get("accountInternalError")));
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 }

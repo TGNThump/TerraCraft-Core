@@ -4,9 +4,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.entity.Player;
+
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
@@ -36,6 +39,12 @@ public class NotificationManager {
 	}
 	
 	public static void createNotification(Account account, String message) throws TerraException {
+		Player player = account.getPlayer();
+		if (player != null){
+			player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + message));
+			return;
+		}
+		
 		Notification notification = new Notification();
 		notification.setAccount(account);
 		notification.setMessage(message);
@@ -48,6 +57,15 @@ public class NotificationManager {
 	}
 	
 	public static void createNotification(Character character, String message) throws TerraException {
+		Account account = character.getAccount();
+		Player player = account.getPlayer();
+		if (player != null){
+			if (account.getActiveCharacter() == character){
+				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + message));
+				return;
+			}
+		}
+		
 		Notification notification = new Notification();
 		notification.setAccount(character.getAccount());
 		notification.setCharacter(character);

@@ -3,7 +3,7 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechani
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
@@ -24,7 +24,7 @@ public class AccountCommands {
 	@CommandDescription("Set Language")
 	@CommandParent("account")
 	public void onLangCommand(Player sender, Command command, Language lang, Language language) {
-		AccountMechanics.getInstance().getRegistry().getAccount(sender).setLanguage(language);
+		AccountRegistry.getAccount(sender).setLanguage(language);
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "commandSetLanguage", false)));
 	}
 	

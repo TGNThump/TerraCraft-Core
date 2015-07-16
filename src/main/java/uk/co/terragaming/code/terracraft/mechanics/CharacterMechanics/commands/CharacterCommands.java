@@ -9,10 +9,10 @@ import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemManager;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -22,8 +22,7 @@ public class CharacterCommands {
 	@CommandDescription("Switch to a diffrent Character.")
 	public void onCharCommand(Player sender, Language language) {
 		
-		AccountMechanics accountMechanics = AccountMechanics.getInstance();
-		Account account = accountMechanics.getRegistry().getAccount(sender);
+		Account account = AccountRegistry.getAccount(sender);
 		
 		try {
 			Character character = account.getActiveCharacter();
@@ -31,7 +30,7 @@ public class CharacterCommands {
 			if (character != null) {
 				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
 			} else {
-				ItemManager.cleanUpItemsInInventory(account.getPlayer());
+//				ItemManager.cleanUpItemsInInventory(account.getPlayer());
 			}
 			
 		} catch (SQLException e) {

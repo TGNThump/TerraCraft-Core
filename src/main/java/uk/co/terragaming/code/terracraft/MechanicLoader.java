@@ -10,6 +10,7 @@ import org.reflections.Reflections;
 
 import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
 import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
+import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.google.common.collect.Lists;
@@ -146,37 +147,37 @@ public class MechanicLoader implements Comparator<Class<? extends Mechanic>> {
 		return mechanics.get(mechanicName);
 	}
 	
-	public void preInitMechanics() {
+	public void preInitMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.PreInitialize();
 		}
 	}
 	
-	public void initMechanics() {
+	public void initMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.Initialize();
 		}
 	}
 	
-	public void postInitMechanics() {
+	public void postInitMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.PostInitialize();
 		}
 	}
 	
-	public void preDenitializeMechanics() {
+	public void preDenitializeMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.PreDenitialize();
 		}
 	}
 	
-	public void denitializeMechanics() {
+	public void denitializeMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.Denitialize();
 		}
 	}
 	
-	public void postDenitializeMechanics() {
+	public void postDenitializeMechanics() throws TerraException {
 		for (Mechanic mechanic : mechanics.values()) {
 			mechanic.PostDenitialize();
 		}

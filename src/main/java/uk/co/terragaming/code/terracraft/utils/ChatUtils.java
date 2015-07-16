@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 
 public class ChatUtils {
@@ -32,14 +31,13 @@ public class ChatUtils {
 	}
 	
 	public static String getName(Player sender, Channel channel) {
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-		String name = sender.getName();
 		
-		if (registry.hasAccount(sender)) {
-			Account account = registry.getAccount(sender);
+		String name = sender.getName();
+		if (AccountRegistry.hasAccount(sender)) {
+			Account account = AccountRegistry.getAccount(sender);
 			name = account.getTerraTag();
 			
-			if (channel.getName().equals("ooc"))
+			if (channel.getName().equals("ooc") || channel.getName().equals("staff"))
 				return name;
 			
 			if (account.getActiveCharacter() != null) {
@@ -51,14 +49,13 @@ public class ChatUtils {
 	}
 	
 	public static String getName(Player sender, Integer nameLevel) {
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		String name = sender.getName();
 		
 		if (nameLevel == 0)
 			return name;
 		
-		if (registry.hasAccount(sender)) {
-			Account account = registry.getAccount(sender);
+		if (AccountRegistry.hasAccount(sender)) {
+			Account account = AccountRegistry.getAccount(sender);
 			name = account.getTerraTag();
 			if (nameLevel == 1)
 				return name;

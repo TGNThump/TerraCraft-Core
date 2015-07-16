@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterShiftClickInterface;
+import uk.co.terragaming.code.terracraft.mechanics.NPCMechanics.NPCMechanics;
 
 public class ShiftClickListener implements Listener {
 	
@@ -16,7 +17,7 @@ public class ShiftClickListener implements Listener {
 		Player you = event.getPlayer();
 		Player target = (Player) event.getRightClicked();
 		
-		if (!you.isSneaking())
+		if (!you.isSneaking() || NPCMechanics.isNPC(target))
 			return;
 		
 		new CharacterShiftClickInterface(you, target);

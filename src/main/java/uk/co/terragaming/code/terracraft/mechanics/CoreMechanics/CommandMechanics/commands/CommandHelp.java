@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.OptArg;
@@ -34,8 +34,8 @@ public class CommandHelp {
 		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if (AccountMechanics.getInstance().getRegistry().hasAccount(player)) {
-				Account account = AccountMechanics.getInstance().getRegistry().getAccount(player);
+			if (AccountRegistry.hasAccount(player)) {
+				Account account = AccountRegistry.getAccount(player);
 				lang = account.getLanguage();
 			}
 		}

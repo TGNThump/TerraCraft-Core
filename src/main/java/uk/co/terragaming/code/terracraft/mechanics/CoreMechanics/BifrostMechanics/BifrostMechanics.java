@@ -25,12 +25,12 @@ public class BifrostMechanics implements Mechanic {
 	
 	@Override
 	public void PreInitialize() {
-		TerraCraft.server.getPluginManager().registerEvents(new BifrostLoginListener(), TerraCraft.plugin);
+		
 	}
 	
 	@Override
 	public void Initialize() {
-		
+		TerraCraft.server.getPluginManager().registerEvents(new BifrostLoginListener(), TerraCraft.plugin);
 	}
 	
 	@Override

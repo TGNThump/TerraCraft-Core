@@ -10,7 +10,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
@@ -33,9 +33,7 @@ public class CharacterStaffCommands {
 	@CommandParent("staff char")
 	public void onCharDownloadCommand(Player sender) {
 		try {
-			AccountMechanics accountMechanics = AccountMechanics.getInstance();
-			
-			Account account = accountMechanics.getRegistry().getAccount(sender);
+			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
 			if (character == null) {
@@ -56,9 +54,7 @@ public class CharacterStaffCommands {
 	@CommandParent("staff char")
 	public void onCharUploadCommand(Player sender) {
 		try {
-			AccountMechanics accountMechanics = AccountMechanics.getInstance();
-			
-			Account account = accountMechanics.getRegistry().getAccount(sender);
+			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
 			if (character == null) {
@@ -81,9 +77,7 @@ public class CharacterStaffCommands {
 	@CommandParent("staff char")
 	public void onCharSwitchCommand(Player sender) {
 		try {
-			AccountMechanics accountMechanics = AccountMechanics.getInstance();
-			
-			Account account = accountMechanics.getRegistry().getAccount(sender);
+			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
 			if (character != null) {

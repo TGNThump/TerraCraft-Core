@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
@@ -22,7 +22,7 @@ public class FealtyCommands {
 	@CommandParent("staff")
 	@CommandDescription("Test the fealty inheritance tree")
 	public void onTestFealty(Player sender) {
-		Account account = AccountMechanics.getInstance().getRegistry().getAccount(sender);
+		Account account = AccountRegistry.getAccount(sender);
 		Character character = account.getActiveCharacter();
 		
 		if (character == null) {

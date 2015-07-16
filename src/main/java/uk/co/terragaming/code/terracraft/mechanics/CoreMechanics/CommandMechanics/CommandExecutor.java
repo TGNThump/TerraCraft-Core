@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
@@ -109,9 +108,8 @@ public class CommandExecutor implements TabExecutor {
 		Language lang = Language.ENGLISH;
 		
 		if (sender instanceof Player) {
-			AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-			if (registry.hasAccount((Player) sender)) {
-				lang = registry.getAccount((Player) sender).getLanguage();
+			if (AccountRegistry.hasAccount((Player) sender)) {
+				lang = AccountRegistry.getAccount((Player) sender).getLanguage();
 			}
 		}
 		

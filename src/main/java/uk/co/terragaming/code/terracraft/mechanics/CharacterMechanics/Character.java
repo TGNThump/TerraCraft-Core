@@ -6,7 +6,9 @@ import org.joda.time.DateTime;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
+
+import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -21,9 +23,6 @@ public class Character {
 	
 	@DatabaseField(canBeNull = false, foreign = true, columnName = "accountId")
 	private Account account;
-	
-	@DatabaseField(canBeNull = false, foreign = true, columnName = "raceId")
-	private CharacterRace race;
 	
 	@DatabaseField(canBeNull = false)
 	private String name;
@@ -139,10 +138,6 @@ public class Character {
 	
 	public Account getAccount() {
 		return account;
-	}
-	
-	public CharacterRace getRace() {
-		return race;
 	}
 	
 	public String getName() {
@@ -295,10 +290,6 @@ public class Character {
 		this.account = account;
 	}
 	
-	public void setRace(CharacterRace race) {
-		this.race = race;
-	}
-	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -373,7 +364,12 @@ public class Character {
 	
 	public void setLocWorld(String world) {
 		locWorld = world;
-		location.setWorld(TerraCraft.server.getWorld(world));
+		try{
+			if(TerraCraft.server.getWorld(world) == null) return;
+			location.setWorld(TerraCraft.server.getWorld(world));
+		} catch (Exception e){
+			location.setWorld(TerraCraft.server.getWorlds().get(0));
+		}
 	}
 	
 	public void setLocX(Integer x) {

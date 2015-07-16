@@ -8,17 +8,20 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.enums.Language;
+import uk.co.terragaming.code.terracraft.events.character.fealty.FealtyBreakEvent;
+import uk.co.terragaming.code.terracraft.events.character.fealty.FealtySwearEvent;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NotificationMechanics.NotificationManager;
+import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroup;
+import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupManager;
+import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupRegistry;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -27,118 +30,128 @@ import com.google.common.collect.Lists;
 
 public class FealtyManager {
 	
-	public static boolean hasVassalRecursively(Character you, Character them) {
-		if (you.getVassals().isEmpty())
-			return false;
+	// Utils
+	
+	public static List<Character> getVassalsRecursively (Character character){
+		Long timestamp = System.currentTimeMillis();
 		
-		if (you.getVassals().contains(them))
-			return true;
+		if (character == null) return Lists.newArrayList();
+		if (character.getVassals().isEmpty()) return Lists.newArrayList();
 		
-		for (Character vassal : you.getVassals()) {
-			if (hasVassalRecursively(vassal, them))
-				return true;
+		List<Character> ret = Lists.newArrayList();
+		for (Character c : character.getVassals()){
+			ret.add(c);
+			ret.addAll(getVassalsRecursively(c));
+		}
+		
+		Long timeTaken = System.currentTimeMillis() - timestamp;
+		if (timeTaken > 50){
+			TerraLogger.warn("getVassalsRecursively(" + character.getId() + ") took " + timeTaken + "ms");
+		}
+				
+		return ret;
+	}
+	
+	public static Character getPatronRecursivly(Character character){
+		if (character.getPatron() == null) return character;
+		return getPatronRecursivly(character.getPatron());
+	}
+	
+	public static boolean isVassalRecursive(Character you, Character them){
+		if (you == null) return false;
+		if (them == null) return false;
+		if (you.getVassals().isEmpty()) return false;
+		if (you.getVassals().contains(them)) return true;
+		
+		for (Character vassal : you.getVassals()){
+			if (isVassalRecursive(vassal, them)) return true;
 		}
 		
 		return false;
 	}
 	
-	public static List<Character> getVassalsRecursively(Character character) {
-		if (character == null)
-			return Lists.newArrayList();
-		if (character.getVassals() == null)
-			return Lists.newArrayList();
-		if (character.getVassals().isEmpty())
-			return Lists.newArrayList();
-		
-		List<Character> ret = Lists.newArrayList();
-		for (Character c : character.getVassals()) {
-			ret.add(c);
-			ret.addAll(getVassalsRecursively(c));
-		}
-		return ret;
+	public static Character getPatronBellowYou(Character vassal, Character you){
+		if (vassal.getPatron() == null) return null;
+		if (vassal.getPatron().equals(you)) return vassal;
+		return getPatronBellowYou(vassal.getPatron(), you);
 	}
 	
-	public static void fixVassalDiscrepancy(Character you, Character them) {
-		Character theirPatron = null;
-		
-		for (Character vassal : you.getVassals()) {
-			if (!vassal.equals(them) & !hasVassalRecursively(you, them)) {
-				continue;
-			}
-			theirPatron = vassal;
-			break;
-		}
-		
-		if (theirPatron == null) {
+	public static void fixVassalDiscrepancy(Character you, Character them){
+		// Get the targets patron recursively, but stop one level bellow you, ...
+		Character newGroupLeader = getPatronBellowYou(them, you);
+		if (newGroupLeader == null){
 			TerraLogger.error("fixVassalDiscrepency called when no discrepancy exists...");
 			return;
 		}
 		
-		theirPatron.setPatron(null);
+		// ... set the newGroupLeaders patron to null and create a new fealty group ...
+		newGroupLeader.setPatron(null);
 		
-		try {
-			CharacterMechanics.getInstance().getCharacterDao().update(theirPatron);
-			theirPatron.getVassals().refreshCollection();
+		FealtyGroup group = FealtyGroupManager.createFealtyGroup(newGroupLeader);
+		if(group == null) return;
+		
+		// ... update all the characters data ...
+		
+		try{
+			CharacterMechanics.getInstance().getCharacterDao().update(newGroupLeader);
+			newGroupLeader.getVassals().refreshCollection();
 			you.getVassals().refreshCollection();
-		} catch (SQLException e) {
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 		
-		Account account = theirPatron.getAccount();
-		Player player = account.getPlayer();
+		// ... and send a notification to the new groups leader ...
 		
-		if (player == null) {
-			try {
-				NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
-				return;
-			} catch (TerraException e) {
-				return;
-			}
-		} else if (account.getActiveCharacter() != theirPatron) {
-			if (account.getActiveCharacter() != theirPatron) {
-				try {
-					NotificationManager.createNotification(theirPatron, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
-					return;
-				} catch (TerraException e) {
-					return;
-				}
-			}
+		Account account = newGroupLeader.getAccount();
+		
+		try {
+			NotificationManager.createNotification(newGroupLeader, Lang.get(account.getLanguage(), "fealtyPatronBecomeVassal"));
+		} catch (TerraException e) {
+			e.printStackTrace();
 		}
-		
-		Language lang = Language.ENGLISH;
-		if (account.getLanguage() != null) {
-			lang = account.getLanguage();
-		}
-		
-		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "fealtyPatronBecomeVassal")));
 	}
 	
+	// Swear and Break Fealty
+	
 	@Callback
-	// Used in characterShiftClickInterface
-	public static void swearFealty(Player you, Player target) {
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+	public static void swearFealty(Player you, Player target){
+		Character yourChar = AccountRegistry.getAccount(you).getActiveCharacter();
+		Character targetChar = AccountRegistry.getAccount(target).getActiveCharacter();
 		
-		Account yourAcc = registry.getAccount(you);
+		swearFealty(yourChar, targetChar);
+	}
+	
+	public static void swearFealty(Character you, Character target){
+		FealtySwearEvent e1 = new FealtySwearEvent(you, target);
+		Bukkit.getPluginManager().callEvent(e1);
+		if (e1.isCancelled()) return;
 		
-		Character yourChar = yourAcc.getActiveCharacter();
-		Character targetChar = registry.getAccount(target).getActiveCharacter();
-		
-		// Do Checks to prevent infinite loops in recursive vassal getting.
-		
-		if (hasVassalRecursively(yourChar, targetChar)) {
-			fixVassalDiscrepancy(yourChar, targetChar);
+		// If your target is one of your vassals ...
+		if (isVassalRecursive(you, target)){
+			fixVassalDiscrepancy(you, target);
 		}
 		
-		yourChar.setPatron(targetChar);
+		if (you.getPatron() != null)
+			breakFealty(you, you.getPatron());
+		
+		you.setPatron(target);
+		
+		if (FealtyGroupRegistry.isGroupPatron(you)){
+			FealtyGroupManager.destroyFealtyGroup(you);
+		}
+		
+		if (!FealtyGroupRegistry.isGroupPatron(target) && target.getPatron() == null){
+			FealtyGroupManager.createFealtyGroup(target);
+		}
 		
 		try {
-			CharacterMechanics.getInstance().getCharacterDao().update(yourChar);
-			targetChar.getVassals().refreshCollection();
-		} catch (SQLException e) {
+			CharacterMechanics.getInstance().getCharacterDao().update(you);
+			target.getVassals().refreshCollection();
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
-		
-		swearFealtyText(you, yourChar, target, targetChar);
+	
+		swearFealtyText(you.getAccount().getPlayer(), you, target.getAccount().getPlayer(), target);
 	}
 	
 	public static void swearFealtyText(Player you, Character yourChar, Player target, Character targetChar) {
@@ -218,25 +231,39 @@ public class FealtyManager {
 	}
 	
 	@Callback
-	// Used in characterShiftClickInterface
-	public static void breakFealty(Player you, Player target) {
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
+	public static void breakFealty(Player you, Player target){
+		Character yourChar = AccountRegistry.getAccount(you).getActiveCharacter();
+		Character targetChar = AccountRegistry.getAccount(target).getActiveCharacter();
 		
-		Account yourAcc = registry.getAccount(you);
-		Account targetAcc = registry.getAccount(target);
+		breakFealty(yourChar, targetChar);
+	}
+	
+	public static void breakFealty(Character you, Character target){
+		FealtyBreakEvent e1 = new FealtyBreakEvent(you, target);
+		Bukkit.getPluginManager().callEvent(e1);
+		if (e1.isCancelled()) return;
 		
-		Character yourChar = yourAcc.getActiveCharacter();
-		Character targetChar = registry.getAccount(target).getActiveCharacter();
+		you.getAccount().getPlayer().sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(you.getAccount().getLanguage(), "characterBreakFealty"), target.getName()));
+		target.getAccount().getPlayer().sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(target.getAccount().getLanguage(), "characterBreakFealtyToYou"), you.getName()));
 		
-		yourChar.setPatron(null);
+		Character oldPatron = you.getPatron();
 		
-		try {
-			CharacterMechanics.getInstance().getCharacterDao().update(yourChar);
-		} catch (SQLException e) {
+		you.setPatron(null);
+		if (you.getVassals().size() > 0) FealtyGroupManager.createFealtyGroup(you);
+		
+		if (FealtyGroupRegistry.isGroupPatron(oldPatron)){
+			if (oldPatron.getVassals().size() <= 1){
+				FealtyGroupManager.destroyFealtyGroup(oldPatron);
+			}
+		}
+		
+		try{
+			CharacterMechanics.getInstance().getCharacterDao().update(you);
+			oldPatron.getVassals().refreshCollection();
+			target.getVassals().refreshCollection();
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 		
-		you.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(yourAcc.getLanguage(), "characterBreakFealty"), targetChar.getName()));
-		target.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(targetAcc.getLanguage(), "characterBreakFealtyToYou"), yourChar.getName()));
 	}
 }

@@ -1,5 +1,12 @@
 package uk.co.terragaming.code.terracraft.utils;
 
+import org.bukkit.entity.Player;
+
+import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
+
 public class TerraLogger {
 	
 	public static void debug(Object msg) {
@@ -27,33 +34,24 @@ public class TerraLogger {
 	}
 	
 	public static void info(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + String.format(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + Txt.parse(msg, args) + "<r>", true));
 	}
 	
 	public static void debug(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>DEBUG<r>] " + String.format(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>DEBUG<r>] " + Txt.parse(msg, args) + "<r>", true));
 		
-		// TODO: Redo Developer Account Debug Messages
-		
-		// AccountRegistry registry =
-		// AccountMechanics.getInstance().getRegistry();
-		//
-		// for(Player player : TerraCraft.server.getOnlinePlayers()){
-		// Account account = registry.getAccount(player);
-		//
-		// for(PermissionGroup group : account.getGroupsAsArray()){
-		// if(group.getGroupName().toLowerCase().equals("developer")){
-		// player.sendMessage("[" + ChatColor.DARK_AQUA + "TerraCraft" +
-		// ChatColor.WHITE + "][" + ChatColor.DARK_AQUA + "DEBUG" +
-		// ChatColor.WHITE + "] " + String.format(msg, args) + ChatColor.RESET);
-		// break;
-		// }
-		// }
-		// }
+		for (Player player : TerraCraft.server.getOnlinePlayers()) {
+			Account account = AccountRegistry.getAccount(player);
+			
+			if (GroupRegistry.isInGroup(account, GroupRegistry.getGroup(2))) {
+				player.sendMessage(Txt.parse("[<l>DEBUG<r>] " + String.format(msg, args) + "<r>", false));
+				break;
+			}
+		}
 	}
 	
 	public static void warn(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + String.format(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>WARN<r>] " + String.format(msg, args) + "<r>", true));
 	}
 	
 	public static void error(String msg, Object args) {

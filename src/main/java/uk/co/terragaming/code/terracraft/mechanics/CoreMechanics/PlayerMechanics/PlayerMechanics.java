@@ -5,15 +5,13 @@ import org.bukkit.Bukkit;
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.InterfaceEventListener;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.listeners.PlayerJoinQuitMessageOverrideListener;
 
 @MechanicParent("CoreMechanics")
 public class PlayerMechanics implements Mechanic {
 	
 	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+	public boolean isEnabled() { return true; }
 	
 	public static PlayerMechanics getInstance() {
 		return (PlayerMechanics) TerraCraft.getMechanic("CoreMechanics.PlayerMechanics");
@@ -21,21 +19,17 @@ public class PlayerMechanics implements Mechanic {
 	
 	// Mechanic Variables
 	
-	private InterfaceEventListener interfaceHandler;
+	
 	
 	// Mechanic Methods
 	
-	public InterfaceEventListener getInterfaceHandler() {
-		return interfaceHandler;
-	}
+	
 	
 	// Mechanic Events
 	
 	@Override
 	public void PreInitialize() {
-		interfaceHandler = new InterfaceEventListener();
-		Bukkit.getPluginManager().registerEvents(interfaceHandler, TerraCraft.plugin);
-		PlayerEffects.init();
+		Bukkit.getPluginManager().registerEvents(new PlayerJoinQuitMessageOverrideListener(), TerraCraft.plugin);
 	}
 	
 	@Override

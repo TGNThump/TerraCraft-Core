@@ -60,6 +60,11 @@ public class SessionManager {
 	
 	public static void updateSession(Account account, boolean active) throws SQLException {
 		AccountSession session = account.getActiveSession();
+		updateSession(session, active);
+	}
+	
+	public static void updateSession(AccountSession session, boolean active) throws SQLException {
+		Account account = session.getAccount();
 		session.setActive(active);
 		if (active) {
 			session.setLastUsed(DateTime.now());

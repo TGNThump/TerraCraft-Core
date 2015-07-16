@@ -6,7 +6,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerMechanics;
 
 public class PlayerInterfaceInstance {
 	
@@ -55,11 +54,11 @@ public class PlayerInterfaceInstance {
 	}
 	
 	public void register() {
-		PlayerMechanics.getInstance().getInterfaceHandler().registerInstance(player.getUniqueId(), this);
+		InterfaceMechanics.getInstance().getInterfaceHandler().registerInstance(player.getUniqueId(), this);
 	}
 	
 	public void deRegister() {
-		PlayerMechanics.getInstance().getInterfaceHandler().removeInstance(player.getUniqueId(), this);
+		InterfaceMechanics.getInstance().getInterfaceHandler().removeInstance(player.getUniqueId(), this);
 	}
 	
 	public void open() {

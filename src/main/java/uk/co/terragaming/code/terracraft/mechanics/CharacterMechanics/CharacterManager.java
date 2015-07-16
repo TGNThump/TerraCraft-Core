@@ -15,19 +15,24 @@ import org.bukkit.inventory.PlayerInventory;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
-import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.events.CharacterChangeEvent;
+import uk.co.terragaming.code.terracraft.events.character.CharacterJoinEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.PlayerEffects;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstanceRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemManager;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstanceRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
+import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.oldItemMechanics;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstanceRegistry;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemMechanics;
 
 public class CharacterManager {
 	
@@ -43,15 +48,14 @@ public class CharacterManager {
 		
 		Player player = account.getPlayer();
 		
-		CharacterChangeEvent event = new CharacterChangeEvent(player, account, character);
-		
-		TerraCraft.server.getPluginManager().callEvent(event);
+		CharacterJoinEvent e = new CharacterJoinEvent(character, player);
+		Bukkit.getPluginManager().callEvent(e);
 		
 		character.getItems().refreshCollection();
 		
 		player.setHealth(character.getCurHitpoints());
 		
-		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
+		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
 		registry.clearItems(character);
 		player.getInventory().clear();
 		
@@ -68,6 +72,8 @@ public class CharacterManager {
 		player.teleport(character.getLocation());
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCustomName(character.getName());
+
+		NickRegistry.setNick(player.getUniqueId(), character.getColouredName());
 		
 		if (!player.isDead()) {
 			PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
@@ -87,6 +93,10 @@ public class CharacterManager {
 					return;
 				Player player = p.getPlayer();
 				PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
+				if (PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE)) {
+					player.sendMessage(Txt.parse("[<l>TerraCraft<r>] Failed to remove invulnerability."));
+					return;
+				}
 				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire")));
 			}
 			
@@ -95,13 +105,13 @@ public class CharacterManager {
 		player.setCanPickupItems(true);
 		PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
 		
-		account.setActiveCharacter(character);
+		account.setActiveCharacter(character);	
 	}
 	
 	private static void applyCharacterInventory(Player player, Character character) {
 		PlayerInventory inventory = player.getInventory();
 		
-		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
+		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
 		
 		ItemStack[] armour = new ItemStack[4];
 		
@@ -144,7 +154,7 @@ public class CharacterManager {
 	
 	private static void updateCharacterInventory(Player player, Character character) {
 		PlayerInventory inv = player.getInventory();
-		ItemInstanceRegistry registry = ItemMechanics.getInstance().getItemInstanceRegistry();
+		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
 		
 		List<ItemInstance> toUpdate = Lists.newArrayList();
 		
@@ -211,11 +221,11 @@ public class CharacterManager {
 		}
 		
 		try {
-			ItemMechanics.getInstance().getItemInstanceDao().callBatchTasks(new Callable<Void>() {
+			oldItemMechanics.getInstance().getItemInstanceDao().callBatchTasks(new Callable<Void>() {
 				
 				@Override
 				public Void call() throws Exception {
-					Dao<ItemInstance, Integer> dao = ItemMechanics.getInstance().getItemInstanceDao();
+					Dao<ItemInstance, Integer> dao = oldItemMechanics.getInstance().getItemInstanceDao();
 					for (ItemInstance item : toUpdate) {
 						dao.update(item);
 					}

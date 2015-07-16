@@ -30,7 +30,7 @@ public class Lang {
 		add(Language.ENGLISH, "accountUploadFailed", "<b>Failed to uplaod account to database.");
 		add(Language.ENGLISH, "accountDownloadFailed", "<b>Failed to downlaod account from database.");
 		
-		add(Language.ENGLISH, "accountServerMode", "<b>TerraCraft %s is currently '%s'."); // serverName,
+		add(Language.ENGLISH, "accountServerMode", "<b>TerraCraft %s is currently %s."); // serverName,
 																							// serverMode
 		
 		add(Language.ENGLISH, "bifrostAllreadyLinked", "<b>Your account is already linked to a Terra Gaming Network Account.");

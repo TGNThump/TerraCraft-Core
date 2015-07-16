@@ -63,6 +63,7 @@ public class ARChannel extends ARAbstractSelect<Channel> implements ARAllAble<Ch
 			if (channel instanceof WhisperChannel) {
 				continue;
 			}
+			
 			if (channel instanceof PartyChannel) {
 				continue;
 			}

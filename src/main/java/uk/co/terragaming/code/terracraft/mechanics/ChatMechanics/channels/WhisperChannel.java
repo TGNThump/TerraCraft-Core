@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -52,10 +51,8 @@ public class WhisperChannel extends Channel {
 		sender.sendMessage(Txt.parse("[<l>%s<r> to <italic><pink>%s<r>] %s", getTag(), theirName, message));
 		reciever.sendMessage(Txt.parse("[<l>%s<r> from <italic><pink>%s<r>] %s", getTag(), yourName, message));
 		
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-		
-		if (registry.hasAccount(sender)) {
-			Account account = registry.getAccount(sender);
+		if (AccountRegistry.hasAccount(sender)) {
+			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
 			
 			ChatLogger.log(account, character, this, message);

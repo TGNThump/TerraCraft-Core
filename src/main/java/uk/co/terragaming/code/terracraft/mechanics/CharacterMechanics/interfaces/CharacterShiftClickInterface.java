@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
@@ -27,16 +26,14 @@ public class CharacterShiftClickInterface {
 		
 		this.you = you;
 		// this.target = target;
-		
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
-		
-		Character yourChar = registry.getAccount(you).getActiveCharacter();
-		Character targetChar = registry.getAccount(target).getActiveCharacter();
+
+		Character yourChar = AccountRegistry.getAccount(you).getActiveCharacter();
+		Character targetChar = AccountRegistry.getAccount(target).getActiveCharacter();
 		
 		if (yourChar == null || targetChar == null)
 			return;
 		
-		Language lang = registry.getAccount(you).getLanguage();
+		Language lang = AccountRegistry.getAccount(you).getLanguage();
 		
 		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuTrade")), Txt.parse(Lang.get(lang, "characterShiftMenuTradeDesc"), targetChar.getName())), new CallBack("trade", this));
 		

@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
+import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.NotificationChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.PartyChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.WhisperChannel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 
@@ -74,7 +74,6 @@ public class ChannelManager {
 			return null;
 		
 		// If its a playerName / terratag / characterName,
-		AccountRegistry registry = AccountMechanics.getInstance().getRegistry();
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.equals(sender)) {
@@ -84,11 +83,11 @@ public class ChannelManager {
 			if (playerName.equals(name))
 				return getWhisperChannel(sender, playerName, player, 0);
 			
-			if (!registry.hasAccount(player)) {
+			if (!AccountRegistry.hasAccount(player)) {
 				continue;
 			}
 			
-			Account account = registry.getAccount(player);
+			Account account = AccountRegistry.getAccount(player);
 			String terraTag = account.getTerraTag();
 			
 			if (!terraTag.equalsIgnoreCase(playerName)) {
@@ -148,6 +147,9 @@ public class ChannelManager {
 		
 		for (Channel channel : ChannelManager.getChannels()) {
 			if (channel instanceof WhisperChannel) {
+				continue;
+			}
+			if (channel instanceof NotificationChannel) {
 				continue;
 			}
 			if (channel instanceof PartyChannel) {

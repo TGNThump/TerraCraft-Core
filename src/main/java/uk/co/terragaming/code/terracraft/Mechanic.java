@@ -1,18 +1,20 @@
 package uk.co.terragaming.code.terracraft;
 
+import uk.co.terragaming.code.terracraft.exceptions.TerraException;
+
 public interface Mechanic {
 	
 	public boolean isEnabled();
 	
-	public void PreInitialize();
+	public void PreInitialize() throws TerraException;
 	
-	public void Initialize();
+	public void Initialize() throws TerraException;
 	
-	public void PostInitialize();
+	public void PostInitialize() throws TerraException;
 	
-	public void PreDenitialize();
+	public void PreDenitialize() throws TerraException;
 	
-	public void Denitialize();
+	public void Denitialize() throws TerraException;
 	
-	public void PostDenitialize();
+	public void PostDenitialize() throws TerraException;
 }

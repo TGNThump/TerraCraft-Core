@@ -2,11 +2,17 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechani
 
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
+
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
 import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.commands.AccountCommands;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.LoginEventHandler;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.LogoutEventHandler;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.PingEventHandler;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.PreLoginEventHandler;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 
@@ -17,9 +23,7 @@ import com.j256.ormlite.dao.Dao;
 public class AccountMechanics implements Mechanic {
 	
 	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+	public boolean isEnabled() { return true; }
 	
 	public static AccountMechanics getInstance() {
 		return (AccountMechanics) TerraCraft.getMechanic("CoreMechanics.AccountMechanics");
@@ -27,16 +31,12 @@ public class AccountMechanics implements Mechanic {
 	
 	// Mechanic Variables
 	
-	private AccountRegistry accountRegistry;
 	private DatabaseMechanics databaseMechanics;
+	
 	private Dao<Account, Integer> accountsDao;
 	private Dao<AccountSession, Integer> sessionsDao;
 	
 	// Mechanic Methods
-	
-	public AccountRegistry getRegistry() {
-		return accountRegistry;
-	}
 	
 	public Dao<Account, Integer> getAccountsDao() {
 		return accountsDao;
@@ -50,7 +50,7 @@ public class AccountMechanics implements Mechanic {
 	
 	@Override
 	public void PreInitialize() {
-		accountRegistry = new AccountRegistry();
+		new AccountRegistry();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -65,10 +65,17 @@ public class AccountMechanics implements Mechanic {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		AccountEvents.init();
+				
 		AccountManager.init();
 		SessionManager.init();
+		
+		Bukkit.getPluginManager().registerEvents(new PingEventHandler(), TerraCraft.plugin);
+		
+		Bukkit.getPluginManager().registerEvents(new PreLoginEventHandler(), TerraCraft.plugin);
+		Bukkit.getPluginManager().registerEvents(new LoginEventHandler(), TerraCraft.plugin);
+		
+		Bukkit.getPluginManager().registerEvents(new LogoutEventHandler(), TerraCraft.plugin);
+		
 		
 		CommandRegistry.registerCommands(TerraCraft.plugin, new AccountCommands());
 	}

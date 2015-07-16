@@ -9,7 +9,6 @@ import java.util.HashMap;
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicParent;
-import uk.co.terragaming.code.terracraft.exceptions.DatabaseException;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.j256.ormlite.dao.Dao;
@@ -51,6 +50,7 @@ public class DatabaseMechanics implements Mechanic {
 		}
 	}
 	
+	@Deprecated
 	public static void printResultSet(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsmd = rs.getMetaData();
 		
@@ -71,7 +71,10 @@ public class DatabaseMechanics implements Mechanic {
 	public void PreInitialize() {
 		try {
 			database = new Database();
-		} catch (ClassNotFoundException | DatabaseException | SQLException e) {
+			database.getConnection();
+			database.getConnectionPool();
+			database.getConnectionSource();
+		} catch (Throwable e) {
 			TerraLogger.blank();
 			TerraLogger.error("Could not Initialize Database Connection...");
 			e.printStackTrace();
