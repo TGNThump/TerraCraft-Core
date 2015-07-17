@@ -12,6 +12,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
 //import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -47,6 +49,26 @@ public class CharacterCommands {
 		}
 		
 		new CharacterSelectInterface(sender);
+	}
+	
+	@Command("name")
+	@CommandParent("character")
+	@CommandDescription("Set the name of your new  character.")
+	public void onCharName(Player sender, String name){
+		Account account = AccountRegistry.getAccount(sender);
+		if (account == null) return;
+		Character character = account.getActiveCharacter();
+		if (character == null) return;
+		
+		if (!character.getName().equals(account.getTerraTag())){
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You can only change the name of a character once."));
+			return;
+		}
+		
+		character.setName(name);
+		
+		NickRegistry.setNick(sender.getUniqueId(), name);
+		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You successfully changed your name to <n>" + name + "<r>."));
 	}
 	
 }

@@ -98,7 +98,7 @@ public class CommandRegistry {
 			
 		} catch (TerraException e) {
 			for (String string : Txt.wrap(e.getMessages())) {
-				TerraLogger.error("[<l>TerraCraft<r>] " + string);
+				TerraLogger.error(string);
 			}
 			return;
 		}

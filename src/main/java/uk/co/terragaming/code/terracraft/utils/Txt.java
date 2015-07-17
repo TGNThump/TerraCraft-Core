@@ -81,8 +81,9 @@ public class Txt {
 		parseReplacements.put("<logo>", "\u00A73");
 		parseReplacements.put("<n>", "\u00A77");
 		parseReplacements.put("<notice>", "\u00A77");
-		parseReplacements.put("<i>", "\u00A7e");
-		parseReplacements.put("<info>", "\u00A7e");
+		parseReplacements.put("<n>", "\u00A7e");
+		parseReplacements.put("<fg>", "\u00A7a");
+		parseReplacements.put("<group>", "\u00A7a");
 		parseReplacements.put("<g>", "\u00A7a");
 		parseReplacements.put("<good>", "\u00A7a");
 		parseReplacements.put("<b>", "\u00A7c");

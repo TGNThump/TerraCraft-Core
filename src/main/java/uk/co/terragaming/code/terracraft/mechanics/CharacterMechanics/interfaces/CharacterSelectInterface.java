@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.joda.time.DateTime;
 
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.events.character.CharacterLeaveEvent;
@@ -96,8 +97,25 @@ public class CharacterSelectInterface {
 	
 	@Callback
 	public void createNewCharacter() {
-		// TODO: Character Creation
-		// new NewCharacterInterface(player);
+		Account account = AccountRegistry.getAccount(player);
+		Character character = new Character();
+		character.setAccount(account);
+		character.setCreateDate(DateTime.now());
+		character.setLastLoginDate(DateTime.now());
+		character.setLocation(Bukkit.getWorld("TerraCraft_old").getSpawnLocation());
+		character.setName(account.getTerraTag());
+		
+		try {
+			CharacterMechanics.getInstance().getCharacterDao().create(character);
+			account.getCharacters().refreshCollection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			new CharacterSelectInterface(player);
+		}
+		
+		selectCharacter(character.getId());
+		
+		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] You successfully created a new Character, set the characters name by typing <c>/character name <name><r>."));
 	}
 	
 	@Callback

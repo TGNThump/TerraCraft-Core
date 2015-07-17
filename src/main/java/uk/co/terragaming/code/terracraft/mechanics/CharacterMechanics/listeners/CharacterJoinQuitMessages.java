@@ -20,7 +20,7 @@ public class CharacterJoinQuitMessages implements Listener{
 		Player player = event.getPlayer();
 		Character character = event.getCharacter();
 		Channel channel = ChannelManager.getChannel("localNotifications");
-		channel.processChatEvent(player, Txt.parse("<i>" + character.getName() + "<r> has awoken from his slumber."));
+		channel.processChatEvent(player, Txt.parse("<n>" + character.getName() + "<r> has awoken from his slumber."));
 	}
 	
 	@EventHandler
@@ -29,7 +29,7 @@ public class CharacterJoinQuitMessages implements Listener{
 		Character character = event.getCharacter();
 		if (!PlayerEffects.hasEffect(player, PlayerEffect.INVISIBLE)){
 			Channel channel = ChannelManager.getChannel("localNotifications");
-			channel.processChatEvent(player, Txt.parse("<i>" + character.getName() + "<r> has fallen into a deep sleep."));
+			channel.processChatEvent(player, Txt.parse("<n>" + character.getName() + "<r> has fallen into a deep sleep."));
 		}
 	}
 }

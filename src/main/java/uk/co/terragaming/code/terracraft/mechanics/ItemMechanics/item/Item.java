@@ -72,7 +72,7 @@ public abstract class Item {
 		if (hasDurability()){
 			if (isBroken()){
 				item.addLore("<grey><italic>Broken<r>");
-				item.setDurability((short) 0);
+				item.setDurability((short) getIcon().getMaxDurability());
 			} else {
 				double maxDamage = getIcon().getMaxDurability();
 				double percent = (double) getCurrentDurability() / getMaxDurability();

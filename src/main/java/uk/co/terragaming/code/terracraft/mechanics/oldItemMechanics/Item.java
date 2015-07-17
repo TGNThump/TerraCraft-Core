@@ -31,8 +31,8 @@ public class Item {
 	@DatabaseField(canBeNull = false)
 	private ItemQuality quality;
 	
-	@DatabaseField(canBeNull = true, columnName = "bind")
-	private ItemBindType bindType;
+	@DatabaseField(canBeNull = false, columnName = "bind")
+	private ItemBindType bindType = ItemBindType.NONE;
 	
 	@DatabaseField(canBeNull = true, columnName = "class")
 	private ItemClass itemClass;

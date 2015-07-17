@@ -1,6 +1,9 @@
 package uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics;
 
+import org.joda.time.DateTime;
+
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -19,9 +22,13 @@ public class FealtyGroup {
 	@DatabaseField(canBeNull = false, foreign = true, columnName = "patronid")
 	private Character patron;
 	
+	@DatabaseField(canBeNull = false, persisterClass = DateTimePersister.class)
+	private DateTime createDate;
+	
 	@ForeignCollectionField(eager = true, foreignFieldName = "group")
 	private ForeignCollection<FealtyGroupStance> stances;
 
+	public FealtyGroup(){}
 	
 	public Integer getId() {
 		return id;
@@ -60,5 +67,17 @@ public class FealtyGroup {
 	
 	public void setStances(ForeignCollection<FealtyGroupStance> stances) {
 		this.stances = stances;
+	}
+
+
+	
+	public DateTime getCreateDate() {
+		return createDate;
+	}
+
+
+	
+	public void setCreateDate(DateTime createDate) {
+		this.createDate = createDate;
 	}
 }

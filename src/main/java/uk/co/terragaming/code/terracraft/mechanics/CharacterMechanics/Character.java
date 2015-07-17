@@ -1,5 +1,6 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.joda.time.DateTime;
 
@@ -28,61 +29,61 @@ public class Character {
 	private String name;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrStrength;
+	private Integer attrStrength = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrAgility;
+	private Integer attrAgility = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrStamina;
+	private Integer attrStamina = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrSpirit;
+	private Integer attrSpirit = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrResistance;
+	private Integer attrResistance = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrIntellect;
+	private Integer attrIntellect = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer attrVitality;
+	private Integer attrVitality = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer maxHitpoints;
+	private Integer maxHitpoints = 20;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curHitpoints;
+	private Integer curHitpoints = 20;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer maxHunger;
+	private Integer maxHunger = 100;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curHunger;
+	private Integer curHunger = 100;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curSaturation;
+	private Integer curSaturation = 100;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curExhaustion;
+	private Integer curExhaustion = 100;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer maxMana;
+	private Integer maxMana = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curMana;
+	private Integer curMana = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curLevel;
+	private Integer curLevel = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer curExp;
+	private Integer curExp = 0;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer money;
+	private Integer money = 100;
 	
 	@DatabaseField(canBeNull = false)
-	private Integer bankMoney;
+	private Integer bankMoney = 0;
 	
 	@DatabaseField(canBeNull = true, useGetSet = true)
 	private String locWorld;
@@ -128,7 +129,7 @@ public class Character {
 	
 	// Non Database Fields
 	
-	private Location location = TerraCraft.server.getWorlds().get(0).getSpawnLocation();
+	private Location location = Bukkit.getWorld("TerraCraft_old").getSpawnLocation();
 	
 	// Getters
 	

@@ -57,8 +57,10 @@ public class NotificationChannel extends Channel {
 		int squaredDistance = distance * distance;
 		List<Player> list = new ArrayList<Player>();
 		for (Player p : Bukkit.getOnlinePlayers())
-			if (p.getLocation().distanceSquared(loc) < squaredDistance) {
-				list.add(p);
+			if (p.getLocation().getWorld().equals(loc.getWorld())){
+				if (p.getLocation().distanceSquared(loc) < squaredDistance) {
+					list.add(p);
+				}
 			}
 		return list;
 	}

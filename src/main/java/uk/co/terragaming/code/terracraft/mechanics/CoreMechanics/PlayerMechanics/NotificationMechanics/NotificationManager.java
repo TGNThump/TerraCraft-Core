@@ -56,12 +56,12 @@ public class NotificationManager {
 		}
 	}
 	
-	public static void createNotification(Character character, String message) throws TerraException {
+	public static void createNotification(Character character, String message, Object... args) throws TerraException {
 		Account account = character.getAccount();
 		Player player = account.getPlayer();
 		if (player != null){
 			if (account.getActiveCharacter() == character){
-				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + message));
+				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + message, args));
 				return;
 			}
 		}
@@ -69,7 +69,7 @@ public class NotificationManager {
 		Notification notification = new Notification();
 		notification.setAccount(character.getAccount());
 		notification.setCharacter(character);
-		notification.setMessage(message);
+		notification.setMessage(String.format(message, args));
 		try {
 			NotificationMechanics.getInstance().getNotificationDao().create(notification);
 		} catch (SQLException e) {

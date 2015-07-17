@@ -16,6 +16,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.HelpCommand;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.TagArg;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.Perms;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemFactory;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.item.Item;
 import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
@@ -31,6 +32,14 @@ public class StaffItemCommands {
 	@CommandParent("staff")
 	@HelpCommand
 	public void onStaffItemCommand(Player sender, Language language) {
+		if (sender instanceof Player){
+			Account account = AccountRegistry.getAccount((Player) sender);
+			if (account == null) return;
+			if (!(Perms.check(account, 1) || (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT) && Perms.check(account, 2)))){
+				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You do not have permission to access these commands."));
+				return;
+			}
+		}
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(language, "commandHelpUsage", !(sender instanceof Player)), "staff item help"));
 	}
 	
@@ -38,6 +47,14 @@ public class StaffItemCommands {
 	@CommandDescription("Create random Item")
 	@CommandParent("staff item")
 	public void onStaffRandomItemCreate(Player sender){
+		if (sender instanceof Player){
+			Account account = AccountRegistry.getAccount((Player) sender);
+			if (account == null) return;
+			if (!(Perms.check(account, 1) || (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT) && Perms.check(account, 2)))){
+				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You do not have permission to access these commands."));
+				return;
+			}
+		}
 		Item item = ItemFactory.randomItem();
 		sender.getInventory().addItem(item.render());
 	}
@@ -46,6 +63,14 @@ public class StaffItemCommands {
 	@CommandDescription("Create an Item")
 	@CommandParent("staff item")
 	public void onStaffItemCreateCommand(Player sender, @TagArg boolean perm, Integer itemId) {
+		if (sender instanceof Player){
+			Account account = AccountRegistry.getAccount((Player) sender);
+			if (account == null) return;
+			if (!(Perms.check(account, 1) || (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT) && Perms.check(account, 2)))){
+				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You do not have permission to access these commands."));
+				return;
+			}
+		}
 		ItemRegistry registry = oldItemMechanics.getInstance().getItemRegistry();
 		
 		if (registry.hasItem(itemId)) {

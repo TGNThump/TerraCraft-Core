@@ -1,9 +1,13 @@
 package uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics;
 
+import org.bukkit.Bukkit;
+
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.annotations.MechanicRequires;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.listeners.CharacterJoinListener;
+import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.listeners.FealtyGroupEventListener;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -42,6 +46,8 @@ public class FealtyGroupMechanics implements Mechanic {
 		fealtyGroupsDao = (Dao<FealtyGroup, Integer>) databaseMechanics.getDao(FealtyGroup.class);
 		new FealtyGroupRegistry().init();
 		new FealtyGroupManager().init();
+		Bukkit.getPluginManager().registerEvents(new FealtyGroupEventListener(), TerraCraft.plugin);
+		Bukkit.getPluginManager().registerEvents(new CharacterJoinListener(), TerraCraft.plugin);
 	}
 	
 	@Override

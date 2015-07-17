@@ -24,7 +24,6 @@ import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGr
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupRegistry;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.google.common.collect.Lists;
 
@@ -134,11 +133,11 @@ public class FealtyManager {
 		if (you.getPatron() != null)
 			breakFealty(you, you.getPatron());
 		
-		you.setPatron(target);
-		
 		if (FealtyGroupRegistry.isGroupPatron(you)){
 			FealtyGroupManager.destroyFealtyGroup(you);
 		}
+		
+		you.setPatron(target);
 		
 		if (!FealtyGroupRegistry.isGroupPatron(target) && target.getPatron() == null){
 			FealtyGroupManager.createFealtyGroup(target);
@@ -151,7 +150,15 @@ public class FealtyManager {
 			e.printStackTrace();
 		}
 	
-		swearFealtyText(you.getAccount().getPlayer(), you, target.getAccount().getPlayer(), target);
+		if (you.getAccount().getPlayer() == null || target.getAccount().getPlayer() == null){
+			// TODO: Lang...
+			try {
+				NotificationManager.createNotification(you, "You swore fealty to <n>" + target.getName() + "<r>.");
+				NotificationManager.createNotification(target, "<n>" + you.getName() + " swore fealty to you.");
+			} catch (TerraException e) {
+				e.printStackTrace();
+			}
+		} else swearFealtyText(you.getAccount().getPlayer(), you, target.getAccount().getPlayer(), target);
 	}
 	
 	public static void swearFealtyText(Player you, Character yourChar, Player target, Character targetChar) {
@@ -243,9 +250,13 @@ public class FealtyManager {
 		Bukkit.getPluginManager().callEvent(e1);
 		if (e1.isCancelled()) return;
 		
-		you.getAccount().getPlayer().sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(you.getAccount().getLanguage(), "characterBreakFealty"), target.getName()));
-		target.getAccount().getPlayer().sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>" + Lang.get(target.getAccount().getLanguage(), "characterBreakFealtyToYou"), you.getName()));
-		
+		try {
+			NotificationManager.createNotification(you, "<b>" + Lang.get(you.getAccount().getLanguage(), "characterBreakFealty"), target.getName());
+			NotificationManager.createNotification(target, "<b>" + Lang.get(target.getAccount().getLanguage(), "characterBreakFealtyToYou"), you.getName());
+		} catch (TerraException e2) {
+			e2.printStackTrace();
+		}
+
 		Character oldPatron = you.getPatron();
 		
 		you.setPatron(null);
