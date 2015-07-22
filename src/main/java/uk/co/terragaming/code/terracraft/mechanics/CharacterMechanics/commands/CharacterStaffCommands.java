@@ -1,7 +1,5 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.commands;
 
-import java.sql.SQLException;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,21 +49,16 @@ public class CharacterStaffCommands {
 				return;
 			}
 		}
-		try {
-			Account account = AccountRegistry.getAccount(sender);
-			Character character = account.getActiveCharacter();
-			
-			if (character == null) {
-				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
-				return;
-			}
-			
-			CharacterManager.setActiveCharacter(account, character);
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully download character from database."));
-		} catch (SQLException e) {
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>Failed to download character from database."));
-			e.printStackTrace();
+		Account account = AccountRegistry.getAccount(sender);
+		Character character = account.getActiveCharacter();
+		
+		if (character == null) {
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
+			return;
 		}
+		
+		CharacterManager.setActiveCharacter(account, character);
+		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully download character from database."));
 	}
 	
 	@Command({ "upload", "up", "u" })
@@ -80,23 +73,16 @@ public class CharacterStaffCommands {
 				return;
 			}
 		}
-		try {
-			Account account = AccountRegistry.getAccount(sender);
-			Character character = account.getActiveCharacter();
-			
-			if (character == null) {
-				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
-				return;
-			}
-			
-			CharacterManager.updateActiveCharacter(account.getPlayer(), character);
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully uploaded character to database."));
-			
-		} catch (SQLException e) {
-			// TODO: Error Recovery
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>Failed to upload character to database."));
-			e.printStackTrace();
+		Account account = AccountRegistry.getAccount(sender);
+		Character character = account.getActiveCharacter();
+		
+		if (character == null) {
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>No Active Character."));
+			return;
 		}
+		
+		CharacterManager.updateActiveCharacter(account, character);
+		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully uploaded character to database."));
 	}
 	
 	@Command({ "switch", "s" })
@@ -111,18 +97,11 @@ public class CharacterStaffCommands {
 				return;
 			}
 		}
-		try {
-			Account account = AccountRegistry.getAccount(sender);
-			Character character = account.getActiveCharacter();
-			
-			if (character != null) {
-				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
-			}
-			
-		} catch (SQLException e) {
-			// TODO: Error Recovery
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] <b>Failed to upload character to database."));
-			e.printStackTrace();
+		Account account = AccountRegistry.getAccount(sender);
+		Character character = account.getActiveCharacter();
+		
+		if (character != null) {
+			CharacterManager.updateActiveCharacter(account, character);
 		}
 		
 		new CharacterSelectInterface(sender);

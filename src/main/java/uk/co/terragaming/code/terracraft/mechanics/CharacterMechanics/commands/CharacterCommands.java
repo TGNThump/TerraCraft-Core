@@ -1,7 +1,5 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.commands;
 
-import java.sql.SQLException;
-
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
@@ -14,9 +12,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
+//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
 
 public class CharacterCommands {
 	
@@ -26,26 +23,12 @@ public class CharacterCommands {
 		
 		Account account = AccountRegistry.getAccount(sender);
 		
-		try {
-			Character character = account.getActiveCharacter();
-			
-			if (character != null) {
-				CharacterManager.updateActiveCharacter(account.getPlayer(), character);
-			} else {
+		Character character = account.getActiveCharacter();
+		
+		if (character != null) {
+			CharacterManager.updateActiveCharacter(account, character);
+		} else {
 //				ItemManager.cleanUpItemsInInventory(account.getPlayer());
-			}
-			
-		} catch (SQLException e) {
-			// TODO: Error Recovery
-			
-			Language lang = Language.ENGLISH;
-			
-			if (account != null) {
-				lang = account.getLanguage();
-			}
-			
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(lang, "accountUploadFailed")));
-			e.printStackTrace();
 		}
 		
 		new CharacterSelectInterface(sender);
@@ -55,6 +38,10 @@ public class CharacterCommands {
 	@CommandParent("character")
 	@CommandDescription("Set the name of your new  character.")
 	public void onCharName(Player sender, String name){
+		if (name.length() > 14){
+			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Your name must be less than 14 characters."));
+			return;
+		}
 		Account account = AccountRegistry.getAccount(sender);
 		if (account == null) return;
 		Character character = account.getActiveCharacter();

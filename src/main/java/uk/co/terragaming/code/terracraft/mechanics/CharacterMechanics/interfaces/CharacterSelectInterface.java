@@ -1,8 +1,6 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,15 +25,16 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMecha
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.VanishEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterface;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterfaceInstance;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
 import uk.co.terragaming.code.terracraft.utils.CustomItem;
 import uk.co.terragaming.code.terracraft.utils.IconMenu;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 public class CharacterSelectInterface {
 	
 	private final Player player;
+	private final PlayerInterfaceInstance ifaceInstance;
 	
 	public CharacterSelectInterface(Player player) {
 		this.player = player;
@@ -69,30 +68,16 @@ public class CharacterSelectInterface {
 		
 		iface.closable = false;
 		preMenuOpen(player);
-		iface.createInstance(player).open();
+		ifaceInstance = iface.createInstance(player);
+		ifaceInstance.open();
 	}
 	
 	@Callback
 	public void selectCharacter(int charId) {
+		ifaceInstance.close();
+		
 		Account account = AccountRegistry.getAccount(player);
-		
-		HashMap<String, Object> conditions = new HashMap<String, Object>();
-		conditions.put("characterId", charId);
-		conditions.put("accountId", account.getId());
-		
-		try {
-			List<Character> chars = CharacterMechanics.getInstance().getCharacterDao().queryForFieldValues(conditions);
-			
-			for (Character character : chars) {
-				CharacterManager.setActiveCharacter(account, character);
-				break;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			player.kickPlayer(Txt.parse(Lang.get(account.getLanguage(), "internalException")));
-			return;
-		}
+		CharacterManager.setActiveCharacter(account, charId);
 	}
 	
 	@Callback
@@ -125,6 +110,8 @@ public class CharacterSelectInterface {
 		player.setGameMode(GameMode.CREATIVE);
 		player.setAllowFlight(true);
 		PlayerEffects.addEffect(player, PlayerEffect.STAFFMODE);
+		PlayerEffects.removeEffect(player, PlayerEffect.NOCHAT);
+		PlayerEffects.removeEffect(player, PlayerEffect.NOMOVE);
 		if (!VanishEffect.canSeeVanished.contains(player.getUniqueId())) {
 			VanishEffect.canSeeVanished.add(player.getUniqueId());
 			VanishEffect.vanishRefresh(player);
@@ -166,8 +153,10 @@ public class CharacterSelectInterface {
 		player.setExp(0f);
 		player.setAllowFlight(false);
 		PlayerEffects.clearEffects(player);
-		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
+		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
+		PlayerEffects.addEffect(player, PlayerEffect.NOCHAT);
+		PlayerEffects.addEffect(player, PlayerEffect.NOMOVE);
 		NickRegistry.removeNick(player.getUniqueId());
 	}
 	

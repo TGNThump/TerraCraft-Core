@@ -7,10 +7,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
+import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -43,6 +45,7 @@ public class EmoteChannel extends Channel {
 		if (range == -1) {
 			for (UUID uuid : getJoinedPlayers()) {
 				Player reciever = Bukkit.getPlayer(uuid);
+				if (PlayerEffects.hasEffect(reciever, PlayerEffect.NOCHAT)) continue;
 				reciever.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
 			}
 		} else {
@@ -52,6 +55,7 @@ public class EmoteChannel extends Channel {
 					continue;
 				}
 				Player reciever = (Player) entity;
+				if (PlayerEffects.hasEffect(reciever, PlayerEffect.NOCHAT)) continue;
 				if (contains(reciever.getUniqueId())) {
 					reciever.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
 				}

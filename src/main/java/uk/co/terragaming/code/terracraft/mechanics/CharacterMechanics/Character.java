@@ -7,9 +7,8 @@ import org.joda.time.DateTime;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
 
-import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -118,7 +117,7 @@ public class Character {
 	@DatabaseField(canBeNull = true)
 	private String notes;
 	
-	@ForeignCollectionField(eager = true, columnName = "charId", foreignFieldName = "character")
+	@ForeignCollectionField(eager = true, columnName = "charId", foreignFieldName = "owner")
 	private ForeignCollection<ItemInstance> items;
 	
 	@ForeignCollectionField(eager = true, columnName = "patronId", foreignFieldName = "patron")

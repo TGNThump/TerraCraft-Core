@@ -34,28 +34,28 @@ public class TerraLogger {
 	}
 	
 	public static void info(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + Txt.parse(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + Txt.parse(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	
 	public static void debug(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>DEBUG<r>] " + Txt.parse(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>DEBUG<r>] " + Txt.parse(Txt.parse(msg, true), args) + "<r>", true));
 		
 		for (Player player : TerraCraft.server.getOnlinePlayers()) {
 			Account account = AccountRegistry.getAccount(player);
 			
 			if (GroupRegistry.isInGroup(account, GroupRegistry.getGroup(2))) {
-				player.sendMessage(Txt.parse("[<l>DEBUG<r>] " + String.format(msg, args) + "<r>", false));
+				player.sendMessage(Txt.parse("[<l>DEBUG<r>] " + String.format(Txt.parse(msg, false), args) + "<r>", false));
 				break;
 			}
 		}
 	}
 	
 	public static void warn(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>WARN<r>] " + String.format(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>WARN<r>] " + String.format(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	
 	public static void error(String msg, Object args) {
-		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>ERROR<r>] " + String.format(msg, args) + "<r>", true));
+		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>ERROR<r>] " + String.format(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	
 	public static void blank() {

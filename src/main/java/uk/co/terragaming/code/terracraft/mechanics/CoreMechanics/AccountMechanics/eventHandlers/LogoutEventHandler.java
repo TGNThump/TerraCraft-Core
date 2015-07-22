@@ -32,7 +32,7 @@ public class LogoutEventHandler implements Listener{
 			SessionManager.updateSession(account, false);
 			AccountRegistry.removeAccount(account);
 			
-			TerraLogger.info("Uploaded Account Data of %s.", account.getTerraTag());
+			TerraLogger.info("Uploaded Account Data of <n>%s<r>.", account.getTerraTag());
 		} catch (Throwable e) {
 			player.kickPlayer(Lang.get(account.getLanguage(), "internalException"));
 			e.printStackTrace();

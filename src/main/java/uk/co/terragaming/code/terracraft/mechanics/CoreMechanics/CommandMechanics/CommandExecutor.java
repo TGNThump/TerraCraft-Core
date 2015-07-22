@@ -240,7 +240,7 @@ public class CommandExecutor implements TabExecutor {
 				
 				// ... throw a new TerraException - Incorrect Command Usage ...
 				CommandException ex = new CommandException();
-				ex.addMessage("<b>%s", Lang.get(lang, "commandIncorrectUsage", true));
+				ex.addMessage("<b>%s", Lang.get(lang, "commandIncorrectUsage", (sender instanceof ConsoleCommandSender)));
 				ex.addMessage(command.getUsage());
 				throw ex;
 			}
@@ -251,7 +251,7 @@ public class CommandExecutor implements TabExecutor {
 		
 		if (argLength > paramLength) {
 			CommandException ex = new CommandException();
-			ex.addMessage("<b>%s", Lang.get(lang, "commandIncorrectUsage", true));
+			ex.addMessage("<b>%s", Lang.get(lang, "commandIncorrectUsage", (sender instanceof ConsoleCommandSender)));
 			ex.addMessage(command.getUsage());
 			throw ex;
 		}

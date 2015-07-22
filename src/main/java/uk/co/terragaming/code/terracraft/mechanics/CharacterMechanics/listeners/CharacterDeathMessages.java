@@ -47,78 +47,78 @@ public class CharacterDeathMessages implements Listener	{
 
 		switch(victim.getLastDamageCause().getCause()){
 			case BLOCK_EXPLOSION:
-				return "<i>" + victimName + "<b>'s body was found splattered on the ground.";
+				return "<n>" + victimName + "<b>'s body was found splattered on the ground.";
 			case CONTACT:
-				return "<i>" + victimName + "<b> was pricked to death.";
+				return "<n>" + victimName + "<b> was pricked to death.";
 			case DROWNING:
-				return "<i>" + victimName + "<b> was found floating in a pool of water.";
+				return "<n>" + victimName + "<b> was found floating in a pool of water.";
 			case ENTITY_ATTACK:
 				if (killer instanceof Player){
 					killerName = ChatUtils.getName((Player) killer, channel);
 				} else {
 					if (killer.getCustomName() == null) {
-						killerName = "<b>the <i>" + killer.getType().toString().toLowerCase();
+						killerName = "<b>the <n>" + killer.getType().toString().toLowerCase();
 					} else if (killer.getCustomName().isEmpty()) {
-						killerName = "<b>the <i>" + killer.getType().toString().toLowerCase();
+						killerName = "<b>the <n>" + killer.getType().toString().toLowerCase();
 					} else {
 						killerName = ChatColor.BOLD + killer.getCustomName();
 					}
 				}
 				
-				return "<i>" + victimName + "<b> was murdered by <i>" + killerName + "<b>.";
+				return "<n>" + victimName + "<b> was murdered by <n>" + killerName + "<b>.";
 			case ENTITY_EXPLOSION:
 				if (killer instanceof Player){
 					
 					if (((Player) killer).equals(victim)){
-						return "<i>" + victimName + "<b> blew themself up.";
+						return "<n>" + victimName + "<b> blew themself up.";
 					}
 					
 					killerName = ChatUtils.getName((Player) killer, channel);
 				} else {
 					if (killer.getCustomName() == null) {
-						killerName = "<b>the <i>" + killer.getType().toString().toLowerCase();
+						killerName = "<b>the <n>" + killer.getType().toString().toLowerCase();
 					} else if (killer.getCustomName().isEmpty()) {
-						killerName = "<b>the <i>" + killer.getType().toString().toLowerCase();
+						killerName = "<b>the <n>" + killer.getType().toString().toLowerCase();
 					} else {
 						killerName = ChatColor.BOLD + killer.getCustomName();
 					}
 				}
 				
-				return "<i>" + victimName + "<b> was blown up by <i>" + killerName + "<b>.";
+				return "<n>" + victimName + "<b> was blown up by <n>" + killerName + "<b>.";
 			case FALL:
-				return "<i>" + victimName + "<b> fell to their death.";
+				return "<n>" + victimName + "<b> fell to their death.";
 			case FALLING_BLOCK:
-				return "<i>" + victimName + "<b> was crushed by a falling block.";
+				return "<n>" + victimName + "<b> was crushed by a falling block.";
 			case FIRE:
-				return "<i>" + victimName + "<b> burned to death.";
+				return "<n>" + victimName + "<b> burned to death.";
 			case FIRE_TICK:
-				return "<i>" + victimName + "<b> burned to death.";
+				return "<n>" + victimName + "<b> burned to death.";
 			case LAVA:
-				return "<i>" + victimName + "<b> fell into the lava.";
+				return "<n>" + victimName + "<b> fell into the lava.";
 			case LIGHTNING:
-				return "<i>" + victimName + "<b> was struck by lightning.";
+				return "<n>" + victimName + "<b> was struck by lightning.";
 			case MAGIC:
-				return "<i>" + victimName + "<b> was killed by magic.";
+				return "<n>" + victimName + "<b> was killed by magic.";
 			case MELTING:
 				return "";
 			case POISON:
-				return "<i>" + victimName + "<b> was poisoned.";
+				return "<n>" + victimName + "<b> was poisoned.";
 			case PROJECTILE:
-				return "<i>" + victimName + "<b> was found with an arrow lodged in his head.";
+				return "<n>" + victimName + "<b> was found with an arrow lodged in his head.";
 			case STARVATION:
-				return "<i>" + victimName + "<b> burned to death.";
+				return "<n>" + victimName + "<b> burned to death.";
 			case SUFFOCATION:
-				return "<i>" + victimName + "<b> suffocated in a block.";
+				return "<n>" + victimName + "<b> suffocated in a block.";
 			case SUICIDE:
-				return "<i>" + victimName + "<b> commited suicide.";
+				return "<n>" + victimName + "<b> commited suicide.";
 			case THORNS:
-				return "<i>" + victimName + "<b> was found dead.";
+				return "<n>" + victimName + "<b> was found dead.";
 			case VOID:
-				return "<i>" + victimName + "<b> died.";
+				return "<n>" + victimName + "<b> died.";
 			case WITHER:
-				return "<i>" + victimName + "<b> died.";
+				return "<n>" + victimName + "<b> died.";
 			default:
-				return "<i>" + victimName + "<b> was found dead.";
+				return "<n>" + victimName + "<b> was found dead.";
 		}
 	}
 }

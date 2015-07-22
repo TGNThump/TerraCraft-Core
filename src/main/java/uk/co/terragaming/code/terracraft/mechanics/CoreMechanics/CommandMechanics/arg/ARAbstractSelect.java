@@ -53,7 +53,7 @@ public abstract class ARAbstractSelect<T> extends ARAbstract<T> {
 			List<String> matches = this.getMatchingAltNames(arg, sender, this.getMaxLevenshteinDistanceForArg(arg));
 			
 			if (names.isEmpty()) {
-				exception.addMessage("<i>Note: There is no %s available.", getTypeName());
+				exception.addMessage("<l>Note: There is no %s available.", getTypeName());
 			} else if (!matches.isEmpty() && matches.size() < LIST_COUNT_MAX) {
 				// For some reason the arguments doesn't get parsed.
 				String suggest = Txt.parse(Txt.implodeCommaAnd(matches, "<i>, <h>", " <i>or <h>"), !(sender instanceof Player));

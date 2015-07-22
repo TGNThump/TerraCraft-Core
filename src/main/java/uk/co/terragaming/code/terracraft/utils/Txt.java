@@ -78,16 +78,10 @@ public class Txt {
 		
 		// Color by semantic functionality
 		parseReplacements.put("<l>", "\u00A73");
-		parseReplacements.put("<logo>", "\u00A73");
-		parseReplacements.put("<n>", "\u00A77");
-		parseReplacements.put("<notice>", "\u00A77");
 		parseReplacements.put("<n>", "\u00A7e");
 		parseReplacements.put("<fg>", "\u00A7a");
-		parseReplacements.put("<group>", "\u00A7a");
 		parseReplacements.put("<g>", "\u00A7a");
-		parseReplacements.put("<good>", "\u00A7a");
 		parseReplacements.put("<b>", "\u00A7c");
-		parseReplacements.put("<bad>", "\u00A7c");
 		parseReplacements.put("<r>", "\u00A7r");
 		
 		parseReplacements.put("<k>", "\u00A7b");
@@ -163,17 +157,12 @@ public class Txt {
 		consoleParseReplacements.put("<em>", "");
 		consoleParseReplacements.put("<reset>", ConsoleColor.RESET);
 		
-		// Color by semantic functionality
+		// Color by semantic functionality		
 		consoleParseReplacements.put("<l>", ConsoleColor.CYAN);
-		consoleParseReplacements.put("<logo>", ConsoleColor.CYAN);
-		consoleParseReplacements.put("<n>", "");
-		consoleParseReplacements.put("<notice>", "");
-		consoleParseReplacements.put("<i>", ConsoleColor.YELLOW);
-		consoleParseReplacements.put("<info>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<n>", ConsoleColor.YELLOW);
+		consoleParseReplacements.put("<fg>", ConsoleColor.MAGENTA);
 		consoleParseReplacements.put("<g>", ConsoleColor.GREEN);
-		consoleParseReplacements.put("<good>", ConsoleColor.GREEN);
 		consoleParseReplacements.put("<b>", ConsoleColor.RED);
-		consoleParseReplacements.put("<bad>", ConsoleColor.RED);
 		consoleParseReplacements.put("<r>", ConsoleColor.RESET);
 		
 		consoleParseReplacements.put("<k>", ConsoleColor.CYAN);

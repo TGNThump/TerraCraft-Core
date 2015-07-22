@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -17,52 +15,127 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.events.character.CharacterJoinEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.LoadingMode;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
-import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstanceRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
-import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.oldItemMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemInstanceRegistry;
+import uk.co.terragaming.code.terracraft.utils.ItemUtils;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstance;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemInstanceRegistry;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemMechanics;
+
 
 public class CharacterManager {
 	
 	private static Dao<Character, Integer> charactersDao;
-	
+
 	public static void init() {
 		charactersDao = CharacterMechanics.getInstance().getCharacterDao();
 	}
 	
-	public static void setActiveCharacter(Account account, Character character) throws SQLException {
+	// Download
+	
+	public static void setActiveCharacter(Account account, Integer charId){
+		Player player = account.getPlayer();
+		LoadingMode.activeFor(player);
 		
-		downloadCharacter(character, account);
+		Bukkit.getScheduler().runTaskAsynchronously(TerraCraft.plugin, new Runnable(){
+
+			@Override
+			public void run() {
+				Character character = downloadCharacter(account, charId);
+				applyCharacter(account, character);
+			}
+			
+		});
+	}
+	
+	public static void setActiveCharacter(Account account, Character character){
+		Player player = account.getPlayer();
+		LoadingMode.activeFor(player);
 		
+		Bukkit.getScheduler().runTaskAsynchronously(TerraCraft.plugin, new Runnable(){
+
+			@Override
+			public void run(){
+				downloadCharacter(account, character);
+				applyCharacter(account, character);
+			}
+			
+		});
+	}
+	
+	public static Character downloadCharacter(Account account, Integer charId){
+		try {
+			Character character = CharacterMechanics.getInstance().getCharacterDao().queryForId(charId);
+			downloadCharacter(account, character);
+			return character;
+		} catch (SQLException e) {
+			// TODO: Error Recovery
+			kickPlayerInternalException(account.getPlayer());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static void downloadCharacter(Account account, Character character){
+		try{
+			charactersDao.refresh(character);
+			charactersDao.refresh(character.getPatron());
+			
+			downloadCharacterInventory(character);
+			
+			TerraLogger.info("Downloaded Character Data of <n>" + character.getAccount().getTerraTag() + "<r>'s <n>" + character.getName() + "<r>.");
+		} catch (SQLException e) {
+			// TODO: Error Recovery
+			kickPlayerInternalException(account.getPlayer());
+			e.printStackTrace();
+		}
+	}
+	
+	public static void applyCharacter(Account account, Character character){
+		Player player = account.getPlayer();
+		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable(){
+
+			@Override
+			public void run() {
+				try{
+					applyCharacterSync(account, character);
+					applyCharacterInventory(account, character);
+					LoadingMode.deactiveFor(player);
+					CharacterJoinEvent e = new CharacterJoinEvent(character, player);
+					Bukkit.getPluginManager().callEvent(e);
+					PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
+					player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerability")));
+				} catch (Exception e){
+					// TODO: Error Recovery
+					kickPlayerInternalException(account.getPlayer());
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				if (account.getActiveCharacter() == null) return;
+				if (!account.getActiveCharacter().equals(character)) return;
+				PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
+				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire")));
+			}
+			
+		}, 60);
+	}
+	
+	private static void applyCharacterSync(Account account, Character character){
 		Player player = account.getPlayer();
 		
-		CharacterJoinEvent e = new CharacterJoinEvent(character, player);
-		Bukkit.getPluginManager().callEvent(e);
-		
-		character.getItems().refreshCollection();
-		
 		player.setHealth(character.getCurHitpoints());
-		
-		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
-		registry.clearItems(character);
-		player.getInventory().clear();
-		
-		if (!player.isDead()) {
-			applyCharacterInventory(player, character);
-		}
-		
 		player.setMaxHealth(character.getMaxHitpoints());
 		player.setLevel(character.getCurLevel());
 		player.setExp((float) character.getCurExp() / 100f);
@@ -70,73 +143,54 @@ public class CharacterManager {
 		player.setExhaustion(character.getCurExhaustion());
 		player.setSaturation(character.getCurSaturation());
 		player.teleport(character.getLocation());
-		player.setGameMode(GameMode.SURVIVAL);
 		player.setCustomName(character.getName());
-
+		
 		NickRegistry.setNick(player.getUniqueId(), character.getColouredName());
-		
-		if (!player.isDead()) {
-			PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
-		}
-		
-		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerability")));
-		
-		OfflinePlayer p = player;
-		
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				if (account.getActiveCharacter() == null)
-					return;
-				if (!account.getActiveCharacter().equals(character))
-					return;
-				Player player = p.getPlayer();
-				PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
-				if (PlayerEffects.hasEffect(player, PlayerEffect.INVULNERABLE)) {
-					player.sendMessage(Txt.parse("[<l>TerraCraft<r>] Failed to remove invulnerability."));
-					return;
-				}
-				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire")));
-			}
-			
-		}, 60);
-		
-		player.setCanPickupItems(true);
-		PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
-		
-		account.setActiveCharacter(character);	
+		account.setActiveCharacter(character);
+
 	}
 	
-	private static void applyCharacterInventory(Player player, Character character) {
+	private static void downloadCharacterInventory(Character character) throws SQLException{
+		character.getItems().refreshCollection();
+		for (ItemInstance item : character.getItems()){
+			item.download();
+		}
+	}
+	
+	private static void applyCharacterInventory(Account account, Character character){
+		Player player = account.getPlayer();
 		PlayerInventory inventory = player.getInventory();
-		
-		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
+		inventory.clear();
 		
 		ItemStack[] armour = new ItemStack[4];
 		
 		List<ItemInstance> addLater = Lists.newArrayList();
 		for (ItemInstance item : character.getItems()) {
-			registry.addItemToCharacter(character, item);
+			ItemInstanceRegistry.addItemToCharacter(character, item);
+			
 			if (item.getSlotId() == null) {
 				addLater.add(item);
 				continue;
 			}
 			
 			if (item.getSlotId() >= inventory.getSize()) {
-				armour[item.getSlotId() - inventory.getSize()] = item.getItemStack();
+				armour[item.getSlotId() - inventory.getSize()] = item.render();
 				continue;
 			}
 			
-			inventory.setItem(item.getSlotId(), item.getItemStack());
+			inventory.setItem(item.getSlotId(), item.render());
 		}
 		for (ItemInstance item : addLater) {
-			inventory.addItem(item.getItemStack());
+			inventory.addItem(item.render());
 		}
 		inventory.setArmorContents(armour);
 	}
 	
-	public static void updateActiveCharacter(Player player, Character character) throws SQLException {
+	// Upload
+	
+	public static void updateActiveCharacter(Account account, Character character){
+		Player player = account.getPlayer();
+		
 		character.setLocation(player.getLocation());
 		character.setCurExp(Math.round(player.getExp() * 100));
 		character.setCurHitpoints((int) Math.round(player.getHealth()));
@@ -145,61 +199,70 @@ public class CharacterManager {
 		character.setCurSaturation((int) player.getSaturation());
 		character.setCurLevel(player.getLevel());
 		
-		if (!player.isDead()) {
-			updateCharacterInventory(player, character);
-		}
+		LoadingMode.activeFor(player);
 		
-		updateCharacter(character);
+		List<ItemInstance> toUpload = updateCharacterItems(account, character);
+		
+		Bukkit.getScheduler().runTaskAsynchronously(TerraCraft.plugin, new Runnable(){
+
+			@Override
+			public void run() {
+				try{
+					if (!player.isDead()) {
+						uploadItems(toUpload);
+					}
+					
+					uploadCharacter(account, character);
+					
+				} catch (SQLException e) {
+					// TODO: Error Recovery
+					kickPlayerInternalException(account.getPlayer());
+					e.printStackTrace();
+					return;
+				}
+			}
+			
+		});
+
 	}
 	
-	private static void updateCharacterInventory(Player player, Character character) {
+	private static List<ItemInstance> updateCharacterItems(Account account, Character character){
+		Player player = account.getPlayer();
 		PlayerInventory inv = player.getInventory();
-		ItemInstanceRegistry registry = oldItemMechanics.getInstance().getItemInstanceRegistry();
 		
 		List<ItemInstance> toUpdate = Lists.newArrayList();
+		ArrayList<Integer> items = ItemInstanceRegistry.getCharactersItemIds(character);
 		
-		// Get the items in the characters itemregistry ...
-		@SuppressWarnings("unchecked")
-		ArrayList<Integer> items = (ArrayList<Integer>) registry.getItemIds(character).clone();
-		
-		// ... then for each slot ...
 		for (int slot = 0; slot < inv.getSize() + 4; slot++) {
+			// Get the item stack ...
 			ItemStack is = null;
 			if (slot >= inv.getSize()) {
 				is = inv.getArmorContents()[slot - inv.getSize()];
 			} else {
 				is = inv.getItem(slot);
 			}
-			// If the item is an ItemInstance ...
+			// ... and if the item is an ItemInstance ...
 			
-			if (is == null) {
-				continue;
-			}
-			if (is.getType().equals(Material.AIR)) {
-				continue;
-			}
-			Integer id = ItemManager.getItemInstanceId(is);
-			if (id == null) {
-				continue;
-			}
+			if (is == null) continue;
+			if (is.getType().equals(Material.AIR)) continue;
+			
+			Integer id = ItemUtils.getItemId(is);
+			if (id == null) continue;
 			
 			// If the item is in the characters itemregistry ...
 			if (items.contains(id)) {
-				ItemInstance item = registry.getItem(id);
+				ItemInstance item = ItemInstanceRegistry.get(id);
 				item.setSlotId(slot);
-				item.setCharacter(character);
-				item = ItemManager.updateItemInstance(item, is);
 				items.remove(id);
 				toUpdate.add(item);
 				// ... or if it is not ...
 			} else {
-				if (registry.hasItem(id)) {
-					ItemInstance item = registry.getItem(id);
+				if (ItemInstanceRegistry.has(id)) {
+					ItemInstance item = ItemInstanceRegistry.get(id);
 					item.setSlotId(slot);
-					item.setCharacter(character);
-					item = ItemManager.updateItemInstance(item, is);
-					registry.removeItemFromDropped(item);
-					registry.addItemToCharacter(character, item);
+					item.setOwner(character);
+					ItemInstanceRegistry.removeItemFromDropped(item);
+					ItemInstanceRegistry.addItemToCharacter(character, item);
 					toUpdate.add(item);
 				} else {
 					TerraLogger.error("Could not find item with id " + id + ".");
@@ -208,47 +271,42 @@ public class CharacterManager {
 		}
 		
 		// If there are any items in the registry that were not in the inventory
-		// ...
 		if (items.size() > 0) {
 			for (Integer id : items) {
-				ItemInstance item = registry.getItem(id);
-				item.setCharacter(null);
+				ItemInstance item = ItemInstanceRegistry.get(id);
+				item.setOwner(null);
 				item.setSlotId(null);
-				registry.removeFromCharacter(character, id);
-				registry.addItemToDroped(item);
+				ItemInstanceRegistry.removeItemFromCharacter(character, item);
+				ItemInstanceRegistry.addItemToDropped(item);
 				toUpdate.add(item);
 			}
 		}
 		
-		try {
-			oldItemMechanics.getInstance().getItemInstanceDao().callBatchTasks(new Callable<Void>() {
-				
-				@Override
-				public Void call() throws Exception {
-					Dao<ItemInstance, Integer> dao = oldItemMechanics.getInstance().getItemInstanceDao();
-					for (ItemInstance item : toUpdate) {
-						dao.update(item);
-					}
-					return null;
-				}
-				
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
+		return toUpdate;
+	}
+	
+	public static void uploadItems(List<ItemInstance> items) throws SQLException{
+		for (ItemInstance item : items) {
+			item.upload();
 		}
-		
 	}
 	
-	private static void updateCharacter(Character character) throws SQLException {
+	private static void uploadCharacter(Account account, Character character) throws SQLException{
 		charactersDao.update(character);
-		
-		TerraLogger.info("Uploaded Character Data of " + character.getAccount().getTerraTag() + "'s" + character.getName() + ".");
+		TerraLogger.info("Uploaded Character Data of <n>" + character.getAccount().getTerraTag() + "<r>'s <n>" + character.getName() + "<r>.");
 	}
 	
-	private static void downloadCharacter(Character character, Account account) throws SQLException {
-		charactersDao.refresh(character);
-		charactersDao.refresh(character.getPatron());
-		
-		TerraLogger.info("Downloaded Character Data of " + account.getTerraTag() + "'s" + character.getName() + ".");
+	// Util
+	
+	private static void kickPlayerInternalException(Player player){
+		Bukkit.getScheduler().callSyncMethod(TerraCraft.plugin, new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				player.kickPlayer(Lang.get("internalException"));
+				return true;
+			}
+
+		});
 	}
 }

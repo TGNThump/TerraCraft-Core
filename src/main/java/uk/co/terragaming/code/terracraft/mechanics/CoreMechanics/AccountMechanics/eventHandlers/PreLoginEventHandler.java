@@ -57,7 +57,7 @@ public class PreLoginEventHandler implements Listener{
 			SessionManager.updateSession(session, true);
 			AccountRegistry.addAccount(account, uuid);
 			
-			TerraLogger.info("Downloaded Account Data of %s.", account.getTerraTag());
+			TerraLogger.info("Downloaded Account Data of <n>%s<r>.", account.getTerraTag());
 			
 			event.allow();
 		} catch (TerraException e){
