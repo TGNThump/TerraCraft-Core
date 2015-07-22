@@ -188,6 +188,32 @@ public class CharacterManager {
 	
 	// Upload
 	
+	public static void syncUpdateActiveCharacter(Account account){
+		try {
+			Character character = account.getActiveCharacter();
+			if (character == null) return;
+			Player player = account.getPlayer();
+			
+			character.setLocation(player.getLocation());
+			character.setCurExp(Math.round(player.getExp() * 100));
+			character.setCurHitpoints((int) Math.round(player.getHealth()));
+			character.setCurHunger(player.getFoodLevel());
+			character.setCurExhaustion((int) player.getExhaustion());
+			character.setCurSaturation((int) player.getSaturation());
+			character.setCurLevel(player.getLevel());
+			
+			LoadingMode.activeFor(player);
+			List<ItemInstance> toUpload = updateCharacterItems(account, character);
+			if (!player.isDead()) { uploadItems(toUpload); }
+			uploadCharacter(account, character);
+		} catch (SQLException e) {
+			// TODO: Error Recovery
+			kickPlayerInternalException(account.getPlayer());
+			e.printStackTrace();
+			return;
+		}
+	}
+	
 	public static void updateActiveCharacter(Account account, Character character){
 		Player player = account.getPlayer();
 		
@@ -285,7 +311,7 @@ public class CharacterManager {
 		return toUpdate;
 	}
 	
-	public static void uploadItems(List<ItemInstance> items) throws SQLException{
+	private static void uploadItems(List<ItemInstance> items) throws SQLException{
 		for (ItemInstance item : items) {
 			item.upload();
 		}

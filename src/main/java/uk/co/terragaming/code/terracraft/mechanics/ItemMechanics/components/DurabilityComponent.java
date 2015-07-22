@@ -1,7 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.GlobalProperty;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.LocalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.GlobalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
 
 
 public class DurabilityComponent extends ItemComponent{

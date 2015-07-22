@@ -4,14 +4,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.ItemComponent;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.GlobalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemComponentRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemBaseComponentData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemBaseComponentLink;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemComponentDataEntry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemInstanceComponentData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemInstanceComponentLink;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.GlobalProperty;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.LocalProperty;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.google.common.collect.Lists;

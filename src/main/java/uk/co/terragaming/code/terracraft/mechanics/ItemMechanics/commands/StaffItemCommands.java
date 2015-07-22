@@ -1,5 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.commands;
 
+import java.sql.SQLException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -17,6 +19,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.Perms;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemBase;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ItemFactory;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemBaseRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemInstanceRegistry;
@@ -58,33 +61,33 @@ public class StaffItemCommands {
 		ItemBase iBase = ItemBaseRegistry.get(itemId);
 
 		if (iBase != null) {
-			ItemInstance item = ItemFactory.create(iBase);
 			Account account = AccountRegistry.getAccount(sender);
 			Character character = account.getActiveCharacter();
-			item.setOwner(character);
-			ItemInstanceRegistry.addItemToCharacter(character, item);
+			ItemInstance item = ItemFactory.create(iBase);
 			
-//			if (character == null) {
-////				if (perm) {
-////					ItemMechanicsV1.getInstance().getItemInstanceRegistry().addItemIfAbsent(item);
-////					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Permanent Item: " + item.getColouredName()));
-////				} else {
-////					try {
-////						ItemMechanicsV1.getInstance().getItemInstanceDao().delete(item);
-////					} catch (SQLException e) {
-////						e.printStackTrace();
-////					}
-////					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Temporary Item: " + item.getColouredName()));
-////				}
-//			} else {
-//				if (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT)) {
-
-			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Item <n>%s<r>.", item.getBase().getName()));
-//				} else {
-//					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You cannot spawn items without being in staff mode."));
-//					return;
-//				}
-//			}
+			if (character == null) {
+				if (perm) {
+					
+					ItemInstanceRegistry.addItemToCharacter(character, item);
+					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Item: " + item.getColouredName()));
+				} else {
+					try {
+						ItemMechanics.getInstance().getItemInstanceDao().delete(item);
+						sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Temporary Item: " + item.getColouredName()));
+					} catch (SQLException e) {
+						e.printStackTrace();
+						return;
+					}
+				}
+			} else {
+				if (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT)) {
+					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Spawned Item <n>%s<r>.", item.getBase().getName()));
+					ItemInstanceRegistry.addItemToCharacter(character, item);
+				} else {
+					sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You cannot spawn items without being in staff mode."));
+					return;
+				}
+			}
 			
 			sender.getInventory().addItem(item.render());
 		} else {

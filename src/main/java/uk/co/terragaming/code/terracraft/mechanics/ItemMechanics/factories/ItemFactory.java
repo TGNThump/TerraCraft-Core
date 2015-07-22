@@ -8,13 +8,13 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechani
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemBase;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.ItemComponent;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemBaseRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemComponentRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemInstanceRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemBaseComponentLink;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemInstanceComponentData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemInstanceComponentLink;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.LocalProperty;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;

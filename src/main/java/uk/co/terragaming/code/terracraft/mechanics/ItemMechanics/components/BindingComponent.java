@@ -3,8 +3,8 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 import uk.co.terragaming.code.terracraft.enums.ItemBindType;
 import uk.co.terragaming.code.terracraft.enums.ItemBinding;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.GlobalProperty;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations.LocalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.GlobalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
 
 
 public class BindingComponent extends ItemComponent{

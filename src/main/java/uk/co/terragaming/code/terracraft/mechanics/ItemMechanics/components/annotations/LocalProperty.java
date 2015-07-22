@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ItemMechanicsV2.components.annotations;
+package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
