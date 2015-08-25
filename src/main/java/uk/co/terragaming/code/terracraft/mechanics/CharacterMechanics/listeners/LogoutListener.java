@@ -25,6 +25,6 @@ public class LogoutListener implements Listener {
 		CharacterLeaveEvent e1 = new CharacterLeaveEvent(activeCharacter, player);
 		Bukkit.getServer().getPluginManager().callEvent(e1);
 		
-		CharacterManager.updateActiveCharacter(account, account.getActiveCharacter());
+		CharacterManager.updateActiveCharacter(account, account.getActiveCharacter(), false);
 	}	
 }

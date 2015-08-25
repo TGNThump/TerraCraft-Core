@@ -1,0 +1,60 @@
+package uk.co.terragaming.code.terracraft.mechanics.WorldMechanics;
+
+import java.sql.SQLException;
+
+import uk.co.terragaming.code.terracraft.Mechanic;
+import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.exceptions.TerraException;
+
+
+public class WorldMechanics implements Mechanic{
+	
+	@Override
+	public boolean isEnabled(){ return true; }
+	
+	public static WorldMechanics getInstance(){
+		return (WorldMechanics) TerraCraft.getMechanic("WorldMechanics");
+	}
+	
+	// Mechanic Variables
+	
+	// Mechanics Methods
+	
+	// Mechanic Events
+	
+	@Override
+	public void PreInitialize() {
+		
+	}
+	
+	@Override
+	public void Initialize() throws TerraException{
+		try {
+			WorldManager.loadWorlds();
+			WorldManager.loadWorldContainers();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new TerraException();
+		}
+	}
+	
+	@Override
+	public void PostInitialize() {
+		
+	}
+	
+	@Override
+	public void PreDenitialize() {
+		
+	}
+	
+	@Override
+	public void Denitialize() {
+		
+	}
+	
+	@Override
+	public void PostDenitialize() {
+		
+	}
+}

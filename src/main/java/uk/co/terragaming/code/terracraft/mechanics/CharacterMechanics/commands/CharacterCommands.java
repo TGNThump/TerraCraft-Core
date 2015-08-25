@@ -25,13 +25,10 @@ public class CharacterCommands {
 		
 		Character character = account.getActiveCharacter();
 		
-		if (character != null) {
-			CharacterManager.updateActiveCharacter(account, character);
-		} else {
-//				ItemManager.cleanUpItemsInInventory(account.getPlayer());
-		}
-		
-		new CharacterSelectInterface(sender);
+		if (character != null)
+			CharacterManager.updateActiveCharacter(account, character, true);
+		else
+			new CharacterSelectInterface(account.getPlayer());
 	}
 	
 	@Command("name")

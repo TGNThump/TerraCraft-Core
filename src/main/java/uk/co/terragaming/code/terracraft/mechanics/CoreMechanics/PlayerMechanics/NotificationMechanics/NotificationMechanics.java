@@ -39,12 +39,11 @@ public class NotificationMechanics implements Mechanic {
 	public void PreInitialize() {
 		
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();
-		notificationDao = (Dao<Notification, Integer>) databaseMechanics.getDao(Notification.class);
+		notificationDao = databaseMechanics.getDao(Notification.class);
 		try {
 			notificationDao.setObjectCache(true);
 		} catch (SQLException e) {

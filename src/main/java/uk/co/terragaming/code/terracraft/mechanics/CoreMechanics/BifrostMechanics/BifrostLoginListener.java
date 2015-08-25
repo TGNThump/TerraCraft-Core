@@ -26,8 +26,7 @@ import com.j256.ormlite.dao.Dao;
 public class BifrostLoginListener implements Listener {
 	
 	private Dao<AccountSession, Integer> sessionsDao;
-	
-	@SuppressWarnings("unchecked")
+
 	public BifrostLoginListener() {
 		DatabaseMechanics databaseMechanics = DatabaseMechanics.getInstance();
 		sessionsDao = (Dao<AccountSession, Integer>) databaseMechanics.getDao(AccountSession.class);

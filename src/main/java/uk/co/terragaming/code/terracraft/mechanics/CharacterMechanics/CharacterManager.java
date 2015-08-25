@@ -1,12 +1,10 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -14,13 +12,13 @@ import org.bukkit.inventory.PlayerInventory;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.events.character.CharacterJoinEvent;
+import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.LoadingMode;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemInstanceRegistry;
-import uk.co.terragaming.code.terracraft.utils.ItemUtils;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.RenderComponent;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -151,12 +149,9 @@ public class CharacterManager {
 	}
 	
 	private static void downloadCharacterInventory(Character character) throws SQLException{
-		character.getItems().refreshCollection();
-		for (ItemInstance item : character.getItems()){
-			item.download();
-		}
+		character.getContainer().refresh();
 	}
-	
+
 	private static void applyCharacterInventory(Account account, Character character){
 		Player player = account.getPlayer();
 		PlayerInventory inventory = player.getInventory();
@@ -164,9 +159,9 @@ public class CharacterManager {
 		
 		ItemStack[] armour = new ItemStack[4];
 		
-		List<ItemInstance> addLater = Lists.newArrayList();
-		for (ItemInstance item : character.getItems()) {
-			ItemInstanceRegistry.addItemToCharacter(character, item);
+		List<Item> addLater = Lists.newArrayList();
+		for (Item item : character.getContainer()) {
+			//ItemInstanceRegistry.addItemToCharacter(character, item);
 			
 			if (item.getSlotId() == null) {
 				addLater.add(item);
@@ -174,14 +169,14 @@ public class CharacterManager {
 			}
 			
 			if (item.getSlotId() >= inventory.getSize()) {
-				armour[item.getSlotId() - inventory.getSize()] = item.render();
+				armour[item.getSlotId() - inventory.getSize()] = item.as(RenderComponent.class).render();
 				continue;
 			}
 			
-			inventory.setItem(item.getSlotId(), item.render());
+			inventory.setItem(item.getSlotId(), item.as(RenderComponent.class).render());
 		}
-		for (ItemInstance item : addLater) {
-			inventory.addItem(item.render());
+		for (Item item : addLater) {
+			inventory.addItem(item.as(RenderComponent.class).render());
 		}
 		inventory.setArmorContents(armour);
 	}
@@ -203,8 +198,8 @@ public class CharacterManager {
 			character.setCurLevel(player.getLevel());
 			
 			LoadingMode.activeFor(player);
-			List<ItemInstance> toUpload = updateCharacterItems(account, character);
-			if (!player.isDead()) { uploadItems(toUpload); }
+			//List<Item> toUpload = updateCharacterItems(account, character);
+			//if (!player.isDead()) { uploadItems(toUpload); }
 			uploadCharacter(account, character);
 		} catch (SQLException e) {
 			// TODO: Error Recovery
@@ -214,7 +209,7 @@ public class CharacterManager {
 		}
 	}
 	
-	public static void updateActiveCharacter(Account account, Character character){
+	public static void updateActiveCharacter(Account account, Character character, Boolean showInterface){
 		Player player = account.getPlayer();
 		
 		character.setLocation(player.getLocation());
@@ -227,18 +222,31 @@ public class CharacterManager {
 		
 		LoadingMode.activeFor(player);
 		
-		List<ItemInstance> toUpload = updateCharacterItems(account, character);
+	//	List<Item> toUpload = updateCharacterItems(account, character);
 		
 		Bukkit.getScheduler().runTaskAsynchronously(TerraCraft.plugin, new Runnable(){
 
 			@Override
 			public void run() {
 				try{
-					if (!player.isDead()) {
-						uploadItems(toUpload);
-					}
+//					if (!player.isDead()) {
+//					//	uploadItems(toUpload);
+//					}
+
+					character.getContainer().update();
 					
 					uploadCharacter(account, character);
+					
+					if (showInterface)
+						Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable(){
+
+							@Override
+							public void run() {
+								if (account.getPlayer() != null)
+									new CharacterSelectInterface(account.getPlayer());
+							}
+							
+						});
 					
 				} catch (SQLException e) {
 					// TODO: Error Recovery
@@ -252,70 +260,73 @@ public class CharacterManager {
 
 	}
 	
-	private static List<ItemInstance> updateCharacterItems(Account account, Character character){
-		Player player = account.getPlayer();
-		PlayerInventory inv = player.getInventory();
-		
-		List<ItemInstance> toUpdate = Lists.newArrayList();
-		ArrayList<Integer> items = ItemInstanceRegistry.getCharactersItemIds(character);
-		
-		for (int slot = 0; slot < inv.getSize() + 4; slot++) {
-			// Get the item stack ...
-			ItemStack is = null;
-			if (slot >= inv.getSize()) {
-				is = inv.getArmorContents()[slot - inv.getSize()];
-			} else {
-				is = inv.getItem(slot);
-			}
-			// ... and if the item is an ItemInstance ...
-			
-			if (is == null) continue;
-			if (is.getType().equals(Material.AIR)) continue;
-			
-			Integer id = ItemUtils.getItemId(is);
-			if (id == null) continue;
-			
-			// If the item is in the characters itemregistry ...
-			if (items.contains(id)) {
-				ItemInstance item = ItemInstanceRegistry.get(id);
-				item.setSlotId(slot);
-				items.remove(id);
-				toUpdate.add(item);
-				// ... or if it is not ...
-			} else {
-				if (ItemInstanceRegistry.has(id)) {
-					ItemInstance item = ItemInstanceRegistry.get(id);
-					item.setSlotId(slot);
-					item.setOwner(character);
-					ItemInstanceRegistry.removeItemFromDropped(item);
-					ItemInstanceRegistry.addItemToCharacter(character, item);
-					toUpdate.add(item);
-				} else {
-					TerraLogger.error("Could not find item with id " + id + ".");
-				}
-			}
-		}
-		
-		// If there are any items in the registry that were not in the inventory
-		if (items.size() > 0) {
-			for (Integer id : items) {
-				ItemInstance item = ItemInstanceRegistry.get(id);
-				item.setOwner(null);
-				item.setSlotId(null);
-				ItemInstanceRegistry.removeItemFromCharacter(character, item);
-				ItemInstanceRegistry.addItemToDropped(item);
-				toUpdate.add(item);
-			}
-		}
-		
-		return toUpdate;
-	}
+//	private static List<Item> updateCharacterItems(Account account, Character character){
+//		Player player = account.getPlayer();
+//		PlayerInventory inv = player.getInventory();
+//		
+//		List<Item> toUpdate = Lists.newArrayList();
+//		ArrayList<Integer> items = ItemInstanceRegistry.getCharactersItemIds(character);
+//		
+//		for (int slot = 0; slot < inv.getSize() + 4; slot++) {
+//			// Get the item stack ...
+//			ItemStack is = null;
+//			if (slot >= inv.getSize()) {
+//				is = inv.getArmorContents()[slot - inv.getSize()];
+//			} else {
+//				is = inv.getItem(slot);
+//			}
+//			// ... and if the item is an ItemInstance ...
+//			
+//			if (is == null) continue;
+//			if (is.getType().equals(Material.AIR)) continue;
+//			
+//			Integer id = ItemUtils.getItemId(is);
+//			if (id == null) continue;
+//			
+//			// If the item is in the characters itemregistry ...
+//			if (items.contains(id)) {
+//				ItemInstance item = ItemInstanceRegistry.get(id);
+//				item.setOwner(character);
+//				item.setSlotId(slot);
+//				item.setAmount(is.getAmount());
+//				items.remove(id);
+//				toUpdate.add(item);
+//				// ... or if it is not ...
+//			} else {
+//				if (ItemInstanceRegistry.has(id)) {
+//					ItemInstance item = ItemInstanceRegistry.get(id);
+//					item.setSlotId(slot);
+//					item.setOwner(character);
+//					item.setAmount(is.getAmount());
+//					ItemInstanceRegistry.removeItemFromDropped(item);
+//					ItemInstanceRegistry.addItemToCharacter(character, item);
+//					toUpdate.add(item);
+//				} else {					
+//					TerraLogger.error("Could not find item with id " + id + ".");
+//				}
+//			}
+//		}
+//		
+//		// If there are any items in the registry that were not in the inventory
+//		if (items.size() > 0) {
+//			for (Integer id : items) {
+//				ItemInstance item = ItemInstanceRegistry.get(id);
+//				item.setOwner(null);
+//				item.setSlotId(null);
+//				ItemInstanceRegistry.removeItemFromCharacter(character, item);
+//				ItemInstanceRegistry.addItemToDropped(item);
+//				toUpdate.add(item);
+//			}
+//		}
+//		
+//		return toUpdate;
+//	}
 	
-	private static void uploadItems(List<ItemInstance> items) throws SQLException{
-		for (ItemInstance item : items) {
-			item.upload();
-		}
-	}
+//	private static void uploadItems(List<Item> items) throws SQLException{
+//		for (ItemInstance item : items) {
+//			item.upload();
+//		}
+//	}
 	
 	private static void uploadCharacter(Account account, Character character) throws SQLException{
 		charactersDao.update(character);

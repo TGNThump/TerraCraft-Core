@@ -38,12 +38,11 @@ public class FealtyGroupMechanics implements Mechanic {
 	public void PreInitialize() {
 		
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();
-		fealtyGroupsDao = (Dao<FealtyGroup, Integer>) databaseMechanics.getDao(FealtyGroup.class);
+		fealtyGroupsDao = databaseMechanics.getDao(FealtyGroup.class);
 		new FealtyGroupRegistry().init();
 		new FealtyGroupManager().init();
 		Bukkit.getPluginManager().registerEvents(new FealtyGroupEventListener(), TerraCraft.plugin);

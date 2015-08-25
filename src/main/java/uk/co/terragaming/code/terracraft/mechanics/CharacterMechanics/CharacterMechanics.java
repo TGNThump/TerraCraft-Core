@@ -47,7 +47,6 @@ public class CharacterMechanics implements Mechanic {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();

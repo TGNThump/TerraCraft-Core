@@ -56,12 +56,11 @@ public class NPCMechanics implements Mechanic {
 		npc.spawn(new Location(Bukkit.getWorld("TerraCraft_old"), 4000, 44, 3725));
 		npc.setProtected(false);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void PostInitialize() throws TerraException {
 		databaseMechanics = DatabaseMechanics.getInstance();
-		zoneDao = (Dao<NPCZone, Integer>) databaseMechanics.getDao(NPCZone.class);
+		zoneDao = databaseMechanics.getDao(NPCZone.class);
 		try {
 			zoneDao.setObjectCache(true);
 		} catch (SQLException e) {

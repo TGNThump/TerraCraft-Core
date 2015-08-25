@@ -34,6 +34,7 @@ public class CommandRegistry {
 	// Register All Commands from a Class
 	
 	public static void registerCommands(JavaPlugin plugin, Object handler) {
+		
 		TerraLogger.blank();
 		TerraLogger.info("Registering Commands in '" + handler.getClass().getSimpleName() + "'");
 		TerraLogger.blank();
@@ -46,6 +47,7 @@ public class CommandRegistry {
 			try {
 				registerMethod(plugin, handler, method);
 			} catch (TerraException e) {
+				e.printStackTrace();
 				break;
 			}
 		}

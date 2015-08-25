@@ -7,8 +7,11 @@ import org.joda.time.DateTime;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.DateTimePersister;
-
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemInstance;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ContainerData;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.CharacterContainer;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ContainerFactory;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -117,8 +120,10 @@ public class Character {
 	@DatabaseField(canBeNull = true)
 	private String notes;
 	
-	@ForeignCollectionField(eager = true, columnName = "charId", foreignFieldName = "owner")
-	private ForeignCollection<ItemInstance> items;
+	@DatabaseField(canBeNull = false, foreign = true, columnName = "containerId")
+	private ContainerData containerData;
+	
+	private Container container;
 	
 	@ForeignCollectionField(eager = true, columnName = "patronId", foreignFieldName = "patron")
 	private ForeignCollection<Character> vassals;
@@ -270,10 +275,6 @@ public class Character {
 	
 	public ForeignCollection<Character> getVassals() {
 		return vassals;
-	}
-	
-	public ForeignCollection<ItemInstance> getItems() {
-		return items;
 	}
 	
 	public Location getLocation() {
@@ -443,6 +444,46 @@ public class Character {
 	
 	// Init
 	
+	
+	public ContainerData getContainerData() {
+		return containerData;
+	}
+
+	
+	public void setContainerData(ContainerData containerData) {
+		this.containerData = containerData;
+	}
+
+	
+	public Container getContainer() {
+		// TODO: Move This Code to CharacterFactory / CharacterManager
+		if (containerData == null){
+			container = ContainerFactory.create(CharacterContainer.class, 39);
+			((CharacterContainer) container).setCharacter(this);
+			container.update();
+			containerData = container.getDao();
+		}
+		
+		if (container == null){
+			containerData.refresh();
+			container = ContainerFactory.create(containerData);
+			((CharacterContainer) container).setCharacter(this);
+			container.update();
+		}
+		
+		if (container.getDao() != containerData){
+			container.setDao(containerData);
+			TerraLogger.error("Container Dao diffrenet from Character Container Dao... Character[getContainer()]");
+			container.refresh();
+		}
+		return container;
+	}
+
+	
+	public void setContainer(Container container) {
+		this.container = container;
+	}
+
 	public Character() {}
 	
 	// Override Methods

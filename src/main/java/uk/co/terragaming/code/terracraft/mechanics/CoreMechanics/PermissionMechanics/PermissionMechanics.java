@@ -48,13 +48,12 @@ public class PermissionMechanics implements Mechanic {
 	@Override
 	public void PreInitialize() {
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();
 		groupsDao = (Dao<Group, Integer>) databaseMechanics.getDao(Group.class);
-		groupMembersDao = (Dao<GroupMembers, Integer>) databaseMechanics.getDao(GroupMembers.class);
+		groupMembersDao = databaseMechanics.getDao(GroupMembers.class);
 	
 		try {
 			groupsDao.setObjectCache(true);

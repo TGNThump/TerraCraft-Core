@@ -33,11 +33,11 @@ public class TerraLogger {
 		debug(string, "");
 	}
 	
-	public static void info(String msg, Object args) {
+	public static void info(String msg, Object... args) {
 		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>INFO<r>] " + Txt.parse(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	
-	public static void debug(String msg, Object args) {
+	public static void debug(String msg, Object... args) {
 		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>DEBUG<r>] " + Txt.parse(Txt.parse(msg, true), args) + "<r>", true));
 		
 		for (Player player : TerraCraft.server.getOnlinePlayers()) {
@@ -50,11 +50,11 @@ public class TerraLogger {
 		}
 	}
 	
-	public static void warn(String msg, Object args) {
+	public static void warn(String msg, Object... args) {
 		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>WARN<r>] " + String.format(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	
-	public static void error(String msg, Object args) {
+	public static void error(String msg, Object... args) {
 		System.out.println(Txt.parse("[<l>TerraCraft<r>][<l>ERROR<r>] " + String.format(Txt.parse(msg, true), args) + "<r>", true));
 	}
 	

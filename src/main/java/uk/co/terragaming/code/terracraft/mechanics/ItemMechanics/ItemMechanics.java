@@ -1,19 +1,12 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.commands.StaffItemCommands;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemComponentRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.registries.ItemInstanceRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.serialization.ItemComponentData;
 import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
-
-import com.j256.ormlite.dao.Dao;
 
 
 public class ItemMechanics implements Mechanic{
@@ -28,28 +21,16 @@ public class ItemMechanics implements Mechanic{
 	// Mechanic Variables
 	
 	private UUID uuid;
-	private DatabaseMechanics databaseMechanics;
+	private ItemSystem itemSystem;
 	
-	private Dao<ItemComponentData, Integer> itemComponentDataDao;
-	private Dao<ItemBase, Integer> itemBaseDao;
-	private Dao<ItemInstance, Integer> itemInstanceDao;
-	
-	// Mechanic Methods
+	// Mechanics Methods
 	
 	public UUID getAttributeUUID() {
 		return uuid;
 	}
 	
-	public Dao<ItemComponentData, Integer> getItemComponentDao(){
-		return itemComponentDataDao;
-	}
-	
-	public Dao<ItemBase, Integer> getItemBaseDao(){
-		return itemBaseDao;
-	}
-	
-	public Dao<ItemInstance, Integer> getItemInstanceDao(){
-		return itemInstanceDao;
+	public ItemSystem getItemSystem(){
+		return itemSystem;
 	}
 	
 	// Mechanic Events
@@ -57,38 +38,12 @@ public class ItemMechanics implements Mechanic{
 	@Override
 	public void PreInitialize() {
 		uuid = AttributeUtil.computeUUID("TerraGamingNetwork-TerraCraft");
+		itemSystem = new ItemSystem();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public void Initialize() {
-		databaseMechanics = DatabaseMechanics.getInstance();
-		itemComponentDataDao = (Dao<ItemComponentData, Integer>) databaseMechanics.getDao(ItemComponentData.class);
-		try {
-			itemComponentDataDao.setObjectCache(true);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void Initialize(){
 		
-		itemBaseDao = (Dao<ItemBase, Integer>) databaseMechanics.getDao(ItemBase.class);
-		itemInstanceDao = (Dao<ItemInstance, Integer>) databaseMechanics.getDao(ItemInstance.class);
-	
-		try {
-			itemBaseDao.setObjectCache(true);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		new ItemComponentRegistry().init();
-		new ItemInstanceRegistry().init();
-		
-		ItemComponentRegistry.registerComponents(itemComponentDataDao);
-		
-		try {
-			itemBaseDao.queryForAll();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override

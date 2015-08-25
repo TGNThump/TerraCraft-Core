@@ -1,40 +1,29 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.GlobalProperty;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.properties.Property;
 
 
 public class DurabilityComponent extends ItemComponent{
-	
-	@GlobalProperty
-	public Integer defaultDurability;
-	
-	@LocalProperty
-	public Integer curDurability;
-	
-	@LocalProperty
-	public Integer maxDurability;
-	
-	public DurabilityComponent(){
-		
-	}
+
+	Property<Integer> curDurability = get("curDurability", Integer.class);
+	Property<Integer> maxDurability = get("maxDurability", Integer.class);
 	
 	@Override
-	public String render() {
+	public String render(Integer lvl) {
+		if (lvl != 2) return "";
 		if (isBroken()){
 			return "<grey><italic>Broken<r>";
 		}
-		return "";
+		return null;
 	}
 	
 	public Integer getCurDurability(){
-		if (curDurability == null) curDurability = defaultDurability;
-		return curDurability;
+		return curDurability.get();
 	}
 	
 	public Integer getMaxDurability(){
-		if (maxDurability == null) maxDurability = defaultDurability;
-		return maxDurability;
+		return maxDurability.get();
 	}
 	
 	public boolean isBroken(){
@@ -52,6 +41,15 @@ public class DurabilityComponent extends ItemComponent{
 		if (percent < 0) percent = 0;
 		
 		double durability = (Math.round((1 - percent) * maxDamage));
-		return (short) durability;		
+		return (short) durability;
 	}
+	
+	public void setCurDurability(Integer curDurability){
+		this.curDurability.set(curDurability);
+	}
+	
+	public void setMaxDurability(Integer maxDurability){
+		this.maxDurability.set(maxDurability);
+	}
+	
 }

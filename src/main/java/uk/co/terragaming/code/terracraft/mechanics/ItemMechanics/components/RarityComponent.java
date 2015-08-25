@@ -1,30 +1,20 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 
 import uk.co.terragaming.code.terracraft.enums.ItemRarity;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.GlobalProperty;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.annotations.LocalProperty;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.properties.Property;
 
 
 public class RarityComponent extends ItemComponent{
 
-	@GlobalProperty
-	public ItemRarity defaultRarity;
-	
-	@LocalProperty
-	public ItemRarity curRarity;
-	
-	public RarityComponent(){
-		
-	}
-	
-	@Override 
-	public String render() {
-		return "";
-	}
+	Property<ItemRarity> rarity = get("rarity", ItemRarity.class);
 	
 	public ItemRarity getRarity(){
-		if (curRarity == null) curRarity = defaultRarity;
-		return curRarity;
+		return rarity.get();
+	}
+	
+	public void setRarity(ItemRarity rarity){
+		this.rarity.set(rarity);
 	}
 	
 }

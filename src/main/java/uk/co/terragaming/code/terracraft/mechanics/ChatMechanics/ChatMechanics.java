@@ -99,7 +99,6 @@ public class ChatMechanics implements Mechanic {
 		ChannelManager.addChannel(staff);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void Initialize() {
 		databaseMechanics = DatabaseMechanics.getInstance();

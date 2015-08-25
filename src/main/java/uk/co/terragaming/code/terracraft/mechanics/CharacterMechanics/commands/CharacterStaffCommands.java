@@ -8,7 +8,6 @@ import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.CharacterManager;
-import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
@@ -81,29 +80,7 @@ public class CharacterStaffCommands {
 			return;
 		}
 		
-		CharacterManager.updateActiveCharacter(account, character);
+		CharacterManager.updateActiveCharacter(account, character, false);
 		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Successfully uploaded character to database."));
-	}
-	
-	@Command({ "switch", "s" })
-	@CommandDescription("Switch Character")
-	@CommandParent("staff char")
-	public void onCharSwitchCommand(Player sender) {
-		if (sender instanceof Player){
-			Account account = AccountRegistry.getAccount((Player) sender);
-			if (account == null) return;
-			if (!(Perms.check(account, 1) || (TerraCraft.serverMode.equals(ServerMode.DEVELOPMENT) && Perms.check(account, 2)))){
-				sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You do not have permission to access these commands."));
-				return;
-			}
-		}
-		Account account = AccountRegistry.getAccount(sender);
-		Character character = account.getActiveCharacter();
-		
-		if (character != null) {
-			CharacterManager.updateActiveCharacter(account, character);
-		}
-		
-		new CharacterSelectInterface(sender);
 	}
 }

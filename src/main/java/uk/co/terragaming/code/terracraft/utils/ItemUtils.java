@@ -2,15 +2,25 @@ package uk.co.terragaming.code.terracraft.utils;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R3.Material;
-
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 
 import com.comphenix.attribute.AttributeStorage;
 
 public class ItemUtils {
+	
+	private static ItemSystem ItemSystem = ItemMechanics.getInstance().getItemSystem();
+	
+	public static boolean isItem(ItemStack is){
+		if (is == null) return false;
+		Integer id = getItemId(is);
+		if (id == null) return false;
+		return ItemSystem.has(id);
+	}
 	
 	public static Integer getItemId(ItemStack is){
 		Assert.notNull(is);
@@ -30,5 +40,14 @@ public class ItemUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static Item getItem(ItemStack is){
+		if (is == null) return null;
+		Integer id = ItemUtils.getItemId(is);
+		if (id == null) return null;
+		if (!ItemSystem.has(id)) return null;
+		
+		return ItemSystem.get(id);
 	}
 }

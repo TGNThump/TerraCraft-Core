@@ -37,13 +37,14 @@ public class DatabaseMechanics implements Mechanic {
 		return database.getConnection();
 	}
 	
-	public Dao<?, ?> getDao(Class<?> cl) {
+	@SuppressWarnings("unchecked")
+	public <T> Dao<T, Integer> getDao(Class<T> cl) {
 		if (dataAccessObjects.containsKey(cl))
-			return dataAccessObjects.get(cl);
+			return (Dao<T, Integer>) dataAccessObjects.get(cl);
 		try {
 			Dao<?, ?> dao = DaoManager.createDao(database.getConnectionSource(), cl);
 			dataAccessObjects.put(cl, dao);
-			return dao;
+			return (Dao<T, Integer>) dao;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
