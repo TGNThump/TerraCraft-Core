@@ -72,7 +72,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 				e.printStackTrace();
 			}
 			ItemMechanics.getInstance().getItemSystem().delete(this);
-			TerraLogger.debug("Deleted Item[<p>%s<r>] named '<p>%S<r>' - cleanup - container null", getId(), getName());
+			TerraLogger.debug("Deleted Item[<p>%s<r>] named '<p>%s<r>' - cleanup - container null", getId(), getName());
 			return;
 		}
 		if (containerData == null){
@@ -92,13 +92,16 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	
 	public void refresh(){
 		
-		components = new HashMap<>();
+		components.clear();
 		
 		try {
 			Item.dao.refresh(this);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		if (!ItemSystem.get().has(this))
+			ItemSystem.get().put(this);
 		
 		for (ItemComponentData d : componentData){
 			add(d);

@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponentData;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.utils.Assert;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.Txt;
@@ -48,7 +49,11 @@ public class ComponentFactory {
 			
 			T component = (T) c.newInstance();
 			component.setData(data);
-			component.setItem(dao.getItem());
+			
+			Integer itemId = dao.getItem().getId();
+			Item item = ItemSystem.get().get(itemId);
+			
+			component.setItem(item);
 			component.setDao(dao);
 			component.refresh();
 			

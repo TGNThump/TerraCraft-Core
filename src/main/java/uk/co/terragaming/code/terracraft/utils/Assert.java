@@ -10,6 +10,9 @@ public class Assert {
 	public static void ofType(Object object, Class<?> type){
 		notNull(object);
 		notNull(type);
-		if (!object.getClass().isAssignableFrom(type)) throw new IllegalArgumentException();
+		if (!type.isAssignableFrom(object.getClass())){
+			TerraLogger.error("<p>%s<r> is not assignable from <p>%s<r>", type.getSimpleName(), object.getClass().getSimpleName());
+			throw new IllegalArgumentException();
+		}
 	}
 }

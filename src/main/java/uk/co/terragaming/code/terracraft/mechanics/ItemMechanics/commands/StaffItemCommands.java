@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.enums.ItemBinding;
+import uk.co.terragaming.code.terracraft.enums.ItemBindType;
 import uk.co.terragaming.code.terracraft.enums.ItemRarity;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
@@ -110,7 +110,7 @@ public class StaffItemCommands {
 		DamageComponent damage = i.add(DamageComponent.class);
 		
 		rarity.setRarity(ItemRarity.ARTIFACT);
-		binding.setBinding(ItemBinding.CHARACTER);
+		binding.setBindType(ItemBindType.PICKUP);
 		durability.setMaxDurability(100);
 		durability.setCurDurability(100);
 		damage.setMinDamage(10);

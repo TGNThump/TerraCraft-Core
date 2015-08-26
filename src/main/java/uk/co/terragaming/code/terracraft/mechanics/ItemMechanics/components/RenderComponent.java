@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 public class RenderComponent extends ItemComponent{
 	
 	public ItemStack render(){
+
 		CustomItem item = new CustomItem(getItem().getIcon());
 		item.setName(getColouredName());
 		item.setStackSize(getStackSize());

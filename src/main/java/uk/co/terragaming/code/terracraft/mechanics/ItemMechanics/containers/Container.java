@@ -122,7 +122,7 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	}
 
 	public boolean addItem(Item item) {
-		for (int i = 0; i <= size; i++){
+		for (int i = 0; i < size; i++){
 			if (items.containsKey(i)) continue;
 			items.put(i, item);
 			item.setSlotId(i);

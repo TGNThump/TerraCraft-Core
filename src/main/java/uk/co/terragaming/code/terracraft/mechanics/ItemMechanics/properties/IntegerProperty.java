@@ -33,8 +33,8 @@ public class IntegerProperty extends Property<Integer>{
 	public void decode(Object value) {
 		this.value = null;
 		if (value == null) return;
-		Assert.ofType(value, Integer.class);
-		this.value = (Integer) value;
+		Assert.ofType(value, Number.class);
+		this.value = value != null ? ((Number)value).intValue() : null;;
 	}
 	
 }

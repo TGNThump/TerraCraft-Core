@@ -48,14 +48,14 @@ public class CommandMechanics implements Mechanic {
 	
 	@Override
 	public void Initialize() {
-		if (TerraCraft.debugMode) {
-			CommandRegistry.registerCommands(TerraCraft.plugin, new TestCommand());
-		}
+		
 	}
 	
 	@Override
 	public void PostInitialize() {
-		
+		if (TerraCraft.debugMode) {
+			CommandRegistry.registerCommands(TerraCraft.plugin, new TestCommand());
+		}
 	}
 	
 	@Override

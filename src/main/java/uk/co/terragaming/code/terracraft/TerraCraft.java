@@ -16,7 +16,7 @@ public class TerraCraft extends JavaPlugin {
 	public static Server server;
 	
 	public static ServerMode serverMode = ServerMode.LOADING;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	
 	@Override
 	public void onEnable() {
