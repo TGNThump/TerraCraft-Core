@@ -2,8 +2,10 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories;
 
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import uk.co.terragaming.code.terracraft.events.item.ItemCreateEvent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
@@ -25,7 +27,7 @@ public class ItemFactory {
 		item.setItemType(typeName);
 		item.setItemClass(className);
 		
-		if (!container.addItem(item)){
+		if (!container.add(item)){
 			TerraLogger.error(Txt.parse("Container '%s' of type '%s' is full...", container.getContainerId(), container.getDao().getType()));
 			item = null;
 			return null;
@@ -40,6 +42,9 @@ public class ItemFactory {
 		}
 	
 		ItemSystem.put(item);
+		
+		ItemCreateEvent event = new ItemCreateEvent(item);
+		Bukkit.getPluginManager().callEvent(event);
 		
 		return item;
 	}

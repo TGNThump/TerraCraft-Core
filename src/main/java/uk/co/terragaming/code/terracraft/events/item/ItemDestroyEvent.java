@@ -4,15 +4,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-public class ItemUseEvent extends Event{
+public class ItemDestroyEvent extends Event{
 
 	private static final HandlerList handlers = new HandlerList();
 	
 	private Item item;
 	
-	public ItemUseEvent(Item item){
+	public ItemDestroyEvent(Item item){
 		this.item = item;
+		
+		TerraLogger.info("Item[<h>%s<r>] Destroyed.", item.getId(), item.getName());
 	}
 	
 	public Item getItem() {

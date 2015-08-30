@@ -73,12 +73,24 @@ public class WorldContainer extends Container{
 	public void setSize(Integer size) {}
 	
 	@Override
-	public boolean addItem(Item item) {
+	public boolean add(Item item) {
 		items.add(item);
 		item.setSlotId(null);
 		item.setContainer(this);
 		item.setContainerData(dao);
 		return true;
+	}
+	
+	@Override
+	public void add(Item item, Integer slot){
+		add(item);
+	}
+	
+	@Override
+	public void remove(Item item){
+		items.remove(item);
+		item.setContainer(null);
+		item.setContainerData(null);
 	}
 	
 }

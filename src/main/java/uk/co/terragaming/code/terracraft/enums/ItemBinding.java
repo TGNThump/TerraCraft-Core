@@ -1,7 +1,7 @@
 package uk.co.terragaming.code.terracraft.enums;
 
 public enum ItemBinding {
-	NONE(null), CHARACTER("Character"), ACCOUNT("Account");
+	NONE("None"), CHARACTER("Character"), ACCOUNT("Account");
 	
 	private final String binding;
 	

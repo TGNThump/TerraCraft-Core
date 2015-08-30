@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.CallbackMethod;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterface;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyMechanics.FealtyManager;
 import uk.co.terragaming.code.terracraft.utils.IconMenu;
@@ -35,7 +35,7 @@ public class CharacterShiftClickInterface {
 		
 		Language lang = AccountRegistry.getAccount(you).getLanguage();
 		
-		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuTrade")), Txt.parse(Lang.get(lang, "characterShiftMenuTradeDesc"), targetChar.getName())), new CallBack("trade", this));
+		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuTrade")), Txt.parse(Lang.get(lang, "characterShiftMenuTradeDesc"), targetChar.getName())), new Callback("trade", this));
 		
 		boolean targetIsYourPatron = false;
 		
@@ -45,31 +45,31 @@ public class CharacterShiftClickInterface {
 			}
 		
 		if (!targetIsYourPatron) {
-			iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealty")), Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyDesc"), targetChar.getName()) + (yourChar.getPatron() != null ? Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyBreak"), yourChar.getPatron().getName()) : "")), new CallBack("swearFealty", new FealtyManager(), you, target));
+			iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealty")), Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyDesc"), targetChar.getName()) + (yourChar.getPatron() != null ? Txt.parse(Lang.get(lang, "characterShiftMenuSwearFealtyBreak"), yourChar.getPatron().getName()) : "")), new Callback("swearFealty", new FealtyManager(), you, target));
 		} else {
-			iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealty")), Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealtyDesc"), targetChar.getName())), new CallBack("breakFealty", new FealtyManager(), you, target));
+			iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealty")), Txt.parse(Lang.get(lang, "characterShiftMenuBreakFealtyDesc"), targetChar.getName())), new Callback("breakFealty", new FealtyManager(), you, target));
 		}
 		
-		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuAddFriend")), Txt.parse(Lang.get(lang, "characterShiftMenuAddFriendDesc"), targetChar.getName())), new CallBack("addFriend", this));
+		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuAddFriend")), Txt.parse(Lang.get(lang, "characterShiftMenuAddFriendDesc"), targetChar.getName())), new Callback("addFriend", this));
 		
-		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuAddToParty")), Txt.parse(Lang.get(lang, "characterShiftMenuAddToPartyDesc"), targetChar.getName())), new CallBack("addToParty", this));
+		iface.addIcon(IconMenu.getItem(new ItemStack(Material.MONSTER_EGG), Txt.parse(Lang.get(lang, "characterShiftMenuAddToParty")), Txt.parse(Lang.get(lang, "characterShiftMenuAddToPartyDesc"), targetChar.getName())), new Callback("addToParty", this));
 		
 		iface.createInstance(you).open();
 	}
 	
 	// TODO: Trade
 	
-	@Callback
+	@CallbackMethod
 	public void trade() {
 		you.sendMessage("Trading is not yet implemented.");
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void addFriend() {
 		you.sendMessage("Add as Friend");
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void addToParty() {
 		you.sendMessage("Add To Party");
 	}

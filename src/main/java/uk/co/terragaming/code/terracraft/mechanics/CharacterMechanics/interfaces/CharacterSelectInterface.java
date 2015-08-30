@@ -19,8 +19,8 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.CallBack;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.CallbackMethod;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.VanishEffect;
@@ -50,11 +50,11 @@ public class CharacterSelectInterface {
 		rows = rows + 1;
 		PlayerInterface iface = new PlayerInterface(Txt.parse("<gold>Your Characters"), rows);
 		
-		iface.addIcon(0, 8, IconMenu.getItem(new ItemStack(Material.BOOK_AND_QUILL), ChatColor.GOLD + "New Character", ChatColor.DARK_AQUA + "Click here to create a new RP Character"), new CallBack("createNewCharacter", this));
-		iface.addIcon(0, 7, IconMenu.getItem(new ItemStack(Material.IRON_BARDING), ChatColor.GOLD + "Leave Server", ChatColor.DARK_AQUA + "Click here to leave TerraCraft."), new CallBack("quitGame", this));
+		iface.addIcon(0, 8, IconMenu.getItem(new ItemStack(Material.BOOK_AND_QUILL), ChatColor.GOLD + "New Character", ChatColor.DARK_AQUA + "Click here to create a new RP Character"), new Callback("createNewCharacter", this));
+		iface.addIcon(0, 7, IconMenu.getItem(new ItemStack(Material.IRON_BARDING), ChatColor.GOLD + "Leave Server", ChatColor.DARK_AQUA + "Click here to leave TerraCraft."), new Callback("quitGame", this));
 		
 		if (GroupRegistry.isInGroup(account, GroupRegistry.getGroup(1))){
-			iface.addIcon(0, 6, IconMenu.getItem(new ItemStack(Material.GOLD_HELMET), ChatColor.GOLD + "Enter Staff Mode", ChatColor.DARK_AQUA + "Click here to enter the game in Staff Mode."), new CallBack("staffModeActivate", this));
+			iface.addIcon(0, 6, IconMenu.getItem(new ItemStack(Material.GOLD_HELMET), ChatColor.GOLD + "Enter Staff Mode", ChatColor.DARK_AQUA + "Click here to enter the game in Staff Mode."), new Callback("staffModeActivate", this));
 		}
 		
 		for (Character character : account.getCharacters()) {
@@ -63,7 +63,7 @@ public class CharacterSelectInterface {
 			item.setName(ChatColor.GOLD + character.getName());
 			item.addLore(ChatColor.DARK_AQUA + "Click here to become " + character.getName() + ".");
 			
-			iface.addIcon(item.getItemStack(), new CallBack("selectCharacter", this, character.getId()));
+			iface.addIcon(item.getItemStack(), new Callback("selectCharacter", this, character.getId()));
 		}
 		
 		iface.closable = false;
@@ -72,7 +72,7 @@ public class CharacterSelectInterface {
 		ifaceInstance.open();
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void selectCharacter(int charId) {
 		ifaceInstance.close();
 		
@@ -80,7 +80,7 @@ public class CharacterSelectInterface {
 		CharacterManager.setActiveCharacter(account, charId);
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void createNewCharacter() {
 		Account account = AccountRegistry.getAccount(player);
 		Character character = new Character();
@@ -103,7 +103,7 @@ public class CharacterSelectInterface {
 		player.sendMessage(Txt.parse("[<l>TerraCraft<r>] You successfully created a new Character, set the characters name by typing <c>/character name <name><r>."));
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void staffModeActivate() {
 		Account account = AccountRegistry.getAccount(player);
 		account.setActiveCharacter(null);
@@ -124,7 +124,7 @@ public class CharacterSelectInterface {
 		
 	}
 	
-	@Callback
+	@CallbackMethod
 	public void quitGame() {
 		player.kickPlayer(Txt.parse("<l>Thanks for Playing!"));
 	}

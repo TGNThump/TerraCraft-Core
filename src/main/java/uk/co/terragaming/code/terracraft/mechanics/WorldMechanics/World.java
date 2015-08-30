@@ -1,6 +1,9 @@
 package uk.co.terragaming.code.terracraft.mechanics.WorldMechanics;
 
 import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
@@ -10,6 +13,7 @@ public class World {
 
 	private String name;
 	private org.bukkit.World bWorld;
+	private List<org.bukkit.entity.Item> itemEntities = Lists.newArrayList();
 	
 	public WorldContainer getContainer() {
 		return ItemSystem.get().getDroppedItems(this);
@@ -33,5 +37,9 @@ public class World {
 	
 	public void setBukkitWorld(org.bukkit.World world){
 		this.bWorld = world;
+	}
+
+	public List<org.bukkit.entity.Item> getItemEntities() {
+		return itemEntities;
 	}
 }

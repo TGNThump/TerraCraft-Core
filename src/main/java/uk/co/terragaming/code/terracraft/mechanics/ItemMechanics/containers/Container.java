@@ -110,6 +110,10 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	public void setItems(HashMap<Integer, Item> items) {
 		this.items = items;
 	}
+	
+	public Class<? extends Container> getType(){
+		return getClass();
+	}
 
 	@Override
 	public Iterator<Item> iterator() {
@@ -121,16 +125,27 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 		return id.compareTo(o.getContainerId());
 	}
 
-	public boolean addItem(Item item) {
+	public boolean add(Item item) {
 		for (int i = 0; i < size; i++){
 			if (items.containsKey(i)) continue;
-			items.put(i, item);
-			item.setSlotId(i);
-			item.setContainer(this);
-			item.setContainerData(dao);
+			add(item, i);
 			return true;
 		}
 		return false;
+	}
+	
+	public void add(Item item, Integer slot){
+		items.put(slot, item);
+		item.setSlotId(slot);
+		item.setContainer(this);
+		item.setContainerData(dao);
+	}
+	
+	public void remove(Item item){
+		if (item.getSlotId() == null) return;
+		items.remove(item.getSlotId());
+		item.setContainer(null);
+		item.setContainerData(null);
 	}
 	
 }

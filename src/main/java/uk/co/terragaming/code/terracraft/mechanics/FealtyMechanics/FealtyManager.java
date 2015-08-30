@@ -17,7 +17,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.CallbackMethod;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NotificationMechanics.NotificationManager;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroup;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupManager;
@@ -112,7 +112,7 @@ public class FealtyManager {
 	
 	// Swear and Break Fealty
 	
-	@Callback
+	@CallbackMethod
 	public static void swearFealty(Player you, Player target){
 		Character yourChar = AccountRegistry.getAccount(you).getActiveCharacter();
 		Character targetChar = AccountRegistry.getAccount(target).getActiveCharacter();
@@ -237,7 +237,7 @@ public class FealtyManager {
 		}, delay * 6);
 	}
 	
-	@Callback
+	@CallbackMethod
 	public static void breakFealty(Player you, Player target){
 		Character yourChar = AccountRegistry.getAccount(you).getActiveCharacter();
 		Character targetChar = AccountRegistry.getAccount(target).getActiveCharacter();

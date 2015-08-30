@@ -2,11 +2,13 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.commands.StaffItemCommands;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events.ItemEvents;
 import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
 
 
@@ -43,17 +45,13 @@ public class ItemMechanics implements Mechanic{
 	}
 	
 	@Override
-	public void Initialize() throws TerraException{
-//		try {
-//			Item.dao.setObjectCache(true);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			throw new TerraException();
-//		}
+	public void Initialize(){
+		
 	}
 	
 	@Override
 	public void PostInitialize() {
+		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
 		CommandRegistry.registerCommands(TerraCraft.plugin, new StaffItemCommands());
 	}
 	

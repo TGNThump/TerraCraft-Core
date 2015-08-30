@@ -43,7 +43,7 @@ public class ContainerData {
 	public void update() {
 		try {
 			dao.update(this);
-			items.updateAll();
+//			items.updateAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -38,7 +38,7 @@ public class PlayerInterfaceInstance {
 			}
 		});
 		
-		iface.items.get(slot).getValue().invoke();
+		iface.items.get(slot).getValue().call();
 	}
 	
 	public void create() {

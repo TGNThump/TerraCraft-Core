@@ -4,8 +4,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.HandlerList;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.events.item.ItemDestroyEvent;
+import uk.co.terragaming.code.terracraft.events.item.ItemMoveEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.persisters.MaterialPersister;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
@@ -66,12 +71,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	
 	public void update(){
 		if (container == null || containerData == null){
-			try {
-				Item.dao.delete(this);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			ItemMechanics.getInstance().getItemSystem().delete(this);
+			destroy();
 			TerraLogger.debug("Deleted Item[<p>%s<r>] named '<p>%s<r>' - cleanup - container null", getId(), getName());
 			return;
 		}
@@ -119,6 +119,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		if (has(type)){ remove(type); }
 		ItemComponent component = ComponentFactory.create(type, this);
 		components.put(type, component);
+		Bukkit.getPluginManager().registerEvents(component, TerraCraft.plugin);
 		return (T) component;
 	}
 	
@@ -131,6 +132,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		ItemComponent component = ComponentFactory.create(data);
 		components.put(component.getClass(), component);
 		refresh(component);
+		Bukkit.getPluginManager().registerEvents(component, TerraCraft.plugin);
 		return (T) component;
 	}
 	
@@ -145,8 +147,10 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	
 	public boolean remove(Class<? extends ItemComponent> type){
 		if (!has(type)) return false;
-		componentData.remove(components.get(type).dao);
+		ItemComponent component = components.get(type);
+		componentData.remove(component.dao);
 		components.remove(type);
+		HandlerList.unregisterAll(component);
 		return true;
 	}
 	
@@ -240,6 +244,36 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	@Override
 	public Iterator<ItemComponent> iterator() {
 		return components.values().iterator();
+	}
+
+	public boolean moveTo(Container to) {
+		ItemMoveEvent event = new ItemMoveEvent(this, container, to);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return false;
+		
+		Integer oldSlot = getSlotId();
+		Container oldContainer = container;
+		container.remove(this);
+		Boolean success = to.add(this);
+		if (success){
+			update();
+			return true;
+		} else {
+			oldContainer.add(this, oldSlot);
+			return false;
+		}
+	}
+	
+	public void destroy(){
+		ItemDestroyEvent event = new ItemDestroyEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		try {
+			Item.dao.delete(this);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		ItemMechanics.getInstance().getItemSystem().delete(this);
 	}
 	
 }

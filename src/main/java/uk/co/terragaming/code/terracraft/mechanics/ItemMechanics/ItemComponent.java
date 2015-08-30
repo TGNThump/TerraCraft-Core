@@ -3,6 +3,7 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.bukkit.event.Listener;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,7 +12,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.Prope
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.properties.Property;
 
 @SuppressWarnings("unchecked")
-public abstract class ItemComponent implements Iterable<Property<?>>{
+public abstract class ItemComponent implements Iterable<Property<?>>, Listener{
 
 	public ItemComponentData dao;
 	

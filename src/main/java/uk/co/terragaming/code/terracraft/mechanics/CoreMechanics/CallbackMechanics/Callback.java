@@ -3,23 +3,24 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechan
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.Callback;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.CallbackMethod;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
-public class CallBack {
+public class Callback {
 	
 	private Method method;
 	private Object object;
 	private Object[] args;
 	
-	public CallBack(String methodName, Object object, Object... args) {
-		Method[] methods = object.getClass().getMethods();
+	public Callback(String methodName, Object scope, Object... args) {
+		Class<?> c = scope.getClass();
+		Method[] methods = c.getDeclaredMethods();
 		
-		this.object = object;
+		this.object = scope;
 		this.args = args;
 		
 		for (Method method : methods) {
-			if (!method.isAnnotationPresent(Callback.class)) {
+			if (!method.isAnnotationPresent(CallbackMethod.class)) {
 				continue;
 			}
 			if (method.getName() != methodName) {
@@ -30,10 +31,11 @@ public class CallBack {
 			return;
 		}
 		
-		TerraLogger.error("Callback Method not Found: " + methodName + " in " + object.getClass().getSimpleName());
+		TerraLogger.error("Callback Method not Found: " + methodName + " in " + c.getSimpleName());
 	}
 	
-	public void invoke() {
+	public void call() {
+		if (method == null) return;
 		try {
 			method.invoke(object, args);
 		} catch (IllegalAccessException | IllegalArgumentException e) {
