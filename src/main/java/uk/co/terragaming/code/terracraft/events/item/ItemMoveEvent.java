@@ -6,7 +6,6 @@ import org.bukkit.event.HandlerList;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class ItemMoveEvent extends Event implements Cancellable{
 
@@ -17,12 +16,10 @@ public class ItemMoveEvent extends Event implements Cancellable{
 	private Container from;
 	private boolean canceled = false;
 	
-	public ItemMoveEvent(Item item, Container to, Container from){
+	public ItemMoveEvent(Item item, Container from, Container to){
 		this.item = item;
 		this.to = to;
 		this.from = from;
-		
-		TerraLogger.info("%s moved from %s to %s", item, from, to);
 	}
 	
 	public Container getTo() {

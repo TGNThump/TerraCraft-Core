@@ -9,6 +9,13 @@ public class DurabilityComponent extends ItemComponent{
 	Property<Integer> curDurability = get("curDurability", Integer.class);
 	Property<Integer> maxDurability = get("maxDurability", Integer.class);
 	
+	public DurabilityComponent(){
+		if (curDurability.get() == null) curDurability.set(0);
+		if (maxDurability.get() == null) maxDurability.set(0);
+	}
+	
+	// Overrides
+	
 	@Override
 	public String render(Integer lvl) {
 		if (lvl != 2) return "";
@@ -17,6 +24,8 @@ public class DurabilityComponent extends ItemComponent{
 		}
 		return null;
 	}
+	
+	//Getters and Setters
 	
 	public Integer getCurDurability(){
 		return curDurability.get();

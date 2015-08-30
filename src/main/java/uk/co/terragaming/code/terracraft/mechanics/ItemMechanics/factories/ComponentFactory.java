@@ -81,7 +81,7 @@ public class ComponentFactory {
 			dao.setData("");
 			dao.setType(type.getSimpleName());
 			ItemComponentData.dao.create(dao);
-			dao.update();
+			component.update();
 			
 			return component;
 		} catch (Exception e) {

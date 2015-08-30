@@ -9,6 +9,12 @@ public class RarityComponent extends ItemComponent{
 
 	Property<ItemRarity> rarity = get("rarity", ItemRarity.class);
 	
+	public RarityComponent(){
+		if (rarity.get() == null) rarity.set(ItemRarity.COMMON);
+	}
+	
+	// Getters and Setters
+	
 	public ItemRarity getRarity(){
 		return rarity.get();
 	}

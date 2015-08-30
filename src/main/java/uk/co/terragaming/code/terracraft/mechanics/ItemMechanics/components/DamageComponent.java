@@ -10,11 +10,20 @@ public class DamageComponent extends ItemComponent{
 	Property<Integer> minDamage = get("minDamage", Integer.class);
 	Property<Integer> maxDamage = get("maxDamage", Integer.class);
 	
+	public DamageComponent(){
+		if (minDamage.get() == null) minDamage.set(0);
+		if (maxDamage.get() == null) maxDamage.set(0);
+	}
+	
+	// Overrides
+	
 	@Override
 	public String render(Integer lvl) {
 		if (lvl != 1) return "";
 		return "<grey>" + getMinDamage() + " - " + getMaxDamage() + " Damage";
 	}
+	
+	// Getters and Setters
 	
 	public Integer getDamage(){
 		return MathUtils.randInt(getMinDamage(), getMaxDamage());

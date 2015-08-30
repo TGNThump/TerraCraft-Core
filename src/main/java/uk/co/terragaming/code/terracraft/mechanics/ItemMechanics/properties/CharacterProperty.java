@@ -30,8 +30,8 @@ public class CharacterProperty extends Property<Character>{
 	public void decode(Object value) {
 		this.value = null;
 		if (value == null) return;
-		Assert.ofType(value, Integer.class);
-		Integer id = (Integer) value;
+		Assert.ofType(value, Number.class);
+		Integer id = ((Number) value).intValue();
 		
 		try {
 			this.value = CharacterMechanics.getInstance().getCharacterDao().queryForId(id);

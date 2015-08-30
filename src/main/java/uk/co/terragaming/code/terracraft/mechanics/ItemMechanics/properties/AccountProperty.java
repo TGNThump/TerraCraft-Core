@@ -32,8 +32,8 @@ public class AccountProperty extends Property<Account>{
 	public void decode(Object value) {
 		this.value = null;
 		if (value == null) return;
-		Assert.ofType(value, Integer.class);
-		Integer id = (Integer) value;
+		Assert.ofType(value, Number.class);
+		Integer id = ((Number) value).intValue();
 		
 		if (AccountRegistry.hasAccount(id)){
 			this.value = AccountRegistry.getAccount(id);

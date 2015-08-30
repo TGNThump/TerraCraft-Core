@@ -255,6 +255,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		ItemMoveEvent event = new ItemMoveEvent(this, container, to);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) return false;
+		TerraLogger.info("%s moved from %s to %s", this, container, to);
 		
 		Integer oldSlot = getSlotId();
 		Container oldContainer = container;
