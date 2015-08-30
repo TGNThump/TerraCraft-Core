@@ -57,7 +57,8 @@ public class BindingComponent extends ItemComponent{
 			default: break;
 		}
 		
-		if (getBindType().equals(ItemBindType.PICKUP))
+		if (getBindType().equals(ItemBindType.PICKUP)
+				&& getBinding().equals(ItemBinding.NONE))
 			bind(to.getCharacter());
 	}
 	
