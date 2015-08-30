@@ -20,6 +20,31 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	
 	protected HashMap<Integer, Item> items = new HashMap<>(); // slotId, item
 	
+	public boolean add(Item item) {
+		for (int i = 0; i < size; i++){
+			if (items.containsKey(i)) continue;
+			add(item, i);
+			return true;
+		}
+		return false;
+	}
+	
+	public void add(Item item, Integer slot){
+		items.put(slot, item);
+		item.setSlotId(slot);
+		item.setContainer(this);
+		item.setContainerData(dao);
+	}
+	
+	public void remove(Item item){
+		if (item.getSlotId() == null) return;
+		items.remove(item.getSlotId());
+		item.setContainer(null);
+		item.setContainerData(null);
+	}
+	
+	// Update and Refresh
+	
 	public void update(){
 		for(Integer id : items.keySet()){
 			Item i = items.get(id);
@@ -47,6 +72,8 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 			items.put(i.getSlotId(), i);
 		}
 	}
+		
+	// Getters and Setters
 	
 	public void setData(String data){
 		if (data == null){
@@ -124,28 +151,9 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	public int compareTo(Container o) {
 		return id.compareTo(o.getContainerId());
 	}
-
-	public boolean add(Item item) {
-		for (int i = 0; i < size; i++){
-			if (items.containsKey(i)) continue;
-			add(item, i);
-			return true;
-		}
-		return false;
-	}
 	
-	public void add(Item item, Integer slot){
-		items.put(slot, item);
-		item.setSlotId(slot);
-		item.setContainer(this);
-		item.setContainerData(dao);
-	}
-	
-	public void remove(Item item){
-		if (item.getSlotId() == null) return;
-		items.remove(item.getSlotId());
-		item.setContainer(null);
-		item.setContainerData(null);
-	}
-	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + id + "<r>]";
+	}	
 }

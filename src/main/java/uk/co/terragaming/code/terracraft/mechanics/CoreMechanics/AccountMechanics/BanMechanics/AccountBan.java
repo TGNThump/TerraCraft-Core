@@ -150,7 +150,8 @@ public class AccountBan {
 	
 	@Override
 	public String toString() {
-		return "AccountBan[ID: " + getId() + ", Account: " + getAccount().toString() + "]";
+		return "AccountBan[<h>" + getId() + "<r>]";
+	//	return "AccountBan[ID: " + getId() + ", Account: " + getAccount().toString() + "]";
 	}
 	
 }

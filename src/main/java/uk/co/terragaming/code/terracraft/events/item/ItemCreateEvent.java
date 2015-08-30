@@ -15,7 +15,7 @@ public class ItemCreateEvent extends Event{
 	public ItemCreateEvent(Item item){
 		this.item = item;
 		
-		TerraLogger.info("Item[<h>%s<r>] %s Created.", item.getId(), item.getName());
+		TerraLogger.info("%s Created and added to %s.", item, item.getContainer());
 	}
 	
 	public Item getItem() {

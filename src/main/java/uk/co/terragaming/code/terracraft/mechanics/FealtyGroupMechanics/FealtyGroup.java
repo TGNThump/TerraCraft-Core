@@ -34,50 +34,44 @@ public class FealtyGroup {
 		return id;
 	}
 
-	
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	
 	public String getName() {
 		return name;
 	}
 
-	
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	
 	public Character getPatron() {
 		return patron;
 	}
 
-	
 	public void setPatron(Character patron) {
 		this.patron = patron;
 	}
 
-	
 	public ForeignCollection<FealtyGroupStance> getStances() {
 		return stances;
 	}
 
-	
 	public void setStances(ForeignCollection<FealtyGroupStance> stances) {
 		this.stances = stances;
 	}
-
-
 	
 	public DateTime getCreateDate() {
 		return createDate;
 	}
-
-
 	
 	public void setCreateDate(DateTime createDate) {
 		this.createDate = createDate;
+	}
+	
+	@Override
+	public String toString(){
+		return "FealtyGroup[<h>" + getId() + "<r>]";
 	}
 }

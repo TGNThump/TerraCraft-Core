@@ -157,8 +157,8 @@ public class AccountSession {
 	}
 	
 	@Override
-	public String toString() {
-		return "AccountSession[ID: " + getId() + ", Account: " + account.toString() + "]";
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + getId() + "<r>]";
 	}
 	
 }

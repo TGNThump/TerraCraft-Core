@@ -102,4 +102,9 @@ public abstract class ItemComponent implements Iterable<Property<?>>, Listener{
 		return properties.iterator();
 	}
 	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + dao.getId() + "<r>]";
+	}
+	
 }

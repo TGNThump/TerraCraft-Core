@@ -224,7 +224,7 @@ public class Account {
 	}
 	
 	@Override
-	public String toString() {
-		return "Account[ID: " + getId() + ", TerraTag: '" + getTerraTag() + "']";
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + getId() + "<r>]";
 	}
 }

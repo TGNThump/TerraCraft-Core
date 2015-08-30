@@ -15,7 +15,7 @@ public class ItemDestroyEvent extends Event{
 	public ItemDestroyEvent(Item item){
 		this.item = item;
 		
-		TerraLogger.info("Item[<h>%s<r>] Destroyed.", item.getId(), item.getName());
+		TerraLogger.info("%s Destroyed and removed from %s.", item, item.getContainer());
 	}
 	
 	public Item getItem() {

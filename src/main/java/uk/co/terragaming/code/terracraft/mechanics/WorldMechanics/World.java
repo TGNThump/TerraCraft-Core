@@ -42,4 +42,9 @@ public class World {
 	public List<org.bukkit.entity.Item> getItemEntities() {
 		return itemEntities;
 	}
+	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + getName() + "<r>]";
+	}
 }

@@ -22,7 +22,7 @@ public class ItemMoveEvent extends Event implements Cancellable{
 		this.to = to;
 		this.from = from;
 		
-		TerraLogger.info("Item[<h>%s<r>] moved from %s[<h>%s<r>] to %s[<h>%s<r>]", item.getId(), from.getType().getSimpleName(), from.getContainerId(), to.getType().getSimpleName(), to.getContainerId());
+		TerraLogger.info("%s moved from %s to %s", item, from, to);
 	}
 	
 	public Container getTo() {

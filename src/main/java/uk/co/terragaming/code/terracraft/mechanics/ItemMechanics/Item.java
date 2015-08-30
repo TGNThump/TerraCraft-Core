@@ -245,6 +245,11 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	public Iterator<ItemComponent> iterator() {
 		return components.values().iterator();
 	}
+	
+	@Override
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + getId() + "<r>]";
+	}
 
 	public boolean moveTo(Container to) {
 		ItemMoveEvent event = new ItemMoveEvent(this, container, to);

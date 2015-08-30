@@ -19,7 +19,7 @@ public class ItemBindEvent extends Event{
 		this.item = item;
 		this.binding = binding;
 
-		TerraLogger.info("Item[<h>%s<r>] bound to %s <h>%s<r>.", item.getId(), binding.getBinding(), (binding.getBinding().equals(ItemBinding.ACCOUNT) ? binding.getAccOwner() : binding.getCharOwner()));
+		TerraLogger.info("%s bound to %s.", item, (binding.getBinding().equals(ItemBinding.ACCOUNT) ? binding.getAccOwner() : binding.getCharOwner()));
 	}
 	
 	public BindingComponent getBinding() {

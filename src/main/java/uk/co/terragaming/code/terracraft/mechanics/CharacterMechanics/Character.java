@@ -501,8 +501,8 @@ public class Character {
 	}
 	
 	@Override
-	public String toString() {
-		return "Character[ID: " + getId() + ", Name: " + getName() + ", Owner: " + getAccount().toString() + "]";
+	public String toString(){
+		return getClass().getSimpleName() + "[<h>" + getId() + "<r>]";
 	}
 	
 	public String getColouredName() {
