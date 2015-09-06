@@ -14,9 +14,8 @@ import uk.co.terragaming.code.terracraft.events.account.AccountLoginEvent;
 import uk.co.terragaming.code.terracraft.events.account.AccountPostLoginEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.Callback;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.annotations.CallbackMethod;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.LoadingMode;
+import uk.co.terragaming.code.terracraft.utils.Callback;
 import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.Txt;
 
@@ -51,13 +50,13 @@ public class LoginEventHandler implements Listener{
 
 			@Override
 			public void run() {
-				asyncLogin(player, new Callback("loginSuccess", instance, player), new Callback("loginFailure", instance, player));
+				asyncLogin(player, Callback.create(instance::loginSuccess, player), Callback.create(instance::loginFailure, player));
 			}
 			
 		});
 	}
 	
-	private void asyncLogin(Player player, Callback success, Callback failure){
+	private void asyncLogin(Player player, Callback<?,?> success, Callback<?,?> failure){
 		try{
 			Account account = AccountRegistry.getAccount(player);
 			account.setPlayer(player);
@@ -96,14 +95,11 @@ public class LoginEventHandler implements Listener{
 		}
 	}
 	
-	
-	@CallbackMethod
 	public void loginSuccess(Player player){
 		BossBarAPI.setHealth(player, 100);
 		BossBarAPI.setMessage(player, "Account Loaded", 100, 5);
 	}
-	
-	@CallbackMethod
+
 	public void loginFailure(Player player){
 		if (AccountRegistry.hasAccount(player))
 			AccountRegistry.removeAccount(AccountRegistry.getAccount(player));

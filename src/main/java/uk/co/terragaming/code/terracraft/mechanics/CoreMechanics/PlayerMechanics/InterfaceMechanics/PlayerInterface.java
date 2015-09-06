@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CallbackMechanics.Callback;
+import uk.co.terragaming.code.terracraft.utils.Callback;
 
 public class PlayerInterface {
 	
@@ -18,7 +18,7 @@ public class PlayerInterface {
 	public int size;
 	public boolean closable = true;
 	
-	public HashMap<Integer, Entry<ItemStack, Callback>> items;
+	public HashMap<Integer, Entry<ItemStack, Callback<?,?>>> items;
 	public HashMap<UUID, PlayerInterfaceInstance> instances;
 	
 	public PlayerInterface(String title, int rows) {
@@ -28,19 +28,19 @@ public class PlayerInterface {
 		instances = new HashMap<>();
 	}
 	
-	public boolean addIcon(int row, int position, ItemStack item, Callback callback) {
+	public boolean addIcon(int row, int position, ItemStack item, Callback<?,?> callback) {
 		if (items.containsKey(row * 9 + position))
 			return false;
-		items.put(row * 9 + position, new AbstractMap.SimpleEntry<ItemStack, Callback>(item, callback));
+		items.put(row * 9 + position, new AbstractMap.SimpleEntry<ItemStack, Callback<?,?>>(item, callback));
 		return true;
 	}
 	
-	public boolean addIcon(ItemStack item, Callback callback) {
+	public boolean addIcon(ItemStack item, Callback<?,?> callback) {
 		for (int i = 0; i < size; i++) {
 			if (items.containsKey(i)) {
 				continue;
 			}
-			items.put(i, new AbstractMap.SimpleEntry<ItemStack, Callback>(item, callback));
+			items.put(i, new AbstractMap.SimpleEntry<ItemStack, Callback<?,?>>(item, callback));
 			return true;
 		}
 		return false;
