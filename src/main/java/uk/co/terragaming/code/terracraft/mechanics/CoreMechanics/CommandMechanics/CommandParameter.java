@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechani
 
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.arg.AR;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CommandParameter {
 	

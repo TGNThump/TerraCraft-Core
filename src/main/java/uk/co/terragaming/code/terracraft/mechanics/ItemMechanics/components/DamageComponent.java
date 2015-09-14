@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.properties.Property;
-import uk.co.terragaming.code.terracraft.utils.MathUtils;
+import uk.co.terragaming.code.terracraft.utils.maths.MathUtils;
 
 
 public class DamageComponent extends ItemComponent{

@@ -12,8 +12,8 @@ import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.events.account.AccountPreLoginEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.BanMechanics.AccountBan;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
 
 
 public class WhitelistBanChecker implements Listener{

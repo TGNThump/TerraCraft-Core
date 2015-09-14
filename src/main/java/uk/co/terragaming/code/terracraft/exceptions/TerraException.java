@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class TerraException extends Exception {
 	

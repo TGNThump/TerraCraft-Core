@@ -17,8 +17,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
-import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class SimpleChannel extends Channel {
 	

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import uk.co.terragaming.code.terracraft.enums.ItemRarity;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
-import uk.co.terragaming.code.terracraft.utils.CustomItem;
+import uk.co.terragaming.code.terracraft.utils.item.CustomItem;
 
 import com.comphenix.attribute.AttributeStorage;
 import com.google.common.collect.Lists;

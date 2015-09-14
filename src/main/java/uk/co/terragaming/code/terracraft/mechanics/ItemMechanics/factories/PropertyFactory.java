@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.properties.Property;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 
 public class PropertyFactory {

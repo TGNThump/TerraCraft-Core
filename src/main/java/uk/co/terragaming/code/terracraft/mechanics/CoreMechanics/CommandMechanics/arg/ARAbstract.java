@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public abstract class ARAbstract<T> implements AR<T> {
 	

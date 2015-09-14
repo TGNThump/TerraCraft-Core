@@ -11,9 +11,9 @@ import uk.co.terragaming.code.terracraft.exceptions.DatabaseException;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.Group;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 

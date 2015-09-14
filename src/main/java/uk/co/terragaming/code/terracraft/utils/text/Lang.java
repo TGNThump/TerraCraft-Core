@@ -1,8 +1,9 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.text;
 
 import java.util.HashMap;
 
 import uk.co.terragaming.code.terracraft.enums.Language;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class Lang {
 	

@@ -11,7 +11,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemComponentDa
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.utils.Assert;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 @SuppressWarnings("unchecked")
 public class ComponentFactory {

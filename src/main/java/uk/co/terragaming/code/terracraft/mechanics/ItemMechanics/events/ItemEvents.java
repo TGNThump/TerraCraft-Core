@@ -23,7 +23,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.RenderComponent;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.WorldRegistry;
-import uk.co.terragaming.code.terracraft.utils.ItemUtils;
+import uk.co.terragaming.code.terracraft.utils.item.ItemUtils;
 
 public class ItemEvents implements Listener{
 

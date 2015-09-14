@@ -15,7 +15,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channe
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.NPCMechanics.NPCMechanics;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CharacterDeathMessages implements Listener	{
 	

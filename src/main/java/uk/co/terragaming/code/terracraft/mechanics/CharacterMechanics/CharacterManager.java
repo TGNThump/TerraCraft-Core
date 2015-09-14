@@ -19,9 +19,9 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.RenderComponent;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;

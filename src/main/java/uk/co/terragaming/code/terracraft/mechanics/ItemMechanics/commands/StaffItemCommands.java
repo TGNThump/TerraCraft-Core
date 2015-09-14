@@ -24,8 +24,8 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.Rari
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.RenderComponent;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ItemBuilder;
 import uk.co.terragaming.code.terracraft.utils.Assert;
-import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class StaffItemCommands {
 	

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public abstract class ARAbstractSelect<T> extends ARAbstract<T> {
 	

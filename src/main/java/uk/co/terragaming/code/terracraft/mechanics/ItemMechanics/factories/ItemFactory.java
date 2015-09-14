@@ -12,7 +12,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 
 public class ItemFactory {

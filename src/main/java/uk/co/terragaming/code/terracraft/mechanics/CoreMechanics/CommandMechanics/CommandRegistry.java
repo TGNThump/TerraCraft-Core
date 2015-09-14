@@ -22,7 +22,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.TagArg;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.commands.CommandHelp;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 

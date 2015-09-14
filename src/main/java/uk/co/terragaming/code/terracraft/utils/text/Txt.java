@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.text;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -17,6 +17,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import uk.co.terragaming.code.terracraft.utils.ColUtil;
 
 public class Txt {
 	

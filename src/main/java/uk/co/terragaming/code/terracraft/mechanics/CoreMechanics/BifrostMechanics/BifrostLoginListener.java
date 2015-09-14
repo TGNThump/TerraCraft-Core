@@ -18,8 +18,8 @@ import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountSession;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.SessionManager;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
-import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.j256.ormlite.dao.Dao;
 

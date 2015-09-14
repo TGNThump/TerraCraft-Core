@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.item;
 
 import java.util.UUID;
 
@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
+import uk.co.terragaming.code.terracraft.utils.Assert;
 
 import com.comphenix.attribute.AttributeStorage;
 

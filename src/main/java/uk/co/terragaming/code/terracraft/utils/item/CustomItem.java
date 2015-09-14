@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CustomItem implements Listener {
 	

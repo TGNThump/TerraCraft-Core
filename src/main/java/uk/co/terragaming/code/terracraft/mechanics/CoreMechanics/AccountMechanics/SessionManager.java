@@ -12,8 +12,8 @@ import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
 import uk.co.terragaming.code.terracraft.exceptions.WhitelistException;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
 
 import com.j256.ormlite.dao.Dao;
 

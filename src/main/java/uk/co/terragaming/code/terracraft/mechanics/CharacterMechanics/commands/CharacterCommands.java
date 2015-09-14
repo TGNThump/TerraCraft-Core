@@ -12,8 +12,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandDescription;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.CommandParent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
-import uk.co.terragaming.code.terracraft.utils.Txt;
-//import uk.co.terragaming.code.terracraft.mechanics.oldItemMechanics.ItemManager;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CharacterCommands {
 	

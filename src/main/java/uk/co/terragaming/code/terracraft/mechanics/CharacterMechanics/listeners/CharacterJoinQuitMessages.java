@@ -11,7 +11,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChannelManager;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channel;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CharacterJoinQuitMessages implements Listener{
 	

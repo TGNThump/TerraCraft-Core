@@ -26,9 +26,9 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterfaceInstance;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
 import uk.co.terragaming.code.terracraft.utils.Callback;
-import uk.co.terragaming.code.terracraft.utils.CustomItem;
-import uk.co.terragaming.code.terracraft.utils.IconMenu;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.item.CustomItem;
+import uk.co.terragaming.code.terracraft.utils.item.IconMenu;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CharacterSelectInterface {
 	

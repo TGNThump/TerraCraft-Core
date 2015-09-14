@@ -10,8 +10,8 @@ import uk.co.terragaming.code.terracraft.events.account.AccountLoginEvent;
 import uk.co.terragaming.code.terracraft.events.account.AccountPostLoginEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class LoginListener implements Listener {
 

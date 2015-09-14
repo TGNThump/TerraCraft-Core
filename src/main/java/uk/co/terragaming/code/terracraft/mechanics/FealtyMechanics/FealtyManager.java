@@ -21,8 +21,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroup;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupManager;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupRegistry;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
 
 import com.google.common.collect.Lists;
 

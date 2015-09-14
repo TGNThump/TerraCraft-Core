@@ -11,8 +11,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountMechanics;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.SessionManager;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
 
 
 public class LogoutEventHandler implements Listener{

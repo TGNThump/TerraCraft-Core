@@ -15,7 +15,8 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.ChatLogger;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.reflection.ActionBar;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class NotificationChannel extends Channel {
 	
@@ -24,7 +25,7 @@ public class NotificationChannel extends Channel {
 	}
 	
 	@Override
-	public void processChatEvent(Player sender, String message) {
+	public void processChatEvent(Player sender, String message) {		
 		Integer range = getRange();
 		
 		if (range == -1) {
@@ -32,9 +33,11 @@ public class NotificationChannel extends Channel {
 				Player reciever = Bukkit.getPlayer(uuid);
 				if (PlayerEffects.hasEffect(reciever, PlayerEffect.NOCHAT)) continue;
 				reciever.sendMessage(Txt.parse("[<l>%s<r>] %s", getTag(), message));
+				ActionBar.sendMessage(reciever, Txt.parse(message));
 			}
 		} else {
 			sender.sendMessage(Txt.parse("[<l>%s<r>] %s", getTag(), message));
+			ActionBar.sendMessage(sender, Txt.parse(message));
 			
 			for (Entity entity : getNearybyPlayers(sender.getLocation(), range)) {
 				if (!(entity instanceof Player)) {
@@ -45,6 +48,7 @@ public class NotificationChannel extends Channel {
 				if (reciever == sender) continue;
 				if (contains(reciever.getUniqueId())) {
 					reciever.sendMessage(Txt.parse("[<l>%s<r>] %s", getTag(), message));
+					ActionBar.sendMessage(reciever, Txt.parse(message));
 				}
 			}
 		}

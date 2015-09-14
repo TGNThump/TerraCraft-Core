@@ -3,7 +3,7 @@ package uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechani
 import org.bukkit.command.CommandSender;
 
 import uk.co.terragaming.code.terracraft.exceptions.CommandException;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public abstract class ARAbstractException<T> extends ARAbstract<T> {
 	

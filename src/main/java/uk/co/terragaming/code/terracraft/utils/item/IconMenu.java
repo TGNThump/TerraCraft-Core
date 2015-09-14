@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +15,8 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public class IconMenu implements Listener {
 	

@@ -10,9 +10,9 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterface;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyMechanics.FealtyManager;
 import uk.co.terragaming.code.terracraft.utils.Callback;
-import uk.co.terragaming.code.terracraft.utils.IconMenu;
-import uk.co.terragaming.code.terracraft.utils.Lang;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.item.IconMenu;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class CharacterShiftClickInterface {
 	

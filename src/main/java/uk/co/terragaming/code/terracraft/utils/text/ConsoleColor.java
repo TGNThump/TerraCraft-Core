@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.text;
 
 import org.fusesource.jansi.Ansi;
 

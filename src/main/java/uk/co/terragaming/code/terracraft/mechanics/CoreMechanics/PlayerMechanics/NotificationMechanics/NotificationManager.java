@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.Character;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;

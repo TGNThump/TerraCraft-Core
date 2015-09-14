@@ -6,8 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.ReloadHandler;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
 
 public class TerraCraft extends JavaPlugin {
 	

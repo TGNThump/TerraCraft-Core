@@ -1,14 +1,19 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.reflection;
 
 import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
 
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+
 public class Reflection {
 	
+	public static String version = "";
+	
 	public static String getVersion() {
+		if (!version.isEmpty()) return version;
 		final String name = Bukkit.getServer().getClass().getPackage().getName();
-		final String version = name.substring(name.lastIndexOf(".") + 1) + ".";
+		version = name.substring(name.lastIndexOf(".") + 1);
 		return version;
 	}
 	
@@ -37,5 +42,14 @@ public class Reflection {
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(f, f.getModifiers() & 0xFFFFFFEF);
 		return f;
+	}
+
+	public static Class<?> getClass(String classpath) {
+		try {
+			return Class.forName(String.format(classpath, getVersion()));
+		} catch (ClassNotFoundException e) {
+			TerraLogger.error("[<l>Reflection<red>] ClassNotFound: %s", classpath);
+			return null;
+		}
 	}
 }

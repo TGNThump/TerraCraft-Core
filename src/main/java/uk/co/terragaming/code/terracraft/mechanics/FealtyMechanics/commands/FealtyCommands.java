@@ -18,9 +18,9 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMecha
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroup;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyGroupMechanics.FealtyGroupManager;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyMechanics.FealtyManager;
-import uk.co.terragaming.code.terracraft.utils.Lang;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-import uk.co.terragaming.code.terracraft.utils.Txt;
+import uk.co.terragaming.code.terracraft.utils.text.Lang;
+import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 
