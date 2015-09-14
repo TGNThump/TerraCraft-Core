@@ -22,7 +22,10 @@ public class ActionBar {
 	}
 	
 	public static void sendRawMessage(Player player, String message){
-		if (enabled == false) return;
+		if (enabled == false){
+			player.sendMessage(message);
+			return;
+		}
 		try{
 			// Get the player as a craftPlayer...
 			Class<?> cCraftPlayer = Reflection.getClass("org.bukkit.craftbukkit.%s.entity.CraftPlayer");

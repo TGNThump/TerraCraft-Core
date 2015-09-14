@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
@@ -36,6 +38,10 @@ public class PlayerEffects {
 			VanishEffect.vanishPlayer(player);
 		} else if (effect.equals(PlayerEffect.INVULNERABLE)) {
 			EntityTargetEffect.removeTargets(player);
+		} else if (effect.equals(PlayerEffect.NOMOVE)){
+			player.setWalkSpeed(0.0f);
+			player.setFlySpeed(0.0f);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000, 128));
 		}
 		
 		if (effects.containsKey(player.getUniqueId())) {
@@ -80,6 +86,10 @@ public class PlayerEffects {
 		
 		if (effect.equals(PlayerEffect.INVISIBLE)) {
 			VanishEffect.unvanishPlayer(player);
+		} else if (effect.equals(PlayerEffect.NOMOVE)){
+			player.removePotionEffect(PotionEffectType.JUMP);
+			player.setWalkSpeed(0.2f);
+			player.setFlySpeed(0.2f);
 		}
 		
 		pEffects.remove(effect);

@@ -1,6 +1,7 @@
 package uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -8,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitTask;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
@@ -20,8 +22,8 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.RenderComponent;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.reflection.ActionBar;
 import uk.co.terragaming.code.terracraft.utils.text.Lang;
-import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 import com.j256.ormlite.dao.Dao;
@@ -95,6 +97,9 @@ public class CharacterManager {
 		}
 	}
 	
+	public static HashMap<Integer, Integer> invlTimer = new HashMap<>();
+	public static HashMap<Integer, BukkitTask> invlTasks = new HashMap<>();
+	
 	public static void applyCharacter(Account account, Character character){
 		Player player = account.getPlayer();
 		Bukkit.getScheduler().runTask(TerraCraft.plugin, new Runnable(){
@@ -108,7 +113,33 @@ public class CharacterManager {
 					CharacterJoinEvent e = new CharacterJoinEvent(character, player);
 					Bukkit.getPluginManager().callEvent(e);
 					PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
-					player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerability")));
+					invlTimer.put(character.getId(), 3);
+					invlTasks.put(character.getId(), Bukkit.getScheduler().runTaskTimer(TerraCraft.plugin, new Runnable(){
+
+						@Override
+						public void run() {
+							if (account.getActiveCharacter() == null){
+								invlTasks.get(character.getId()).cancel();
+								return;
+							}
+							if (!account.getActiveCharacter().equals(character)){
+								invlTasks.get(character.getId()).cancel();
+								return;
+							}
+							Integer left = invlTimer.get(character.getId());
+							if (left <= 0){
+								PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
+								ActionBar.sendMessage(player, Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire"));
+								invlTasks.get(character.getId()).cancel();
+							} else {
+								ActionBar.sendMessage(player, String.format(Lang.get(account.getLanguage(), "characterChangeInvulnerability"), "" + left));
+								invlTimer.put(character.getId(), left - 1);
+							}							
+						}
+						
+					}, 20, 20));
+					
+					
 				} catch (Exception e){
 					// TODO: Error Recovery
 					kickPlayerInternalException(account.getPlayer());
@@ -117,17 +148,6 @@ public class CharacterManager {
 			}
 			
 		});
-		Bukkit.getScheduler().runTaskLater(TerraCraft.plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				if (account.getActiveCharacter() == null) return;
-				if (!account.getActiveCharacter().equals(character)) return;
-				PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
-				player.sendMessage(Txt.parse("[<l>TerraCraft<r>] " + Lang.get(account.getLanguage(), "characterChangeInvulnerabilityExpire")));
-			}
-			
-		}, 60);
 	}
 	
 	private static void applyCharacterSync(Account account, Character character){
@@ -242,8 +262,10 @@ public class CharacterManager {
 
 							@Override
 							public void run() {
-								if (account.getPlayer() != null)
+								if (account.getPlayer() != null){
+									account.setActiveCharacter(null);
 									new CharacterSelectInterface(account.getPlayer());
+								}
 							}
 							
 						});

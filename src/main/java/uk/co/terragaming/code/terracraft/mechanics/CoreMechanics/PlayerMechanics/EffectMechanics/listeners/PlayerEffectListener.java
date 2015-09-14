@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -67,10 +66,15 @@ public class PlayerEffectListener implements Listener {
 		VanishEffect.potionManager.removePlayer(player);
 	}
 	
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event){
-		Player player = event.getPlayer();
-		if (!PlayerEffects.hasEffect(player, PlayerEffect.NOMOVE)) return;
-		event.setCancelled(true);
-	}
+//	@EventHandler
+//	public void onPlayerMove(PlayerMoveEvent event){
+//		Player player = event.getPlayer();
+//		Location to = event.getTo();
+//		Location from = event.getFrom();
+//		if (!PlayerEffects.hasEffect(player, PlayerEffect.NOMOVE)) return;
+//		if (to.getBlockX() != from.getBlockX()) return;
+//		if (to.getBlockY() != from.getBlockY()) return;
+//		if (to.getBlockZ() > from.getBlockZ()) return;
+//		event.setCancelled(true);
+//	}
 }

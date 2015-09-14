@@ -36,7 +36,7 @@ public class CommandRegistry {
 	public static void registerCommands(JavaPlugin plugin, Object handler) {
 		
 		TerraLogger.blank();
-		TerraLogger.info("Registering Commands in '" + handler.getClass().getSimpleName() + "'");
+		TerraLogger.info("Registering Commands in '<h>" + handler.getClass().getSimpleName() + "<r>'");
 		TerraLogger.blank();
 		
 		// Get the methods in the class ...
@@ -240,7 +240,7 @@ public class CommandRegistry {
 			rootCommands.put(command.getPath(), command);
 		}
 		
-		TerraLogger.info("Registered Command: '/" + command.getPath() + "'");
+		TerraLogger.info("Registered Command: '<h>/" + command.getPath() + "<r>'");
 	}
 	
 	// Get Command from Path

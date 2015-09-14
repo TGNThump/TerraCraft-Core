@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.inventivetalent.bossbar.BossBarAPI;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.events.account.AccountLoginEvent;
@@ -39,7 +38,7 @@ public class LoginEventHandler implements Listener{
 	private void syncLogin(Player player){
 		LoadingMode.activeFor(player);
 		
-		BossBarAPI.setMessage(player, "Loading Account Data", 1);
+//		BossBarAPI.setMessage(player, "Loading Account Data", 1);
 		
 		player.getInventory().clear();
 //		player.getInventory().setHelmet(new CustomItem(Material.PUMPKIN).getItemStack());
@@ -61,12 +60,12 @@ public class LoginEventHandler implements Listener{
 			Account account = AccountRegistry.getAccount(player);
 			account.setPlayer(player);
 			
-			BossBarAPI.setHealth(player, 10);
+//			BossBarAPI.setHealth(player, 10);
 			
 			AccountLoginEvent e1 = new AccountLoginEvent(account);
 			Bukkit.getServer().getPluginManager().callEvent(e1);
 			
-			BossBarAPI.setHealth(player, 50);
+//			BossBarAPI.setHealth(player, 50);
 			
 			Bukkit.getScheduler().callSyncMethod(TerraCraft.plugin, new Callable<Boolean>(){
 
@@ -96,8 +95,8 @@ public class LoginEventHandler implements Listener{
 	}
 	
 	public void loginSuccess(Player player){
-		BossBarAPI.setHealth(player, 100);
-		BossBarAPI.setMessage(player, "Account Loaded", 100, 5);
+//		BossBarAPI.setHealth(player, 100);
+//		BossBarAPI.setMessage(player, "Account Loaded", 100, 5);
 	}
 
 	public void loginFailure(Player player){

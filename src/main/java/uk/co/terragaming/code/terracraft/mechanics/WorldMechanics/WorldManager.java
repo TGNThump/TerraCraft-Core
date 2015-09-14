@@ -15,6 +15,7 @@ import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 public class WorldManager {
 	
 	public static void loadWorlds(){
+		TerraLogger.blank();
 		TerraLogger.info("Loading Worlds");
 		for (org.bukkit.World bWorld : Bukkit.getWorlds()){
 			World world = new World();

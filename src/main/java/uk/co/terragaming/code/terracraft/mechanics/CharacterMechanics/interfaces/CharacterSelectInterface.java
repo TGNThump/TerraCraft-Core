@@ -20,6 +20,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Channe
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.LoadingMode;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.VanishEffect;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.InterfaceMechanics.PlayerInterface;
@@ -124,9 +125,7 @@ public class CharacterSelectInterface {
 		player.kickPlayer(Txt.parse("<l>Thanks for Playing!"));
 	}
 	
-	public void preMenuOpen(Player player) {
-		
-		
+	public void preMenuOpen(Player player) {		
 		Account account = AccountRegistry.getAccount(player);
 		if (account != null){
 			Character activeCharacter = account.getActiveCharacter();
@@ -137,17 +136,20 @@ public class CharacterSelectInterface {
 			}
 		}
 		
+		account.setActiveChannel(null);
+		
+		LoadingMode.loading.remove(player.getUniqueId());
+		
 		player.setHealth(20d);
 		player.setFoodLevel(200);
 		player.getInventory().clear();
 		player.getInventory().setArmorContents(new ItemStack[4]);
-		player.setGameMode(GameMode.SURVIVAL);
+		player.setGameMode(GameMode.SPECTATOR);
 		player.setCanPickupItems(false);
 		player.setNoDamageTicks(0);
 		player.setLevel(0);
 		player.setExp(0f);
-		player.setAllowFlight(false);
-		PlayerEffects.clearEffects(player);
+		PlayerEffects.removeEffect(player, PlayerEffect.STAFFMODE);
 		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
 		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.addEffect(player, PlayerEffect.NOCHAT);

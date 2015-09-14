@@ -62,8 +62,8 @@ public class Lang {
 		add(Language.ENGLISH, "ArgReaderIntegerName", "number");
 		add(Language.ENGLISH, "ArgReaderStringName", "text");
 		
-		add(Language.ENGLISH, "characterChangeInvulnerability", "You are invulnerable for 3 seconds.");
-		add(Language.ENGLISH, "characterChangeInvulnerabilityExpire", "Your invulnerability has expired.");
+		add(Language.ENGLISH, "characterChangeInvulnerability", "You are <l>invulnerable<r> for <b><bold>%s<r> seconds.");
+		add(Language.ENGLISH, "characterChangeInvulnerabilityExpire", "Your <l>invulnerability<r> has <b>expired<r>.");
 		
 		add(Language.ENGLISH, "characterShiftMenuTrade", "<gold>Trade");
 		add(Language.ENGLISH, "characterShiftMenuTradeDesc", "<l>Click here to Trade with %s."); // characterName

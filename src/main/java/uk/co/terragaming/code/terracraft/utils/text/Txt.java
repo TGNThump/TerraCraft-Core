@@ -79,12 +79,12 @@ public class Txt {
 		parseReplacements.put("<reset>", "\u00A7r");
 		
 		// Color by semantic functionality
-		parseReplacements.put("<l>", "\u00A73");
-		parseReplacements.put("<n>", "\u00A7e");
-		parseReplacements.put("<fg>", "\u00A7a");
-		parseReplacements.put("<g>", "\u00A7a");
-		parseReplacements.put("<b>", "\u00A7c");
-		parseReplacements.put("<r>", "\u00A7r");
+		parseReplacements.put("<l>", "\u00A73");	// Logo
+		parseReplacements.put("<n>", "\u00A7e");	// Name
+		parseReplacements.put("<fg>", "\u00A7a");	// FealtyGroup
+		parseReplacements.put("<g>", "\u00A7a");	// Good
+		parseReplacements.put("<b>", "\u00A7c");	// Bad
+		parseReplacements.put("<r>", "\u00A7r");	// Reset
 		
 		parseReplacements.put("<k>", "\u00A7b");
 		parseReplacements.put("<key>", "\u00A7b");

@@ -63,7 +63,7 @@ public class ChatMechanics implements Mechanic {
 		ChannelManager.addChannel(deaths);
 		
 		Channel joinleave = new NotificationChannel();
-		joinleave.setName("localNotifications");
+		joinleave.setName("notifications");
 		joinleave.setTag("L");
 		joinleave.setRange(100);
 		joinleave.autojoin();
