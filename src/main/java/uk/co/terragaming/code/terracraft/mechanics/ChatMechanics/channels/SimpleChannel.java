@@ -17,6 +17,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.utils.ChatUtils;
+import uk.co.terragaming.code.terracraft.utils.reflection.ActionBar;
 import uk.co.terragaming.code.terracraft.utils.text.Lang;
 import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
@@ -68,10 +69,7 @@ public class SimpleChannel extends Channel {
 				}
 			}
 			if (!heared) {
-				List<String> messages = Txt.parseWrap(Lang.get(lang, "chatLocalOutOfRange"), false);
-				for (String msg : messages) {
-					sender.sendMessage(msg);
-				}
+				ActionBar.sendMessage(sender, Lang.get(lang, "chatLocalOutOfRange"));
 			}
 		}
 		

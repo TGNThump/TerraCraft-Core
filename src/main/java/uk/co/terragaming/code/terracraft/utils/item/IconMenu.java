@@ -16,8 +16,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import uk.co.terragaming.code.terracraft.utils.TerraLogger;
-
 public class IconMenu implements Listener {
 	
 	private String name;
@@ -81,7 +79,6 @@ public class IconMenu implements Listener {
 			if (event.getSlot() < size) {
 				Row row = getRowFromSlot(event.getSlot());
 				if (!click.click(p, this, row, event.getSlot() - row.getRow() * 9, event.getCurrentItem())) {
-					TerraLogger.debug("Close()");
 					close(p);
 				}
 			}

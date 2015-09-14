@@ -1,8 +1,11 @@
 package uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -50,7 +53,7 @@ public class EmoteChannel extends Channel {
 			}
 		} else {
 			sender.sendMessage(Txt.parse("[<l>%s<r>] <silver>%s %s", getTag(), name, message));
-			for (Entity entity : sender.getNearbyEntities(range, 500, range)) {
+			for (Entity entity : getNearybyPlayers(sender.getLocation(), range)) {
 				if (!(entity instanceof Player)) {
 					continue;
 				}
@@ -68,6 +71,18 @@ public class EmoteChannel extends Channel {
 			
 			ChatLogger.log(account, character, this, message);
 		}
+	}
+	
+	public List<Player> getNearybyPlayers(Location loc, int distance) {
+		int squaredDistance = distance * distance;
+		List<Player> list = new ArrayList<Player>();
+		for (Player p : Bukkit.getOnlinePlayers())
+			if (p.getLocation().getWorld().equals(loc.getWorld())){
+				if (p.getLocation().distanceSquared(loc) < squaredDistance) {
+					list.add(p);
+				}
+			}
+		return list;
 	}
 	
 }

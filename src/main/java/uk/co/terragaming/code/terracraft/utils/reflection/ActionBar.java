@@ -22,7 +22,9 @@ public class ActionBar {
 	}
 	
 	public static void sendRawMessage(Player player, String message){
-		if (enabled == false){
+		if (player == null) return;
+		if (message == null) message = "";
+		if (!enabled){
 			player.sendMessage(message);
 			return;
 		}
@@ -56,8 +58,8 @@ public class ActionBar {
 			sendPacket.invoke(playerConnection, packet);
 			
 		} catch (Exception e){
-			e.printStackTrace();
 			enabled = false;
+			e.printStackTrace();
 		}
 	}
 	

@@ -115,7 +115,7 @@ public class CharacterManager {
 					PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 					invlTimer.put(character.getId(), 3);
 					invlTasks.put(character.getId(), Bukkit.getScheduler().runTaskTimer(TerraCraft.plugin, new Runnable(){
-
+						
 						@Override
 						public void run() {
 							if (account.getActiveCharacter() == null){
