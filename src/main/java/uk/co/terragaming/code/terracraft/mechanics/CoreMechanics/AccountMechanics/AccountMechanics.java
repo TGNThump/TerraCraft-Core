@@ -13,7 +13,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.LogoutEventHandler;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.PingEventHandler;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.eventHandlers.PreLoginEventHandler;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 
 import com.j256.ormlite.dao.Dao;
@@ -76,7 +76,7 @@ public class AccountMechanics implements Mechanic {
 		Bukkit.getPluginManager().registerEvents(new LogoutEventHandler(), TerraCraft.plugin);
 		
 		
-		CommandRegistry.registerCommands(TerraCraft.plugin, new AccountCommands());
+		Commands.register(TerraCraft.plugin, new AccountCommands());
 	}
 	
 	@Override

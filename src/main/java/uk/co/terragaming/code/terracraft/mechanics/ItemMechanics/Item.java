@@ -266,6 +266,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 			return true;
 		} else {
 			oldContainer.add(this, oldSlot);
+			TerraLogger.debug("Inventory Full");
 			return false;
 		}
 	}

@@ -64,7 +64,7 @@ public class CommandMethod implements Comparator<Method> {
 		if (!hasParent(method))
 			return Optional.empty();
 		String[] args = getParentString(method).split(" ");
-		uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Command command = CommandRegistry.getCommand(args);
+		uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Command command = Commands.getCommand(args);
 		if (command == null)
 			return Optional.empty();
 		return Optional.of(command);

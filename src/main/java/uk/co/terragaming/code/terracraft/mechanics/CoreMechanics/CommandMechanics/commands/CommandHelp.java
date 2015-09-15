@@ -12,7 +12,7 @@ import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Command;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.OptArg;
 import uk.co.terragaming.code.terracraft.utils.text.Lang;
 import uk.co.terragaming.code.terracraft.utils.text.Txt;
@@ -50,8 +50,8 @@ public class CommandHelp {
 		try {
 			CommandHelp handler = new CommandHelp();
 			Method method = CommandHelp.class.getMethod("onHelpCommand", CommandSender.class, Command.class, Integer.class);
-			Optional<Command> ret = CommandRegistry.createCommand(plugin, handler, method, "help", Lists.newArrayList("?"), "Shows this help message", "<c>/" + command.getPath() + " help <p>[pageNumber]", Optional.of(command), CommandRegistry.getParams(method));
-			CommandRegistry.registerCommand(ret.get(), handler, method);
+			Optional<Command> ret = Commands.createCommand(plugin, handler, method, "help", Lists.newArrayList("?"), "Shows this help message", "<c>/" + command.getPath() + " help <p>[pageNumber]", Optional.of(command), Commands.getParams(method));
+			Commands.registerCommand(ret.get(), handler, method);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

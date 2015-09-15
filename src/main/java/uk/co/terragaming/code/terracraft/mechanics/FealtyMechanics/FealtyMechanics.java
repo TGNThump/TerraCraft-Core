@@ -2,7 +2,7 @@ package uk.co.terragaming.code.terracraft.mechanics.FealtyMechanics;
 
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.FealtyMechanics.commands.FealtyCommands;
 
 public class FealtyMechanics implements Mechanic {
@@ -34,7 +34,7 @@ public class FealtyMechanics implements Mechanic {
 	
 	@Override
 	public void PostInitialize() {
-		CommandRegistry.registerCommands(TerraCraft.plugin, new FealtyCommands());
+		Commands.register(TerraCraft.plugin, new FealtyCommands());
 	}
 	
 	@Override

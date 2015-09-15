@@ -15,6 +15,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.HelpCommand;
@@ -26,14 +27,18 @@ import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 import com.google.common.collect.Lists;
 
-public class CommandRegistry {
+public class Commands {
 	
 	private final static HashMap<String, Command> rootCommands = new HashMap<String, Command>();
 	private final static CommandMap commandMap = CommandMechanics.getInstance().getCommandMap();
 	
 	// Register All Commands from a Class
 	
-	public static void registerCommands(JavaPlugin plugin, Object handler) {
+	public static void register(Object handler){
+		register(TerraCraft.plugin, handler);
+	}
+	
+	public static void register(JavaPlugin plugin, Object handler) {
 		
 		TerraLogger.blank();
 		TerraLogger.info("Registering Commands in '<h>" + handler.getClass().getSimpleName() + "<r>'");

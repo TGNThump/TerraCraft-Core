@@ -16,6 +16,7 @@ import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.events.character.CharacterJoinEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.interfaces.CharacterSelectInterface;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.LoadingMode;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.NickMechanics.NickRegistry;
@@ -86,7 +87,7 @@ public class CharacterManager {
 		try{
 			charactersDao.refresh(character);
 			charactersDao.refresh(character.getPatron());
-			
+			character.setAccount(AccountRegistry.getAccount(character.getAccount().getId()));
 			downloadCharacterInventory(character);
 			
 			TerraLogger.info("Downloaded Character Data of <n>" + character.getAccount().getTerraTag() + "<r>'s <n>" + character.getName() + "<r>.");

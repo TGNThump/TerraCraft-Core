@@ -24,8 +24,8 @@ public class CommandExecutor implements TabExecutor {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command bukkitCommand, String alias, String[] arguments) {
-		Command rootCommand = CommandRegistry.getRootCommand(bukkitCommand);
-		Entry<Command, List<String>> commandEntry = CommandRegistry.getChildCommandWithArgs(rootCommand, arguments);
+		Command rootCommand = Commands.getRootCommand(bukkitCommand);
+		Entry<Command, List<String>> commandEntry = Commands.getChildCommandWithArgs(rootCommand, arguments);
 		Command command = commandEntry.getKey();
 		List<String> args = commandEntry.getValue();
 		
@@ -92,14 +92,14 @@ public class CommandExecutor implements TabExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] bukkitArgs) {
-		Command command = CommandRegistry.getRootCommand(bukkitCommand.getName());
+		Command command = Commands.getRootCommand(bukkitCommand.getName());
 		List<String> commandArgs = Lists.newArrayList(bukkitArgs);
 		
 		// If the command has at least one argument ...
 		if (bukkitArgs.length > 0) {
 			// ... Grab the subcommand by argument recursively, parsing the
 			// remaining arguments ...
-			Entry<Command, List<String>> result = CommandRegistry.getChildCommandWithArgs(command, bukkitArgs);
+			Entry<Command, List<String>> result = Commands.getChildCommandWithArgs(command, bukkitArgs);
 			
 			command = result.getKey();
 			commandArgs = result.getValue();

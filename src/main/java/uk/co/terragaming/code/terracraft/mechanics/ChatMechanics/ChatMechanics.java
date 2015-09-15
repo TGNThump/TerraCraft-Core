@@ -11,7 +11,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.Notifi
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.channels.SimpleChannel;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.commands.ChannelCommands;
 import uk.co.terragaming.code.terracraft.mechanics.ChatMechanics.listeners.ChatEventListener;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 
 import com.j256.ormlite.dao.Dao;
@@ -108,7 +108,7 @@ public class ChatMechanics implements Mechanic {
 	
 	@Override
 	public void PostInitialize() {
-		CommandRegistry.registerCommands(TerraCraft.plugin, new ChannelCommands());
+		Commands.register(TerraCraft.plugin, new ChannelCommands());
 	}
 	
 	@Override

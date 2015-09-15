@@ -2,14 +2,14 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.commands.StaffItemCommands;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events.ItemEvents;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.listeners.ItemBindNotification;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.listeners.ItemEvents;
 import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
+import uk.co.terragaming.code.terracraft.utils.Events;
 
 
 public class ItemMechanics implements Mechanic{
@@ -51,8 +51,9 @@ public class ItemMechanics implements Mechanic{
 	
 	@Override
 	public void PostInitialize() {
-		Bukkit.getPluginManager().registerEvents(new ItemEvents(), TerraCraft.plugin);
-		CommandRegistry.registerCommands(TerraCraft.plugin, new StaffItemCommands());
+		Events.register(new ItemEvents());
+		Events.register(new ItemBindNotification());
+		Commands.register(new StaffItemCommands());
 	}
 	
 	@Override

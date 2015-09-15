@@ -1,7 +1,9 @@
 package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import uk.co.terragaming.code.terracraft.enums.ItemBindType;
 import uk.co.terragaming.code.terracraft.enums.ItemBinding;
@@ -38,20 +40,22 @@ public class BindingComponent extends ItemComponent{
 	
 	// Event Handlers
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onItemMove(ItemMoveEvent event){
+		if (event.getItem() != this.getItem()) return;
+		if (event.isCancelled()) return;
 		if (!(event.getTo() instanceof CharacterContainer)) return;
 		CharacterContainer to = (CharacterContainer) event.getTo();
 		
 		switch (getBinding()){
 			case ACCOUNT:
 				if (getAccOwner() == null) break;
-				if (getAccOwner().equals(to.getCharacter().getAccount())) break;
+				if (getAccOwner().equals(to.getCharacter().getAccount())) return;
 				event.setCancelled(true);
 				return;
 			case CHARACTER:
 				if (getCharOwner() == null) break;
-				if (getCharOwner().equals(to.getCharacter())) break;
+				if (getCharOwner().equals(to.getCharacter())) return;
 				event.setCancelled(true);
 				return;
 			default: break;
@@ -65,15 +69,15 @@ public class BindingComponent extends ItemComponent{
 	// Methods
 	
 	public void bind(Account account){
-		callBindEvent();
 		accOwner.set(account);
 		setBinding(ItemBinding.ACCOUNT);
+		callBindEvent();
 	}
 	
 	public void bind(Character character){
 		charOwner.set(character);
-		callBindEvent();
 		setBinding(ItemBinding.CHARACTER);
+		callBindEvent();
 	}
 	
 	private void callBindEvent(){
@@ -107,5 +111,17 @@ public class BindingComponent extends ItemComponent{
 	
 	public void setBinding(ItemBinding binding){
 		this.binding.set(binding);
+	}
+	
+	public Player getOwner(){
+		switch (getBinding()){
+			case ACCOUNT:
+				return getAccOwner().getPlayer();
+			case CHARACTER:
+				return getCharOwner().getAccount().getPlayer();
+			case NONE:
+			default:
+				return null;
+		}
 	}
 }

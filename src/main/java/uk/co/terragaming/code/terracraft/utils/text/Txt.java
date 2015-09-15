@@ -215,7 +215,17 @@ public class Txt {
 	}
 	
 	public static String parse(String string, boolean console, Object... args) {
-		return String.format(parse(string, console), args);
+		Object[] formattedArgs = new Object[args.length];
+		int i = 0;
+		for (Object arg : args){
+			if (arg instanceof String){
+				formattedArgs[i] = parse((String) arg, console);
+			} else {
+				formattedArgs[i] = arg;
+			}
+			i++;
+		}
+		return String.format(parse(string, console), formattedArgs);
 	}
 	
 	public static ArrayList<String> parse(Collection<String> strings, boolean console) {

@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.events;
+package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.listeners;
 
 import java.util.Iterator;
 
@@ -24,6 +24,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.Rend
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.WorldRegistry;
 import uk.co.terragaming.code.terracraft.utils.item.ItemUtils;
+import uk.co.terragaming.code.terracraft.utils.reflection.ActionBar;
 
 public class ItemEvents implements Listener{
 
@@ -103,6 +104,8 @@ public class ItemEvents implements Listener{
 			return;
 		} else {
 			event.setCancelled(true);
+			String name = i.get(RenderComponent.class).getColouredName();
+			ActionBar.sendMessage(player, "You are unable to pickup the %s.", name);
 			return;
 		}
 	}

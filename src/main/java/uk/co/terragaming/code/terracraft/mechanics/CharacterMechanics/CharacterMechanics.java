@@ -12,7 +12,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.LoginListener;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.LogoutListener;
 import uk.co.terragaming.code.terracraft.mechanics.CharacterMechanics.listeners.ShiftClickListener;
-import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.CommandRegistry;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.Commands;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
 
 import com.j256.ormlite.dao.Dao;
@@ -66,8 +66,8 @@ public class CharacterMechanics implements Mechanic {
 	
 	@Override
 	public void PostInitialize() {
-		CommandRegistry.registerCommands(TerraCraft.plugin, new CharacterStaffCommands());
-		CommandRegistry.registerCommands(TerraCraft.plugin, new CharacterCommands());
+		Commands.register(TerraCraft.plugin, new CharacterStaffCommands());
+		Commands.register(TerraCraft.plugin, new CharacterCommands());
 	}
 	
 	@Override
