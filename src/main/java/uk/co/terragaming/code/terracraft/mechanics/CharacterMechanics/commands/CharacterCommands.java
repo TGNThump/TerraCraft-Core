@@ -33,8 +33,9 @@ public class CharacterCommands {
 	@Command("name")
 	@CommandParent("character")
 	@CommandDescription("Set the name of your new  character.")
-	public void onCharName(Player sender, String name){
-		if (name.length() > 14){
+	public void onCharName(Player sender, String... name){
+		String implodedName = Txt.implode(name, " ");
+		if (implodedName.length() > 14){
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] Your name must be less than 14 characters."));
 			return;
 		}
@@ -48,10 +49,10 @@ public class CharacterCommands {
 			return;
 		}
 		
-		character.setName(name);
+		character.setName(implodedName);
 		
-		NickRegistry.setNick(sender.getUniqueId(), name);
-		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You successfully changed your name to <n>" + name + "<r>."));
+		NickRegistry.setNick(sender.getUniqueId(), implodedName);
+		sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You successfully changed your name to <n>" + implodedName + "<r>."));
 	}
 	
 }

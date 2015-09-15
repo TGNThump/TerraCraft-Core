@@ -223,6 +223,12 @@ public class CommandExecutor implements TabExecutor {
 			// ... otherwise, if the argIndex > the number of arguments ...
 			if (argIndex < commandArgs.size()) {
 				
+				if (param.getType().isArray()){
+					arg = param.getArgReader().read(Txt.implode(commandArgs.subList(argIndex, argLength), " "), sender);
+					args[paramIndex] = arg;
+					return args;
+				}
+				
 				// ... attempt to read the argument.
 				arg = param.getArgReader().read(commandArgs.get(argIndex), sender);
 				argIndex++;

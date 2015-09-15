@@ -61,7 +61,8 @@ public class CommandParameter {
 		if (isSpecial())
 			return;
 		try {
-			Class<?> arClass = Class.forName("uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.arg.AR" + Txt.upperCaseFirst(type.getSimpleName()));
+			String typeName = type.getSimpleName().replace("[]", "Array");
+			Class<?> arClass = Class.forName("uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.arg.AR" + Txt.upperCaseFirst(typeName));
 			argReader = (AR<?>) arClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			throw new TerraException("<b>Could not find ArgReader for type '" + type.getSimpleName() + "'. [Error Type: " + e.getClass().getSimpleName() + "]");
