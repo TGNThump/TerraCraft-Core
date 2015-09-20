@@ -82,8 +82,9 @@ public class WorldContainer extends Container{
 	}
 	
 	@Override
-	public void add(Item item, Integer slot){
+	public boolean add(Item item, Integer slot){
 		add(item);
+		return true;
 	}
 	
 	@Override

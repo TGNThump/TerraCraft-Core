@@ -1,14 +1,34 @@
 package uk.co.terragaming.code.terracraft.utils;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
+import com.google.common.collect.Lists;
+
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.GroupRegistry;
 import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
 public class TerraLogger {
+	
+	public static List<TCDebug> enabledDebug = Lists.newArrayList();
+	
+	public static void debug(TCDebug type, Object msg){
+		debug(type, "" + msg, "");
+	}
+	
+	public static void debug(TCDebug type, String msg){
+		debug(type, msg, "");
+	}
+	
+	public static void debug(TCDebug type, String msg, Object... args){
+		if (!enabledDebug.contains(type)) return;
+		debug(msg, args);
+	}
 	
 	public static void debug(Object msg) {
 		debug("" + msg, "");

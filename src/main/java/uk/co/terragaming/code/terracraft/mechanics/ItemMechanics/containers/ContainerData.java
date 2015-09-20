@@ -88,5 +88,13 @@ public class ContainerData {
 	public void setData(String data) {
 		this.data = data;
 	}
+
+	public void destory() {
+		try {
+			dao.delete(this);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

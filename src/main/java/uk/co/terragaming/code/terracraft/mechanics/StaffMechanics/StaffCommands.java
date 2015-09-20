@@ -1,12 +1,14 @@
 package uk.co.terragaming.code.terracraft.mechanics.StaffMechanics;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.Language;
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.enums.ServerMode;
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanics.annotations.Command;
@@ -16,6 +18,7 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.CommandMechanic
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PermissionMechanics.Perms;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.VanishEffect;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 import uk.co.terragaming.code.terracraft.utils.text.Lang;
 import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
@@ -81,5 +84,18 @@ public class StaffCommands {
 			sender.sendMessage(Txt.parse("[<l>TerraCraft<r>] You can now see vanished players."));
 		}
 		VanishEffect.vanishRefresh(sender);
+	}
+	
+	@Command({ "debug", "d" })
+	@CommandDescription("Debug Modes")
+	@CommandParent("staff")
+	public void onDebugModeCommand(CommandSender sender, TCDebug mode){
+		if (TerraLogger.enabledDebug.contains(mode)){
+			TerraLogger.enabledDebug.remove(mode);
+			sender.sendMessage(Txt.parse((sender instanceof ConsoleCommandSender), "[<l>TerraCraft<r>] <b>%s Debug Disabled.<r>", mode));
+		} else {
+			TerraLogger.enabledDebug.add(mode);
+			sender.sendMessage(Txt.parse((sender instanceof ConsoleCommandSender), "[<l>TerraCraft<r>] <g>%s Debug Enabled.<r>", mode));
+		}
 	}
 }

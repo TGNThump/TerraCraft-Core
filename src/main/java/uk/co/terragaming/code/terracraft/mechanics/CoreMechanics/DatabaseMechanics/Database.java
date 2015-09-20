@@ -34,6 +34,7 @@ public class Database {
 		BoneCPDataSource dataSource = new BoneCPDataSource(boneConfig);
 		
 		connectionPool = new BoneCP(boneConfig);
+		
 		connectionSource = new DataSourceConnectionSource(dataSource, boneConfig.getJdbcUrl());
 	}
 	

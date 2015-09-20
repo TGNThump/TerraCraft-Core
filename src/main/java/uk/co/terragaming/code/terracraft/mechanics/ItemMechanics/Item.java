@@ -271,6 +271,35 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		}
 	}
 	
+	public boolean moveTo(Container to, Integer slot){
+		return moveTo(to, slot, false);
+	}
+	
+	public boolean moveTo(Container to, Integer slot, boolean force){
+		ItemMoveEvent event = new ItemMoveEvent(this, container, to);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return false;
+		TerraLogger.info("%s moved from %s to %s", this, container, to);
+		
+		Integer oldSlot = getSlotId();
+		Container oldContainer = container;
+		container.remove(this);
+		if (force){
+			to.addOverride(this, slot);
+			return true;
+		} else {
+			Boolean success = to.add(this, slot);
+			if (success){
+				update();
+				return true;
+			} else {
+				oldContainer.add(this, oldSlot);
+				TerraLogger.debug("Inventory Full");
+				return false;
+			}
+		}
+	}
+	
 	public void destroy(){
 		ItemDestroyEvent event = new ItemDestroyEvent(this);
 		Bukkit.getPluginManager().callEvent(event);
@@ -280,7 +309,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		ItemMechanics.getInstance().getItemSystem().delete(this);
+		ItemMechanics.getInstance().getItemSystem().remove(this);
 	}
 	
 }

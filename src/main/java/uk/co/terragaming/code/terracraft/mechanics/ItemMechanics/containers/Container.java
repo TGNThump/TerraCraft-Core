@@ -8,8 +8,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 
-public abstract class Container implements Iterable<Item>, Comparable<Container>{
+public abstract class Container implements Comparable<Container>, Iterable<Item>{
 	
 	protected Integer id;
 	protected Integer size;
@@ -21,19 +22,28 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	protected HashMap<Integer, Item> items = new HashMap<>(); // slotId, item
 	
 	public boolean add(Item item) {
+		if (item == null) return false;
 		for (int i = 0; i < size; i++){
 			if (items.containsKey(i)) continue;
-			add(item, i);
+			addOverride(item, i);
 			return true;
 		}
 		return false;
 	}
 	
-	public void add(Item item, Integer slot){
+	public void addOverride(Item item, Integer slot){
+		if (items.containsKey(slot)) items.get(slot).destroy();
 		items.put(slot, item);
 		item.setSlotId(slot);
 		item.setContainer(this);
 		item.setContainerData(dao);
+	}
+	
+	public boolean add(Item item, Integer slot){
+		if (item == null) return false;
+		if (items.containsKey(slot)) return false;
+		addOverride(item, slot);
+		return true;
 	}
 	
 	public void remove(Item item){
@@ -71,6 +81,14 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 			i.setContainerData(this.dao);
 			items.put(i.getSlotId(), i);
 		}
+	}
+	
+	public void destory(){
+		for (Item i : items.values()){
+			i.destroy();
+		}
+		ItemSystem.get().removeContainer(this);
+		dao.destory();
 	}
 		
 	// Getters and Setters
@@ -137,12 +155,7 @@ public abstract class Container implements Iterable<Item>, Comparable<Container>
 	public void setItems(HashMap<Integer, Item> items) {
 		this.items = items;
 	}
-	
-	public Class<? extends Container> getType(){
-		return getClass();
-	}
 
-	@Override
 	public Iterator<Item> iterator() {
 		return items.values().iterator();
 	}

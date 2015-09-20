@@ -3,11 +3,14 @@ package uk.co.terragaming.code.terracraft.mechanics.WorldMechanics;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.WorldContainer;
+
+import com.google.common.collect.Lists;
 
 public class World {
 
@@ -21,6 +24,18 @@ public class World {
 	
 	public Collection<ChestContainer> getChests() {
 		return ItemSystem.get().getChests(this);
+	}
+	
+	public ChestContainer getChest(Location loc){
+		return getChest(loc.getX(), loc.getY(), loc.getZ());
+	}
+	
+	public ChestContainer getChest(double x, double y, double z){
+		return getChest(new Vector(x,y,z));
+	}
+	
+	public ChestContainer getChest(Vector loc){
+		return ItemSystem.get().getChest(this, loc);
 	}
 
 	public String getName() {
@@ -45,6 +60,7 @@ public class World {
 	
 	@Override
 	public String toString(){
-		return getClass().getSimpleName() + "[<h>" + getName() + "<r>]";
+		return getClass().getSimpleName() + " '<h>" + getName() + "<r>'";
+//		return getClass().getSimpleName() + "[<h>" + getName() + "<r>]";
 	}
 }

@@ -91,8 +91,8 @@ public class Txt {
 		
 		parseReplacements.put("<v>", "\u00A7d");
 		parseReplacements.put("<value>", "\u00A7d");
-		parseReplacements.put("<h>", "\u00A7d");
-		parseReplacements.put("<highlight>", "\u00A7d");
+		parseReplacements.put("<h>", "\u00A7e");
+		parseReplacements.put("<highlight>", "\u00A7e");
 		
 		parseReplacements.put("<c>", "\u00A7b");
 		parseReplacements.put("<command>", "\u00A7b");
@@ -214,7 +214,7 @@ public class Txt {
 		return parse(string, false);
 	}
 	
-	public static String parse(String string, boolean console, Object... args) {
+	public static String parse(boolean console, String string, Object... args) {
 		Object[] formattedArgs = new Object[args.length];
 		int i = 0;
 		for (Object arg : args){
@@ -237,7 +237,7 @@ public class Txt {
 	}
 	
 	public static String parse(String string, Object... args) {
-		return parse(string, false, args);
+		return parse(false, string, args);
 	}
 	
 	public static ArrayList<String> parse(Collection<String> string) {

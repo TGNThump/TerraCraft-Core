@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import uk.co.terragaming.code.terracraft.Mechanic;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.exceptions.TerraException;
+import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.listeners.ChestEvents;
+import uk.co.terragaming.code.terracraft.utils.Events;
 
 
 public class WorldMechanics implements Mechanic{
@@ -32,6 +34,7 @@ public class WorldMechanics implements Mechanic{
 		try {
 			WorldManager.loadWorlds();
 			WorldManager.loadWorldContainers();
+			WorldManager.loadChestContainers();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new TerraException();
@@ -40,7 +43,7 @@ public class WorldMechanics implements Mechanic{
 	
 	@Override
 	public void PostInitialize() {
-		
+		Events.register(new ChestEvents());
 	}
 	
 	@Override

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.util.Vector;
+
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.WorldContainer;
@@ -58,11 +60,15 @@ public class ItemSystem implements Iterable<Item>{
 		put(i.getId(), i);
 	}
 
-	public void delete(Item i) {
+	public void remove(Item i) {
 		items.remove(i.getId());
 	}
 	
-	private HashMap<World, List<ChestContainer>> chestItems = new HashMap<>();
+	public void remove(Integer i){
+		items.remove(i);
+	}
+	
+	private HashMap<World, HashMap<Vector, ChestContainer>> chestContainers = new HashMap<>();
 	private HashMap<World, WorldContainer> droppedItems = new HashMap<>();
 	private HashSet<Container> containers = new HashSet<>();
 	
@@ -80,8 +86,9 @@ public class ItemSystem implements Iterable<Item>{
 		
 		if (container instanceof ChestContainer){
 			ChestContainer c = ((ChestContainer) container);
-			chestItems.putIfAbsent(c.getWorld(), Lists.newArrayList());
-			chestItems.get(c.getWorld()).add(c);
+			
+			chestContainers.putIfAbsent(c.getWorld(), new HashMap<>());
+			chestContainers.get(c.getWorld()).put(c.getBlockLocation(), c);
 		}
 	}
 	
@@ -94,8 +101,8 @@ public class ItemSystem implements Iterable<Item>{
 		}
 		
 		if (container instanceof ChestContainer){
-			ChestContainer c = ((ChestContainer) container);
-			chestItems.get(c.getWorld()).remove(c);
+			ChestContainer c = ((ChestContainer) container);			
+			chestContainers.get(c.getWorld()).remove(c.getBlockLocation());
 		}
 	}
 
@@ -108,7 +115,17 @@ public class ItemSystem implements Iterable<Item>{
 	}
 	
 	public Collection<ChestContainer> getChests(World world) {
-		return chestItems.get(world);
+		if (chestContainers.containsKey(world))
+			return chestContainers.get(world).values();
+		else return Lists.newArrayList();
+	}
+	
+	public ChestContainer getChest(World world, Vector loc){
+		try{
+			return chestContainers.get(world).get(loc);
+		} catch (Exception e){
+			return null;
+		}
 	}
 	
 	@Override
