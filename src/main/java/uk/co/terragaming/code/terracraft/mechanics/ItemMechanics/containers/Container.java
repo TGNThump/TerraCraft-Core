@@ -168,5 +168,9 @@ public abstract class Container implements Comparable<Container>, Iterable<Item>
 	@Override
 	public String toString(){
 		return getClass().getSimpleName() + "[<h>" + id + "<r>]";
-	}	
+	}
+	
+	public int getId(){
+		return getDao().getId();
+	}
 }

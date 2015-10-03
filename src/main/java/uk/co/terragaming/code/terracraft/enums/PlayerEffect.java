@@ -6,6 +6,7 @@ public enum PlayerEffect {
 	STAFFMODE("STAFFMODE"),
 	NOCHAT("NOCHAT"),
 	NOMOVE("NOMOVE"),
+	NOINTERACT("NOINTERACT"),
 	LEAVING("LEAVING");
 	
 	private final String effect;

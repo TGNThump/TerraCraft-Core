@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.listeners;
+package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.listeners;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -6,7 +6,6 @@ import java.util.concurrent.Callable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
@@ -15,8 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,19 +21,19 @@ import org.bukkit.inventory.Inventory;
 import uk.co.terragaming.code.terracraft.TerraCraft;
 import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ContainerData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ContainerFactory;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.WorldRegistry;
-import uk.co.terragaming.code.terracraft.utils.BlockUtils;
 import uk.co.terragaming.code.terracraft.utils.Scheduler;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.google.common.collect.Lists;
 
 
-public class ChestEvents implements Listener{
+public class BlockContainerEvents implements Listener{
 	
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event){
@@ -46,7 +43,7 @@ public class ChestEvents implements Listener{
 
 			@Override
 			public void run() {
-				List<ChestContainer> toUpdate = Lists.newArrayList();
+				List<BlockContainer> toUpdate = Lists.newArrayList();
 				
 				for (BlockState bs : states){
 					if (!(bs instanceof Chest) && !(bs instanceof DoubleChest)) continue;
@@ -56,7 +53,7 @@ public class ChestEvents implements Listener{
 					World world = WorldRegistry.get(c.getWorld());
 					if (world == null) continue;
 					
-					ChestContainer chest = world.getChest(c.getLocation());
+					BlockContainer chest = world.getBlockContainer(c.getLocation());
 					if (chest == null){
 						// Create new chest...
 						Long ts = System.currentTimeMillis();
@@ -77,7 +74,7 @@ public class ChestEvents implements Listener{
 
 						@Override
 						public Void call() throws Exception {
-							for (ChestContainer chest : toUpdate){
+							for (BlockContainer chest : toUpdate){
 								Long ts = System.currentTimeMillis();
 								chest.update();
 								TerraLogger.debug(TCDebug.CHESTS, "Loaded %s in <h>%sms<r>", chest, System.currentTimeMillis() - ts);
@@ -116,7 +113,7 @@ public class ChestEvents implements Listener{
 								World world = WorldRegistry.get(c.getWorld());
 								if (world == null) continue;
 								
-								ChestContainer chest = world.getChest(c.getLocation());
+								BlockContainer chest = world.getBlockContainer(c.getLocation());
 								if (chest == null) continue;
 								chest.update();
 								chest.getItems().keySet().forEach(i -> ItemSystem.get().remove(i));
@@ -147,6 +144,8 @@ public class ChestEvents implements Listener{
 		World world = WorldRegistry.get(loc.getWorld());
 		if (world == null) return;
 		
+		// TODO: Async This
+		
 		ChestContainer chest = ContainerFactory.create(ChestContainer.class, inv.getSize());
 		chest.setWorld(world);
 		chest.setLocation(loc);
@@ -165,49 +164,12 @@ public class ChestEvents implements Listener{
 		World world = WorldRegistry.get(loc.getWorld());
 		if (world == null) return;
 		
-		ChestContainer chest = world.getChest(loc);
+		// TODO: Async This
+		
+		BlockContainer chest = world.getBlockContainer(loc);
 		if (chest == null) return;
 		chest.destory();
 		
 		TerraLogger.debug(TCDebug.CHESTS, "Destroyed %s and removed from %s", chest, chest.getWorld());
 	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-    public void onInventoryOpenEvent(InventoryOpenEvent e){
-		if (e.isCancelled()) return;
-		if (!(e.getInventory().getHolder() instanceof Chest) && !(e.getInventory().getHolder() instanceof DoubleChest)) return;
-
-		Location loc = null;
-		
-		if (e.getInventory().getHolder() instanceof Chest){
-			Chest c = (Chest) e.getInventory().getHolder();
-			loc = c.getLocation();
-		} else {
-			DoubleChest c = (DoubleChest) e.getInventory().getHolder();
-			loc = c.getLocation();
-		}
-		
-		World world = WorldRegistry.get(loc.getWorld());
-		if (world == null){	e.setCancelled(true); return; }
-		
-		ChestContainer chest = world.getChest(loc);
-		if (chest == null){	e.setCancelled(true); return; }
-		
-		e.setCancelled(true);
-		e.getPlayer().openInventory(chest.getInventory());
-		BlockUtils.playChestAction((Chest) e.getInventory().getHolder(), true);
-    }
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void OnInventoryCloseEvent(InventoryCloseEvent e){
-		if (!(e.getInventory().getHolder() instanceof ChestContainer)) return;
-		ChestContainer c = (ChestContainer) e.getInventory().getHolder();
-		
-		Block block = c.getWorld().getBukkitWorld().getBlockAt(c.getLocation());
-		if (!(block.getState() instanceof Chest)) return;
-		
-		Chest chest = (Chest) block.getState();
-		BlockUtils.playChestAction(chest, false);
-	}
-	
 }

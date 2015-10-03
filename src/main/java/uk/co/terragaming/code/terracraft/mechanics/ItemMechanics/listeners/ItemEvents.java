@@ -61,7 +61,7 @@ public class ItemEvents implements Listener{
 
 		World w = WorldRegistry.get(event.getItemDrop().getWorld());
 		
-		boolean success = i.moveTo(w.getContainer());
+		boolean success = i.moveTo(w.getDropsContainer());
 		if (success){
 			event.getItemDrop().setItemStack(i.as(RenderComponent.class).render());
 			w.getItemEntities().add(event.getItemDrop());

@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ContainerData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.WorldContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ContainerFactory;
@@ -42,7 +42,7 @@ public class WorldManager {
 		}
 		
 		for (World w : WorldRegistry.worlds()){
-			if (w.getContainer() != null) continue;
+			if (w.getDropsContainer() != null) continue;
 			WorldContainer c = ContainerFactory.create(WorldContainer.class, null);
 			c.setWorld(w);
 			c.update();
@@ -63,14 +63,14 @@ public class WorldManager {
 		TerraLogger.info("Loading <h>%s<r> Chests...", results.size());
 		
 		for (ContainerData cd : results){
-			ChestContainer c = (ChestContainer) ContainerFactory.create(cd);
+			BlockContainer c = (BlockContainer) ContainerFactory.create(cd);
 			World world = c.getWorld();
 			if (world == null) continue;
 			ItemSystem.get().addContainer(c);
 		}
 		
 		for (World w : WorldRegistry.worlds()){
-			TerraLogger.info("	Loaded <h>%s<r> ChestContainers for %s", w.getChests().size(), w);
+			TerraLogger.info("	Loaded <h>%s<r> ChestContainers for %s", w.getBlockContainers().size(), w);
 		}
 	}
 	

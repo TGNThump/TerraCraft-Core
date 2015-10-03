@@ -14,7 +14,6 @@ import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics
 import uk.co.terragaming.code.terracraft.utils.reflection.ActionBar;
 import uk.co.terragaming.code.terracraft.utils.text.Txt;
 
-
 public class LoadingMode {
 	
 	public static HashMap<UUID, Integer> loading = new HashMap<>();
@@ -56,6 +55,7 @@ public class LoadingMode {
 		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.addEffect(player, PlayerEffect.NOCHAT);
 		PlayerEffects.addEffect(player, PlayerEffect.NOMOVE);
+		PlayerEffects.addEffect(player, PlayerEffect.NOINTERACT);
 	}
 	
 	public static void deactiveFor(Player player){
@@ -63,11 +63,16 @@ public class LoadingMode {
 		PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.removeEffect(player, PlayerEffect.NOCHAT);
 		PlayerEffects.removeEffect(player, PlayerEffect.NOMOVE);
+		PlayerEffects.removeEffect(player, PlayerEffect.NOINTERACT);
 		
 		loading.remove(player.getUniqueId());
 		
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setCanPickupItems(true);
+	}
+	
+	public static boolean isActiveFor(Player player){
+		return loading.containsKey(player.getUniqueId());
 	}
 	
 }

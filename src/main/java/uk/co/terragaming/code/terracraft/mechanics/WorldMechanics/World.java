@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.WorldContainer;
 
 import com.google.common.collect.Lists;
@@ -18,24 +18,24 @@ public class World {
 	private org.bukkit.World bWorld;
 	private List<org.bukkit.entity.Item> itemEntities = Lists.newArrayList();
 	
-	public WorldContainer getContainer() {
+	public WorldContainer getDropsContainer() {
 		return ItemSystem.get().getDroppedItems(this);
 	}
 	
-	public Collection<ChestContainer> getChests() {
-		return ItemSystem.get().getChests(this);
+	public Collection<BlockContainer> getBlockContainers() {
+		return ItemSystem.get().getBlockContainers(this);
 	}
 	
-	public ChestContainer getChest(Location loc){
-		return getChest(loc.getX(), loc.getY(), loc.getZ());
+	public BlockContainer getBlockContainer(Location loc){
+		return getBlockContainer(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
-	public ChestContainer getChest(double x, double y, double z){
-		return getChest(new Vector(x,y,z));
+	public BlockContainer getBlockContainer(double x, double y, double z){
+		return getBlockContainer(new Vector(x,y,z));
 	}
 	
-	public ChestContainer getChest(Vector loc){
-		return ItemSystem.get().getChest(this, loc);
+	public BlockContainer getBlockContainer(Vector loc){
+		return ItemSystem.get().getBlockContainer(this, loc);
 	}
 
 	public String getName() {
@@ -61,6 +61,5 @@ public class World {
 	@Override
 	public String toString(){
 		return getClass().getSimpleName() + " '<h>" + getName() + "<r>'";
-//		return getClass().getSimpleName() + "[<h>" + getName() + "<r>]";
 	}
 }

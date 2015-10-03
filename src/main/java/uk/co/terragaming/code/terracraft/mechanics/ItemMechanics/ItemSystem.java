@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.bukkit.util.Vector;
 
-import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.WorldContainer;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
@@ -68,7 +68,7 @@ public class ItemSystem implements Iterable<Item>{
 		items.remove(i);
 	}
 	
-	private HashMap<World, HashMap<Vector, ChestContainer>> chestContainers = new HashMap<>();
+	private HashMap<World, HashMap<Vector, BlockContainer>> blockContainers = new HashMap<>();
 	private HashMap<World, WorldContainer> droppedItems = new HashMap<>();
 	private HashSet<Container> containers = new HashSet<>();
 	
@@ -84,11 +84,11 @@ public class ItemSystem implements Iterable<Item>{
 			droppedItems.put(c.getWorld(), c);
 		}
 		
-		if (container instanceof ChestContainer){
-			ChestContainer c = ((ChestContainer) container);
+		if (container instanceof BlockContainer){
+			BlockContainer c = ((BlockContainer) container);
 			
-			chestContainers.putIfAbsent(c.getWorld(), new HashMap<>());
-			chestContainers.get(c.getWorld()).put(c.getBlockLocation(), c);
+			blockContainers.putIfAbsent(c.getWorld(), new HashMap<>());
+			blockContainers.get(c.getWorld()).put(c.getBlockLocation(), c);
 		}
 	}
 	
@@ -100,9 +100,9 @@ public class ItemSystem implements Iterable<Item>{
 			droppedItems.remove(c);
 		}
 		
-		if (container instanceof ChestContainer){
-			ChestContainer c = ((ChestContainer) container);			
-			chestContainers.get(c.getWorld()).remove(c.getBlockLocation());
+		if (container instanceof BlockContainer){
+			BlockContainer c = ((BlockContainer) container);			
+			blockContainers.get(c.getWorld()).remove(c.getBlockLocation());
 		}
 	}
 
@@ -114,15 +114,15 @@ public class ItemSystem implements Iterable<Item>{
 		return droppedItems.get(world);
 	}
 	
-	public Collection<ChestContainer> getChests(World world) {
-		if (chestContainers.containsKey(world))
-			return chestContainers.get(world).values();
+	public Collection<BlockContainer> getBlockContainers(World world) {
+		if (blockContainers.containsKey(world))
+			return blockContainers.get(world).values();
 		else return Lists.newArrayList();
 	}
 	
-	public ChestContainer getChest(World world, Vector loc){
+	public BlockContainer getBlockContainer(World world, Vector loc){
 		try{
-			return chestContainers.get(world).get(loc);
+			return blockContainers.get(world).get(loc);
 		} catch (Exception e){
 			return null;
 		}
