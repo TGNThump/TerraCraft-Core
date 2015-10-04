@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.event.HandlerList;
 
 import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.events.item.ItemDestroyEvent;
 import uk.co.terragaming.code.terracraft.events.item.ItemMoveEvent;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.DatabaseMechanics.DatabaseMechanics;
@@ -17,6 +18,7 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Cont
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ContainerData;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.factories.ComponentFactory;
 import uk.co.terragaming.code.terracraft.utils.Assert;
+import uk.co.terragaming.code.terracraft.utils.Scheduler;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 import com.j256.ormlite.dao.Dao;
@@ -72,7 +74,7 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 	public void update(){
 		if (container == null || containerData == null){
 			destroy();
-			TerraLogger.debug("Deleted Item[<p>%s<r>] named '<p>%s<r>' - cleanup - container null", getId(), getName());
+			TerraLogger.debug(TCDebug.ITEMS, "Deleted Item[<p>%s<r>] named '<p>%s<r>' - cleanup - container null", getId(), getName());
 			return;
 		}
 		if (containerData == null){
@@ -251,22 +253,40 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		return getClass().getSimpleName() + "[<h>" + getId() + "<r>]";
 	}
 
+	public boolean moveToSlot(Integer slot){
+		int oldSlot = getSlotId();
+		Container container = this.container;
+		container.remove(this);
+		boolean success = container.add(this, slot);
+		
+		if (success){
+			return true;
+		} else {
+			container.addOverride(this, oldSlot);
+			return false;
+		}
+	}
+	
 	public boolean moveTo(Container to) {
 		ItemMoveEvent event = new ItemMoveEvent(this, container, to);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) return false;
-		TerraLogger.info("%s moved from %s to %s", this, container, to);
+		TerraLogger.debug(TCDebug.ITEMS, "%s moved from %s to %s", this, container, to);
 		
 		Integer oldSlot = getSlotId();
 		Container oldContainer = container;
-		container.remove(this);
+		if (container != null){
+			container.remove(this);	
+		}
 		Boolean success = to.add(this);
 		if (success){
-			update();
+			Scheduler.runAsync(() -> {
+				update();
+			});
 			return true;
 		} else {
-			oldContainer.add(this, oldSlot);
-			TerraLogger.debug("Inventory Full");
+			if (oldContainer != null)
+				oldContainer.add(this, oldSlot);
 			return false;
 		}
 	}
@@ -279,11 +299,11 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 		ItemMoveEvent event = new ItemMoveEvent(this, container, to);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) return false;
-		TerraLogger.info("%s moved from %s to %s", this, container, to);
+		TerraLogger.debug(TCDebug.ITEMS, "%s moved from %s to %s", this, container, to);
 		
 		Integer oldSlot = getSlotId();
 		Container oldContainer = container;
-		container.remove(this);
+		if (container != null) container.remove(this);
 		if (force){
 			to.addOverride(this, slot);
 			return true;
@@ -293,8 +313,8 @@ public class Item implements Iterable<ItemComponent>, Comparable<Item>{
 				update();
 				return true;
 			} else {
-				oldContainer.add(this, oldSlot);
-				TerraLogger.debug("Inventory Full");
+				if (oldContainer != null) oldContainer.add(this, oldSlot);
+				TerraLogger.debug(TCDebug.ITEMS, "Inventory Full");
 				return false;
 			}
 		}

@@ -4,6 +4,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import uk.co.terragaming.code.terracraft.enums.ItemBinding;
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.components.BindingComponent;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
@@ -19,7 +20,7 @@ public class ItemBindEvent extends Event{
 		this.item = item;
 		this.binding = binding;
 
-		TerraLogger.info("%s bound to %s.", item, (binding.getBinding().equals(ItemBinding.ACCOUNT) ? binding.getAccOwner() : binding.getCharOwner()));
+		TerraLogger.debug(TCDebug.ITEMS, "%s bound to %s.", item, (binding.getBinding().equals(ItemBinding.ACCOUNT) ? binding.getAccOwner() : binding.getCharOwner()));
 	}
 	
 	public BindingComponent getBinding() {

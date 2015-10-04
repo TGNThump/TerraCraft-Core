@@ -139,6 +139,7 @@ public class BlockContainerEvents implements Listener{
 		if (type == null) return;
 		
 		Scheduler.runAsync(() -> {
+			// TODO: Double Chests
 			createBlockContainer(type, 27, world, loc);
 		});
 	}
@@ -173,7 +174,7 @@ public class BlockContainerEvents implements Listener{
 	
 	private void updateBlockContainer(BlockContainer container){
 		Long ts = System.currentTimeMillis();
-		container.update();
+		container.refresh();
 		TerraLogger.debug(TCDebug.CHESTS, "Loaded %s in <h>%sms<r>", container, System.currentTimeMillis() - ts);
 	}
 	

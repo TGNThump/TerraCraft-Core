@@ -3,6 +3,7 @@ package uk.co.terragaming.code.terracraft.events.item;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
@@ -15,7 +16,7 @@ public class ItemCreateEvent extends Event{
 	public ItemCreateEvent(Item item){
 		this.item = item;
 		
-		TerraLogger.info("%s Created and added to %s.", item, item.getContainer());
+		TerraLogger.debug(TCDebug.ITEMS, "%s Created and added to %s.", item, item.getContainer());
 	}
 	
 	public Item getItem() {

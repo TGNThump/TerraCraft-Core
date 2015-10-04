@@ -7,22 +7,108 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
 
 import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.events.inventory.BlockContainerCloseEvent;
 import uk.co.terragaming.code.terracraft.events.inventory.BlockContainerOpenEvent;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.Account;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.AccountMechanics.AccountRegistry;
 import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
+import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.Container;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.InventoryContainer;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.WorldRegistry;
 import uk.co.terragaming.code.terracraft.utils.blocks.BlockUtils;
-
+import uk.co.terragaming.code.terracraft.utils.item.ItemUtils;
 
 public class InventoryContainerEvents implements Listener{
 	
+	// Inventory Interact
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onInventoryClickEvent(InventoryClickEvent  e){
+		if (e.isCancelled()) return;
+		e.setCancelled(true);
+		
+		Container inv = getContainer(e.getInventory());
+		Container clicked = getContainer(e.getClickedInventory());
+		Container charInv = getContainer(e.getWhoClicked().getInventory());
+		
+		if (inv == null) return;
+		if (clicked == null) return;
+		if (charInv == null) return;
+		
+		Item current = ItemUtils.getItem(e.getCurrentItem());
+		Item cursor = ItemUtils.getItem(e.getCursor());
+		
+		if (current == null  && cursor == null) return;
+		
+//		TerraLogger.debug(TCDebug.ITEMS, "");
+//		TerraLogger.debug(TCDebug.ITEMS, "INV: %s", inv);
+//		TerraLogger.debug(TCDebug.ITEMS, "CLICKED: %s", clicked);
+//		TerraLogger.debug(TCDebug.ITEMS, "CURRENT: %s", current);
+//		TerraLogger.debug(TCDebug.ITEMS, "CURSOR: %s", cursor);
+//		TerraLogger.debug(TCDebug.ITEMS, "ACTION: %s", e.getAction());
+//		TerraLogger.debug(TCDebug.ITEMS, "");
+		
+		e.setCancelled(false);
+		
+		switch (e.getAction()){
+			case NOTHING:
+			case PICKUP_ALL:
+				break;
+			case PLACE_ALL:
+				if (cursor == null) return;
+				if (cursor.getContainer() == clicked){
+					e.setCancelled(!cursor.moveToSlot(e.getSlot()));
+					return;
+				}
+						
+				e.setCancelled(!cursor.moveTo(clicked, e.getSlot()));
+				
+				break;
+			case MOVE_TO_OTHER_INVENTORY:
+				if (current == null) return;
+				if (clicked == charInv){
+					e.setCancelled(!current.moveTo(inv));
+				} else {
+					e.setCancelled(!current.moveTo(charInv));
+				}
+				break;
+			default:
+				e.setCancelled(true);
+				break;
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onInventoryDragEvent(InventoryDragEvent e){
+		e.setCancelled(true);
+	}
+	
+	private Container getContainer(Inventory inv){
+		if (inv.getHolder() instanceof Player){
+			Player player = (Player) inv.getHolder();
+			Account account = AccountRegistry.getAccount(player);
+			return account.getActiveCharacter().getContainer();
+		}
+		
+		if (inv.getHolder() instanceof InventoryContainer){
+			return (Container) inv.getHolder();
+		}
+		
+		return null;
+	}
+	
+	// Inventory Open and Close
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryOpenEvent(InventoryOpenEvent e){
 		if (e.isCancelled()) return;

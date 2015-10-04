@@ -3,6 +3,7 @@ package uk.co.terragaming.code.terracraft.events.item;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
@@ -15,7 +16,7 @@ public class ItemUseEvent extends Event{
 	public ItemUseEvent(Item item){
 		this.item = item;
 		
-		TerraLogger.info("%s Used.", item);
+		TerraLogger.debug(TCDebug.ITEMS, "%s Used.", item);
 	}
 	
 	public Item getItem() {
