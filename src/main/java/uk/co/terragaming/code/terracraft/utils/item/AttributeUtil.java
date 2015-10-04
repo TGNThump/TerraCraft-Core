@@ -1,4 +1,4 @@
-package uk.co.terragaming.code.terracraft.utils;
+package uk.co.terragaming.code.terracraft.utils.item;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;

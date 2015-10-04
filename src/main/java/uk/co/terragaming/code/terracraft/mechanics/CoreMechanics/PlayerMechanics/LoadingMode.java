@@ -20,6 +20,12 @@ public class LoadingMode {
 	public static BukkitTask task;
 	
 	public static void activeFor(Player player){
+		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
+		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
+		PlayerEffects.addEffect(player, PlayerEffect.NOCHAT);
+		PlayerEffects.addEffect(player, PlayerEffect.NOMOVE);
+		PlayerEffects.addEffect(player, PlayerEffect.NOINTERACT);
+		
 		player.setGameMode(GameMode.SPECTATOR);
 		player.setCanPickupItems(false);
 		
@@ -50,25 +56,19 @@ public class LoadingMode {
 				
 			}, 0, 10);
 		}
-			
-		PlayerEffects.addEffect(player, PlayerEffect.INVISIBLE);
-		PlayerEffects.addEffect(player, PlayerEffect.INVULNERABLE);
-		PlayerEffects.addEffect(player, PlayerEffect.NOCHAT);
-		PlayerEffects.addEffect(player, PlayerEffect.NOMOVE);
-		PlayerEffects.addEffect(player, PlayerEffect.NOINTERACT);
 	}
 	
 	public static void deactiveFor(Player player){
+		loading.remove(player.getUniqueId());
+		
+		player.setGameMode(GameMode.SURVIVAL);
+		player.setCanPickupItems(true);
+		
 		PlayerEffects.removeEffect(player, PlayerEffect.INVISIBLE);
 		PlayerEffects.removeEffect(player, PlayerEffect.INVULNERABLE);
 		PlayerEffects.removeEffect(player, PlayerEffect.NOCHAT);
 		PlayerEffects.removeEffect(player, PlayerEffect.NOMOVE);
 		PlayerEffects.removeEffect(player, PlayerEffect.NOINTERACT);
-		
-		loading.remove(player.getUniqueId());
-		
-		player.setGameMode(GameMode.SURVIVAL);
-		player.setCanPickupItems(true);
 	}
 	
 	public static boolean isActiveFor(Player player){

@@ -10,8 +10,8 @@ import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.list
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.listeners.InventoryContainerEvents;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.listeners.ItemBindNotification;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.listeners.ItemEvents;
-import uk.co.terragaming.code.terracraft.utils.AttributeUtil;
 import uk.co.terragaming.code.terracraft.utils.Events;
+import uk.co.terragaming.code.terracraft.utils.item.AttributeUtil;
 
 
 public class ItemMechanics implements Mechanic{

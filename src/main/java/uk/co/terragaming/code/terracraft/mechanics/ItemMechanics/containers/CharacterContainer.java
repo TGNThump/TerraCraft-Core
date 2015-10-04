@@ -17,23 +17,9 @@ public class CharacterContainer extends Container{
 		super.update();
 	}
 	
-//	@Override
-//	public void refresh(){
-//		super.refresh();
-//		try {
-//			Integer id = (Integer) data.get("cId");
-//			if (id == null) return;
-//			character = CharacterMechanics.getInstance().getCharacterDao().queryForId(id);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	
 	public Character getCharacter() {
 		return character;
 	}
-
 	
 	public void setCharacter(Character character) {
 		this.character = character;

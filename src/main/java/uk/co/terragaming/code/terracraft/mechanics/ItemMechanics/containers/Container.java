@@ -7,8 +7,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import uk.co.terragaming.code.terracraft.enums.TCDebug;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.Item;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
+import uk.co.terragaming.code.terracraft.utils.TerraLogger;
 
 public abstract class Container implements Comparable<Container>, Iterable<Item>{
 	
@@ -89,6 +91,7 @@ public abstract class Container implements Comparable<Container>, Iterable<Item>
 		}
 		ItemSystem.get().removeContainer(this);
 		dao.destory();
+		TerraLogger.debug(TCDebug.CHESTS, "Destroyed %s", this);
 	}
 		
 	// Getters and Setters

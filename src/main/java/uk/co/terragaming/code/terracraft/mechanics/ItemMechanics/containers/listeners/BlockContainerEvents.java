@@ -3,12 +3,10 @@ package uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.lis
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,9 +15,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
-import uk.co.terragaming.code.terracraft.TerraCraft;
+import uk.co.terragaming.code.terracraft.enums.PlayerEffect;
 import uk.co.terragaming.code.terracraft.enums.TCDebug;
+import uk.co.terragaming.code.terracraft.events.inventory.BlockContainerCloseEvent;
+import uk.co.terragaming.code.terracraft.events.inventory.BlockContainerOpenEvent;
+import uk.co.terragaming.code.terracraft.mechanics.CoreMechanics.PlayerMechanics.EffectMechanics.PlayerEffects;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.ItemSystem;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.BlockContainer;
 import uk.co.terragaming.code.terracraft.mechanics.ItemMechanics.containers.ChestContainer;
@@ -29,66 +31,67 @@ import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.World;
 import uk.co.terragaming.code.terracraft.mechanics.WorldMechanics.WorldRegistry;
 import uk.co.terragaming.code.terracraft.utils.Scheduler;
 import uk.co.terragaming.code.terracraft.utils.TerraLogger;
+import uk.co.terragaming.code.terracraft.utils.blocks.BlockUtils;
+import uk.co.terragaming.code.terracraft.utils.blocks.ChestUtils;
 
 import com.google.common.collect.Lists;
 
-
 public class BlockContainerEvents implements Listener{
+	
+	@EventHandler
+	public void onBlockContainerOpenEvent(BlockContainerOpenEvent e){
+		BlockContainer container = e.getContainer();
+		
+		if (container instanceof ChestContainer){
+			if (!PlayerEffects.hasEffect((Player) e.getPlayer(), PlayerEffect.INVISIBLE))
+				ChestUtils.openChest(container.getBlock());
+		}
+	}
+	
+	@EventHandler
+	public void onBlockContainerCloseEvent(BlockContainerCloseEvent e){
+		BlockContainer container = e.getContainer();
+		
+		if (container instanceof ChestContainer){
+			if (!PlayerEffects.hasEffect((Player) e.getPlayer(), PlayerEffect.INVISIBLE))
+				ChestUtils.closeChest(container.getBlock());
+		}
+	}
 	
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event){
 		BlockState[] states = event.getChunk().getTileEntities();
 		
-		Bukkit.getScheduler().runTaskAsynchronously(TerraCraft.plugin, new Runnable(){
-
-			@Override
-			public void run() {
-				List<BlockContainer> toUpdate = Lists.newArrayList();
+		Scheduler.runAsync(() -> {
+			List<BlockContainer> toUpdate = Lists.newArrayList();
+			
+			for (BlockState bs : states){
+				if (!(bs instanceof InventoryHolder)) continue;
+				InventoryHolder holder = (InventoryHolder) bs;
+				Inventory inv = holder.getInventory();
 				
-				for (BlockState bs : states){
-					if (!(bs instanceof Chest) && !(bs instanceof DoubleChest)) continue;
-					Chest c = (Chest) bs;
-					Inventory inv = c.getBlockInventory();
-					
-					World world = WorldRegistry.get(c.getWorld());
-					if (world == null) continue;
-					
-					BlockContainer chest = world.getBlockContainer(c.getLocation());
-					if (chest == null){
-						// Create new chest...
-						Long ts = System.currentTimeMillis();
-						chest = ContainerFactory.create(ChestContainer.class, inv.getSize());
-						chest.setWorld(world);
-						chest.setLocation(c.getLocation());
-						chest.update();
-						chest.refresh();
-						ItemSystem.get().addContainer(chest);
-						TerraLogger.debug(TCDebug.CHESTS, "Created %s in %s in <h>%sms<r>", chest, world, System.currentTimeMillis() - ts);
-						continue;
-					}
-					toUpdate.add(chest);
-				}
+				Location loc = BlockUtils.getLocation(holder);
+				if (loc == null) continue;
 				
-				try {
-					ContainerData.dao.callBatchTasks(new Callable<Void>(){
-
-						@Override
-						public Void call() throws Exception {
-							for (BlockContainer chest : toUpdate){
-								Long ts = System.currentTimeMillis();
-								chest.update();
-								TerraLogger.debug(TCDebug.CHESTS, "Loaded %s in <h>%sms<r>", chest, System.currentTimeMillis() - ts);
-							}
-							return null;
-						}
-						
-					});
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				World world = WorldRegistry.get(loc.getWorld());
+				if (world == null) continue;
+				
+				BlockContainer container = world.getBlockContainer(loc);
+				if (container == null){
+					Class<? extends BlockContainer> type = BlockUtils.getContainerType(bs.getBlock());
+					if (type == null) continue;
+					createBlockContainer(type, inv.getSize(), world, loc);
+				} else toUpdate.add(container);			
 			}
 			
+			try{
+				ContainerData.dao.callBatchTasks((Callable<Void>) () -> {
+					toUpdate.forEach((BlockContainer c) -> updateBlockContainer(c));
+					return null;					
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		});
 	}
 	
@@ -96,80 +99,82 @@ public class BlockContainerEvents implements Listener{
 	public void onChunkUnload(ChunkUnloadEvent event){
 		if (event.isCancelled()) return;
 		final BlockState[] blockStates = event.getChunk().getTileEntities();
-		
-		Scheduler.runAsync(new Runnable(){
-
-			@Override
-			public void run() {
-				try {
-					ContainerData.dao.callBatchTasks(new Callable<Void>(){
-
-						@Override
-						public Void call() throws Exception {
-							for (BlockState bs : blockStates){
-								if (!(bs instanceof Chest) && !(bs instanceof DoubleChest)) continue;
-								Chest c = (Chest) bs;
-								
-								World world = WorldRegistry.get(c.getWorld());
-								if (world == null) continue;
-								
-								BlockContainer chest = world.getBlockContainer(c.getLocation());
-								if (chest == null) continue;
-								chest.update();
-								chest.getItems().keySet().forEach(i -> ItemSystem.get().remove(i));
-								TerraLogger.debug(TCDebug.CHESTS, "Uploaded %s", chest);
-							}
-							return null;
-						}
+		Scheduler.runAsync(() -> {
+			try {
+				ContainerData.dao.callBatchTasks((Callable<Void>) () -> {
+					for (BlockState bs : blockStates){
+						if (!(bs instanceof InventoryHolder)) continue;
+						InventoryHolder holder = (InventoryHolder) bs;
 						
-					});
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+						Location loc = BlockUtils.getLocation(holder);
+						if (loc == null) continue;
+						
+						World world = WorldRegistry.get(loc.getWorld());
+						if (world == null) continue;
+						
+						BlockContainer container = world.getBlockContainer(loc);
+						if (container == null) continue;
+						container.update();
+						container.getItems().keySet().forEach(i -> ItemSystem.get().remove(i));
+						TerraLogger.debug(TCDebug.CHESTS, "Uploaded %s", container);
+					}
+					return null;
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			
-		});
+		}); 
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if (event.isCancelled()) return;
-		if (!event.getBlock().getType().equals(Material.CHEST)) return;
 		
-		Long tstamp = System.currentTimeMillis();
-		
-		Chest c = (Chest) event.getBlock().getState();
-		Inventory inv = c.getBlockInventory();
-		Location loc = event.getBlock().getLocation();
+		Block block = event.getBlock();
+		Location loc = block.getLocation();
 		World world = WorldRegistry.get(loc.getWorld());
 		if (world == null) return;
 		
-		// TODO: Async This
+		Class<? extends BlockContainer> type = BlockUtils.getContainerType(block);
+		if (type == null) return;
 		
-		ChestContainer chest = ContainerFactory.create(ChestContainer.class, inv.getSize());
-		chest.setWorld(world);
-		chest.setLocation(loc);
-		chest.update();
-		chest.refresh();
-		ItemSystem.get().addContainer(chest);
-		TerraLogger.debug(TCDebug.CHESTS, "Created %s in %s <h>%sms<r>", chest, world, System.currentTimeMillis() - tstamp);
+		Scheduler.runAsync(() -> {
+			createBlockContainer(type, 27, world, loc);
+		});
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent event){
 		if (event.isCancelled()) return;
-		if (!event.getBlock().getType().equals(Material.CHEST)) return;
-		
-		Location loc = event.getBlock().getLocation();
+
+		Block block = event.getBlock();
+		Location loc = block.getLocation();
 		World world = WorldRegistry.get(loc.getWorld());
 		if (world == null) return;
 		
-		// TODO: Async This
+		BlockContainer container = world.getBlockContainer(loc);
+		if (container == null) return;
 		
-		BlockContainer chest = world.getBlockContainer(loc);
-		if (chest == null) return;
-		chest.destory();
-		
-		TerraLogger.debug(TCDebug.CHESTS, "Destroyed %s and removed from %s", chest, chest.getWorld());
+		Scheduler.runAsync(() -> {
+			container.destory();
+		}); 
 	}
+	
+	private void createBlockContainer(Class<? extends BlockContainer> type, Integer size, World world, Location loc){
+		Long ts = System.currentTimeMillis();
+		BlockContainer container = ContainerFactory.create(type, size);
+		container.setWorld(world);
+		container.setLocation(loc);
+		container.update();
+		container.refresh();
+		ItemSystem.get().addContainer(container);
+		TerraLogger.debug(TCDebug.CHESTS, "Created %s in %s in <h>%sms<r>", container, world, System.currentTimeMillis() - ts);
+	}
+	
+	private void updateBlockContainer(BlockContainer container){
+		Long ts = System.currentTimeMillis();
+		container.update();
+		TerraLogger.debug(TCDebug.CHESTS, "Loaded %s in <h>%sms<r>", container, System.currentTimeMillis() - ts);
+	}
+	
 }
