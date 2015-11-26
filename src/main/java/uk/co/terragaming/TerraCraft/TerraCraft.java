@@ -7,8 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
-import uk.co.terragaming.Core.Plugin;
-import uk.co.terragaming.Core.Util.Facades.Reflection;
+import uk.co.terragaming.TerraCore.Plugin;
+import uk.co.terragaming.TerraCore.Util.Facades.Reflection;
 
 public class TerraCraft extends Plugin{
 	
