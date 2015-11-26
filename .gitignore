@@ -2,11 +2,11 @@
 /.classpath
 /.project
 /.settings
-/src/main/java/uk/co/terragaming/zoldCode
-
+/src/main/java/uk/co/terragaming/oldcode
 # NetBeans
 /nbproject
 
 # Maven
 /target
 /bin/
+/.apt_generated/

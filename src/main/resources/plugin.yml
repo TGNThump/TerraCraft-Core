@@ -1,6 +1,6 @@
 name: TerraCraft
-main: uk.co.terragaming.code.terracraft.TerraCraft
-version: 0.0.2
+main: uk.co.terragaming.TerraCraft.TerraCraft
+version: 0.3.0
 load: STARTUP
 author: ben@terragaming.co.uk
 website: code.terragaming.co.uk/TerraCraft

@@ -1,0 +1,7 @@
+<factorypath>
+    <factorypathentry kind="EXTJAR" id="C:\Users\Benjamin\.m2\repository\com\google\dagger\dagger\2.0.2\dagger-2.0.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\Users\Benjamin\.m2\repository\com\google\dagger\dagger-compiler\2.0.2\dagger-compiler-2.0.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\Users\Benjamin\.m2\repository\com\google\dagger\dagger-producers\2.0-beta\dagger-producers-2.0-beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\Users\Benjamin\.m2\repository\com\google\guava\guava\18.0\guava-18.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\Users\Benjamin\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
