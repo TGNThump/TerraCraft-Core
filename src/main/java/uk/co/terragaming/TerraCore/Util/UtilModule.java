@@ -5,19 +5,12 @@ import javax.inject.Singleton;
 import org.bukkit.Server;
 
 import uk.co.terragaming.TerraCore.Plugin;
-import uk.co.terragaming.TerraCore.Factories.DaggerLangFactory;
-import uk.co.terragaming.TerraCore.Factories.DaggerLoggerFactory;
 import uk.co.terragaming.TerraCore.Util.Logger.TerraLogger;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class UtilModule{
-	
-	public UtilModule(){
-		Plugin.register(DaggerLoggerFactory.create());
-		Plugin.register(DaggerLangFactory.create());
-	}
 	
 	@Provides @Singleton Plugin providePlugin(){
 		return Plugin.plugin;

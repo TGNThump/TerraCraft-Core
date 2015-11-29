@@ -11,5 +11,13 @@ public class Account extends Model{
 	@DatabaseField(generatedId = true)
 	private Integer id;
 	
+	@DatabaseField(canBeNull = false)
+	private String terratag;
+	
+	@DatabaseField(canBeNull = false)
+	private String first_name;
+	
+	@DatabaseField(canBeNull = false)
+	private String last_name;
 	
 }

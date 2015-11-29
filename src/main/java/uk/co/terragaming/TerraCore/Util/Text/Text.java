@@ -13,16 +13,24 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import uk.co.terragaming.TerraCore.Plugin;
+import uk.co.terragaming.TerraCore.Factories.DaggerLangFactory;
 import uk.co.terragaming.TerraCore.Util.Collections.Collections;
 import uk.co.terragaming.TerraCore.Util.Language.Lang;
 
 
 public class Text {
+	
+	private Text(){}
+	
+	@Inject
+	static Lang lang;
+	
 	protected static final int PAGEHEIGHT_PLAYER = 9;
 	protected static final int PAGEHEIGHT_CONSOLE = 50;
 	
@@ -377,8 +385,8 @@ public class Text {
 		ArrayList<String> ret = new ArrayList<String>();
 		int pageZeroBased = pageHumanBased - 1;
 		int pagecount = (int) Math.ceil((double) lines.size() / pageheight);
-		
-		Lang lang = Plugin.get(Lang.class);
+
+		Lang lang = DaggerLangFactory.create().make();
 		String prefix = lang.get(locale, "prefix", true, console);
 		String noPages = lang.get(locale, "noPages", true, console);
 		String invalidPages = lang.get(locale, "invalidPage", true, console, pagecount);
